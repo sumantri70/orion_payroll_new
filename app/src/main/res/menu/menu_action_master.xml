@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:showIn="navigation_view">
+
+    <item android:title="ALALALALAL"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/nav_master"
+                android:orderInCategory="100"
+                android:title="Edit"
+                android:icon="@drawable/ic_edit_black_24dp"
+                app:showAsAction="never"/>
+            <item
+                android:id="@+id/nav_m"
+                android:orderInCategory="100"
+                android:icon="@drawable/ic_aktivasi_black_24dp"
+                android:title="Aktivasi"
+                app:showAsAction="never"/>
+        </menu>
+    </item>
+</menu>

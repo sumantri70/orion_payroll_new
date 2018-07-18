@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--<color name="colorPrimary">#3d3e41</color>
+    <color name="colorPrimaryDark">#3a3c41</color>
+    <color name="colorAccent">#515252</color>-->
+
+    <color name="colorPrimary">#029dda</color>
+    <color name="colorPrimaryDark">#029dda</color>
+    <color name="colorAccent">#029dda</color>
+
+    <color name="colorRed">#ff4081</color>
+    <color name="colorblackdark">#0d0e0f</color>
+    <color name="colorwhite">#ffffff</color>
+    <color name="colorgrey">#c2c6ca</color>s
+
+
+    <!--color untuk gradient tansition-->
+    <color name="purple_500">#46bcec</color>
+    <color name="cyan_500">#6272ae</color>
+
+</resources>
