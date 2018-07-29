@@ -165,7 +165,7 @@
                         android:layout_marginBottom="9dp"
                         android:background="@drawable/style_txt_default"
                         android:hint="Gaji Pokok"
-                        android:inputType="numberDecimal" />
+                        android:inputType="numberSigned" />
                 </android.support.design.widget.TextInputLayout>
 
                 <Button

@@ -89,6 +89,6 @@ public class PegawaiModel {
 
     @Override
     public String toString() {
-        return this.nik +"-"+ this.nama;
+        return this.nik +" "+ this.nama;
     }
 }

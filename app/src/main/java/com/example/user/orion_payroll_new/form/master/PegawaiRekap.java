@@ -52,7 +52,6 @@ import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 
 public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private SearchView txtSearch;
-    //private Button btnOk;
     private RadioGroup RgFilter;
     private Dialog DialogFilter;
     private RadioButton rbt1, rbt2, rbt3;
@@ -67,8 +66,11 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
     private View dialogView;
 
     private ListView ListRekap;
-    public PegawaiAdapter Adapter;
-    private PegawaiTable Data;
+    public static PegawaiAdapter Adapter;
+    public static PegawaiTable Data;
+
+    public static String Fstatus;
+    public static String OrderBy;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapPegawai);
@@ -95,10 +97,13 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         getSupportActionBar().setLogo(R.drawable.ic_group_black_24dp);
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         setTitle("  Pegawai");
+
+        Fstatus = TRUE_STRING;
+        OrderBy = "NIK";
+
         this.Data = ((OrionPayrollApplication)getApplicationContext()).TPegawai;
         this.Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, this.Data.GetRecords());
         this.ListRekap.setAdapter(Adapter);
-        //registerForContextMenu(ListRekap);
     }
 
 
@@ -124,33 +129,31 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+            RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
 
-                RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
+                @Override
+                public void onCheckedChanged(RadioGroup arg0, int selectedId) {
+                int SelectedId = RgFilter.getCheckedRadioButtonId();
 
-                    @Override
-                    public void onCheckedChanged(RadioGroup arg0, int selectedId) {
-                        int SelectedId = RgFilter.getCheckedRadioButtonId();
-                        String Status;
-
-                        switch (SelectedId){
-                            case R.id.RbtSemua :
-                                Status = "";
-                                break;
-                            case R.id.RbtAktif :
-                                Status = TRUE_STRING;
-                                break;
-                            case R.id.RbtNonAktif:
-                                Status = FALSE_STRING;
-                                break;
-                            default:
-                                Status = "";
-                        }
-                        Data.ReloadList(Status);
-                        PegawaiRekap.this.Adapter.notifyDataSetChanged();
-                        DialogFilter.dismiss();
-                    }
-                });
-                DialogFilter.show();
+                switch (SelectedId){
+                    case R.id.RbtSemua :
+                        Fstatus = "";
+                        break;
+                    case R.id.RbtAktif :
+                        Fstatus = TRUE_STRING;
+                        break;
+                    case R.id.RbtNonAktif:
+                        Fstatus = FALSE_STRING;
+                        break;
+                    default:
+                        Fstatus = "";
+                }
+                Data.ReloadList(Fstatus, OrderBy);
+                PegawaiRekap.this.Adapter.notifyDataSetChanged();
+                DialogFilter.dismiss();
+                }
+            });
+            DialogFilter.show();
             }
         });
 

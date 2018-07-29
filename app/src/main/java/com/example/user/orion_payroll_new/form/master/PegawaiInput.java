@@ -106,7 +106,7 @@ public class PegawaiInput extends AppCompatActivity {
         this.txtTelpon1.setText(Data.getTelpon1());
         this.txtTelpon2.setText(Data.getTelpon2());
         this.txtEmail.setText(Data.getEmail());
-        this.txtGajiPokok.setText(Data.getGaji_pokokl().toString());
+        this.txtGajiPokok.setText(Double.toString(Data.getGaji_pokokl()));
     }
 
     protected boolean IsSaved(){

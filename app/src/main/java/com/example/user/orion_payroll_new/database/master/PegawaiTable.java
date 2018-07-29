@@ -11,27 +11,42 @@ import com.example.user.orion_payroll_new.database.DBConection;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class PegawaiTable {
     private SQLiteDatabase db;
     private ArrayList<PegawaiModel> records;
     private String Fstatus = "";
+    private String OrderBY = "";
+    private String SQL = "";
 
-    public PegawaiTable(Context context) {
+    public PegawaiTable(Context context, String Status, String OrderBY) {
         this.db = new DBConection(context).getWritableDatabase();
         this.records = new ArrayList<PegawaiModel>();
-        this.ReloadList(Fstatus);
+        this.Fstatus = Status;
+        this.OrderBY = OrderBY;
+        this.ReloadList(Fstatus, OrderBY);
     }
 
-    public void ReloadList(String status){
+    public void ReloadList(String status, String  OrderBy){
         String filter = "";
         if (status != ""){
-            filter += " where status = '" + status + "'";
+            filter = " AND status = '" + status + "'";
         };
 
-        this.records.clear();
+        if (OrderBy != ""){
+            OrderBy = " ORDER BY "+ OrderBy;        };
 
-        Cursor cr = this.db.rawQuery("SELECT * FROM master_pegawai "+ filter ,null);
+
+        if (filter.length() > 0) {
+            filter = " where " + filter.substring(4,filter.length());
+        }
+
+        SQL = "SELECT * FROM master_pegawai "+ filter + OrderBy;
+        Log.w("aaa", SQL);
+
+        this.records.clear();
+        Cursor cr = this.db.rawQuery(SQL,null);
         PegawaiModel Data;
         if (cr != null && cr.moveToFirst()){
             do {
@@ -70,26 +85,26 @@ public class PegawaiTable {
         ContentValues cv;
         cv = SetValue(Data);
         this.db.insert("master_pegawai",null,cv);
-        this.ReloadList(Fstatus);
+        this.ReloadList(Fstatus, OrderBY);
     }
 
     public void Update(PegawaiModel Data){
         ContentValues cv;
         cv = SetValue(Data);
         this.db.update("master_pegawai",cv,"_id = "+Data.getId(),null);
-        this.ReloadList(Fstatus);
+        this.ReloadList(Fstatus, OrderBY);
     }
 
     public void delete(long ID){
         this.db.delete("master_pegawai", "_id = " + ID, null);
-        this.ReloadList(Fstatus);
+        this.ReloadList(Fstatus, OrderBY);
     }
 
     public void aktivasi(long ID, String status){
         ContentValues cv = new ContentValues();
         cv.put("status", status);
         this.db.update("master_pegawai", cv,"_id = "+ID,null);
-        this.ReloadList(Fstatus);
+        this.ReloadList(Fstatus, OrderBY);
     }
 
     public ArrayList<PegawaiModel> GetRecords(){

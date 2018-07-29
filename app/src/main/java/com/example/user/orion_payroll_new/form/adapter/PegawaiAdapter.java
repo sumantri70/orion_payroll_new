@@ -45,7 +45,7 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         final int pos = position;
-        Tkaryawan = new PegawaiTable(getContext());
+        //Tkaryawan = new PegawaiTable(getContext());
         LayoutInflater inflater = LayoutInflater.from(getContext());
         v = inflater.inflate(R.layout.list_pegawai_rekap, null);
         final PegawaiModel Data = getItem(position);
@@ -80,9 +80,10 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
                             } else if (Data.getStatus().equals(FALSE_STRING)){
                                 StatusAktivasi = TRUE_STRING;
                             }
-                            Tkaryawan.aktivasi(Data.getId(), StatusAktivasi);
                             Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
-                            notifyDataSetChanged();
+                            PegawaiRekap.Data.aktivasi(Data.getId(), StatusAktivasi);
+                            PegawaiRekap.Data.ReloadList(PegawaiRekap.Fstatus, PegawaiRekap.OrderBy);
+                            PegawaiRekap.Adapter.notifyDataSetChanged();
                         }
                         return false;
                     }
