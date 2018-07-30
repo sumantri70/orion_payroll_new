@@ -45,6 +45,8 @@ public class PegawaiInput extends AppCompatActivity {
     }
 
     protected void InitClass(){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         Bundle extra = this.getIntent().getExtras();
         this.Mode = extra.getString("MODE");
         this.SelectedData = extra.getInt("POSITION");
@@ -96,6 +98,12 @@ public class PegawaiInput extends AppCompatActivity {
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
             LoadData();
         }
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
     }
 
     protected void LoadData(){
