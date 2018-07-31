@@ -181,7 +181,6 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                             case "Nama" :
                                 OrderBy = "nama";
                                 break;
-
                             default:
                                 OrderBy  = "";
                         }
