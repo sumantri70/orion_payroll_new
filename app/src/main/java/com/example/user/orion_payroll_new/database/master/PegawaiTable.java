@@ -59,12 +59,14 @@ public class PegawaiTable {
                         cr.getString(cr.getColumnIndexOrThrow("telpon2")),
                         cr.getString(cr.getColumnIndexOrThrow("email")),
                         cr.getDouble(cr.getColumnIndexOrThrow("gaji_pokokl")),
-                        cr.getString(cr.getColumnIndexOrThrow("status"))
+                        cr.getString(cr.getColumnIndexOrThrow("status")),
+                        cr.getLong(cr.getColumnIndexOrThrow("tgl_lahir"))
+
                 );
                 this.records.add(Data);
             }while (cr.moveToNext());
         }
-        Data = new PegawaiModel(0,"","","","","","",0.0,"");
+        Data = new PegawaiModel(0,"","","","","","",0.0,"", 0);
         this.records.add(Data);
     }
 
@@ -78,6 +80,7 @@ public class PegawaiTable {
         cv.put("email", Data.getEmail());
         cv.put("gaji_pokokl", Data.getGaji_pokokl());
         cv.put("status", Data.getStatus());
+        cv.put("tgl_lahir", Data.getTgl_lahir());
         return cv;
     }
 

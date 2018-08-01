@@ -5,6 +5,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -151,6 +152,8 @@ public class PegawaiInput extends AppCompatActivity {
         this.txtEmail.setText(Data.getEmail());
         final NumberFormat fmt = NumberFormat.getInstance();
         this.txtGajiPokok.setText(fmt.format(Data.getGaji_pokokl()));
+        this.txtTglLahir.setText(FungsiGeneral.getTglFormat(Data.getTgl_lahir()));
+        Log.d("aaaaaaaaaaaaaaa", Long.toString(Data.getTgl_lahir()));
     }
 
     protected boolean IsSaved(){
@@ -161,8 +164,10 @@ public class PegawaiInput extends AppCompatActivity {
                                              txtTelpon2.getText().toString(),
                                              txtEmail.getText().toString(),
                                              FungsiGeneral.StrFmtToDouble(txtGajiPokok.getText().toString()),
-                                             "T"
+                                             "T",
+                                             FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
                                              );
+        Log.d("vvvvvv", Long.toString(Data.getTgl_lahir()));
         TPegawai.Insert(Data);
         PegawaiInput.this.onBackPressed();
         return true;
@@ -175,8 +180,10 @@ public class PegawaiInput extends AppCompatActivity {
                                              txtTelpon1.getText().toString(),
                                              txtTelpon2.getText().toString(),
                                              txtEmail.getText().toString(),
-                                             Double.parseDouble(txtGajiPokok.getText().toString()),
-                                             "T");
+                                             FungsiGeneral.StrFmtToDouble(txtGajiPokok.getText().toString()),
+                                             "T",
+                                             FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
+        );
         TPegawai.Update(Data);
         PegawaiInput.this.onBackPressed();
         return true;

@@ -21,6 +21,7 @@ public class DBConection extends SQLiteOpenHelper{
                "telpon2 text, " +
                "email text, " +
                "gaji_pokokl real, " +
+               "tgl_lahir integer, " +
                "status text)";
         db.execSQL(Sql);
 

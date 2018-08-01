@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/animation_list"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".Login">
 
     <ScrollView
@@ -20,8 +22,6 @@
         android:layout_marginTop="8dp"
         android:scrollbarSize="0dp"
         android:scrollbarStyle="insideOverlay"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

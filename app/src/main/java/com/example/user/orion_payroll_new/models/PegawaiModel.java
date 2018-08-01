@@ -6,8 +6,9 @@ public class PegawaiModel {
     private int id;
     private String nik, nama, alamat, telpon1, telpon2, email, status;
     private Double gaji_pokokl;
+    private long tgl_lahir;
 
-    public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email, Double gaji_pokokl, String status) {
+    public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email, Double gaji_pokokl, String status, long tgl_lahir) {
         this.id = id;
         this.nik = NIK;
         this.nama = nama;
@@ -17,6 +18,7 @@ public class PegawaiModel {
         this.email = email;
         this.gaji_pokokl = gaji_pokokl;
         this.status = status;
+        this.tgl_lahir = tgl_lahir;
     }
 
     public void setId(int id) {
@@ -53,6 +55,8 @@ public class PegawaiModel {
 
     public void setStatus(String status) {this.status = status;}
 
+    public void setTgl_lahir(Integer tgl_lahir) {this.tgl_lahir = tgl_lahir; }
+
     public int getId() {
         return id;
     }
@@ -86,6 +90,10 @@ public class PegawaiModel {
     }
 
     public String getStatus() { return status; }
+
+    public long getTgl_lahir() {
+        return tgl_lahir;
+    }
 
     @Override
     public String toString() {
