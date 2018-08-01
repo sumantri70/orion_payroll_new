@@ -124,9 +124,10 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="9dp"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:background="@drawable/style_txt_default"
-                        android:hint="Tgl. Lahir"
-                        android:inputType="date" />
+                        android:hint="Tgl. Lahir"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
