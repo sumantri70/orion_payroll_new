@@ -15,6 +15,7 @@ import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.utility.EngineGeneral;
 import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
@@ -26,6 +27,9 @@ import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.EDIT_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE;
+import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
+import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 
 public class PegawaiInput extends AppCompatActivity {
     private TextInputEditText txtNik, txtNama, txtAlamat, txtTelpon1, txtTelpon2, txtEmail, txtGajiPokok, txtTglLahir;
@@ -51,10 +55,10 @@ public class PegawaiInput extends AppCompatActivity {
 
     protected void InitClass(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         Bundle extra = this.getIntent().getExtras();
         this.Mode = extra.getString("MODE");
         this.SelectedData = extra.getInt("POSITION");
+        this.TPegawai = ((OrionPayrollApplication)getApplicationContext()).TPegawai;
 
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Pegawai");
@@ -80,24 +84,19 @@ public class PegawaiInput extends AppCompatActivity {
         txtTglLahir.setText(FungsiGeneral.serverNowFormated());
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pegawai_input);
-        CreateView();
-        InitClass();
-        this.TPegawai = ((OrionPayrollApplication)getApplicationContext()).TPegawai;
-
+    protected void EventClass(){
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if(Mode.equals(EDIT_MODE)){
-                IsSavedEdit();
-                Toast.makeText(PegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-            }else{
-                IsSaved();
-                Toast.makeText(PegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-            }
+                if (IsValid() == true){
+                    if(Mode.equals(EDIT_MODE)){
+                        IsSavedEdit();
+                        Toast.makeText(PegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                    }else{
+                        IsSaved();
+                        Toast.makeText(PegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
@@ -129,6 +128,15 @@ public class PegawaiInput extends AppCompatActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pegawai_input);
+        CreateView();
+        InitClass();
+        EventClass();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
@@ -150,42 +158,66 @@ public class PegawaiInput extends AppCompatActivity {
         this.txtTelpon1.setText(Data.getTelpon1());
         this.txtTelpon2.setText(Data.getTelpon2());
         this.txtEmail.setText(Data.getEmail());
-        final NumberFormat fmt = NumberFormat.getInstance();
-        this.txtGajiPokok.setText(fmt.format(Data.getGaji_pokokl()));
+        this.txtGajiPokok.setText(fmt.format(Data.getgaji_pokok()));
         this.txtTglLahir.setText(FungsiGeneral.getTglFormat(Data.getTgl_lahir()));
-        Log.d("aaaaaaaaaaaaaaa", Long.toString(Data.getTgl_lahir()));
     }
 
     protected boolean IsSaved(){
-        PegawaiModel Data = new PegawaiModel(0,txtNik.getText().toString(),
-                                             txtNama.getText().toString(),
-                                             txtAlamat.getText().toString(),
-                                             txtTelpon1.getText().toString(),
-                                             txtTelpon2.getText().toString(),
-                                             txtEmail.getText().toString(),
-                                             FungsiGeneral.StrFmtToDouble(txtGajiPokok.getText().toString()),
-                                             "T",
+        PegawaiModel Data = new PegawaiModel(0,txtNik.getText().toString().trim(),
+                                             txtNama.getText().toString().trim(),
+                                             txtAlamat.getText().toString().trim(),
+                                             txtTelpon1.getText().toString().trim(),
+                                             txtTelpon2.getText().toString().trim(),
+                                             txtEmail.getText().toString().trim(),
+                                             StrFmtToDouble(txtGajiPokok.getText().toString()),
+                                             TRUE_STRING,
                                              FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
                                              );
-        Log.d("vvvvvv", Long.toString(Data.getTgl_lahir()));
         TPegawai.Insert(Data);
         PegawaiInput.this.onBackPressed();
         return true;
     }
 
     protected boolean IsSavedEdit(){
-        PegawaiModel Data = new PegawaiModel(IdMst,txtNik.getText().toString(),
-                                             txtNama.getText().toString(),
-                                             txtAlamat.getText().toString(),
-                                             txtTelpon1.getText().toString(),
-                                             txtTelpon2.getText().toString(),
-                                             txtEmail.getText().toString(),
-                                             FungsiGeneral.StrFmtToDouble(txtGajiPokok.getText().toString()),
-                                             "T",
+        PegawaiModel Data = new PegawaiModel(IdMst,txtNik.getText().toString().trim(),
+                                             txtNama.getText().toString().trim(),
+                                             txtAlamat.getText().toString().trim(),
+                                             txtTelpon1.getText().toString().trim(),
+                                             txtTelpon2.getText().toString().trim(),
+                                             txtEmail.getText().toString().trim(),
+                                             StrFmtToDouble(txtGajiPokok.getText().toString()),
+                                             TRUE_STRING,
                                              FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
         );
         TPegawai.Update(Data);
         PegawaiInput.this.onBackPressed();
+        return true;
+    }
+
+    protected boolean IsValid(){
+        if (this.txtNik.getText().toString().trim().equals("")) {
+            txtNik.requestFocus();
+            txtNik.setError("Nama belum diisi");
+            return false;
+        }
+
+        if (TPegawai.KodeExist(this.txtNik.getText().toString().trim(),IdMst)) {
+            txtNik.requestFocus();
+            txtNik.setError("NIK sudah pernah digunakan");
+            return false;
+        }
+
+        if (this.txtNama.getText().toString().equals("")) {
+            txtNama.requestFocus();
+            txtNama.setError("Nama belum diisi");
+            return false;
+        }
+
+        if (StrFmtToDouble(txtGajiPokok.getText().toString()) == 0) {
+            txtGajiPokok.requestFocus();
+            txtGajiPokok.setError("Gaji pokok belum diisi");
+            return false;
+        }
         return true;
     }
 }

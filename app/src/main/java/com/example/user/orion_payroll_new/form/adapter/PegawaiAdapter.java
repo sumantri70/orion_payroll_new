@@ -32,6 +32,7 @@ import java.util.List;
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
+import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 
 public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
     PegawaiTable Tkaryawan;
@@ -51,12 +52,22 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
         final PegawaiModel Data = getItem(position);
 
         final int id = Data.getId();
-        TextView lblNik   = (TextView) v.findViewById(R.id.lblNik);
-        TextView lblNama  = (TextView) v.findViewById(R.id.lblNama);
+        TextView lblNik      = (TextView) v.findViewById(R.id.lblNik);
+        TextView lblNama     = (TextView) v.findViewById(R.id.lblNama);
+        TextView lblNoTelpon = (TextView) v.findViewById(R.id.lblNoTelpon);
+        TextView lblGaji     = (TextView) v.findViewById(R.id.lblGaji);
+
         final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
+
+        if (Data.getStatus() == "HIDE"){
+            btnAction.setVisibility(View.GONE);
+            lblGaji.setVisibility(View.GONE);
+        }
 
         lblNik.setText(Data.getNik());
         lblNama.setText(Data.getNama());
+        lblNoTelpon.setText(Data.getTelpon1());
+        lblGaji.setText(fmt.format(Data.getgaji_pokok()));
 
         btnAction.setOnClickListener(new View.OnClickListener() {
 

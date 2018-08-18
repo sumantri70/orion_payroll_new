@@ -160,5 +160,7 @@ public class FungsiGeneral {
         return date;
     }
 
-
+    public static String FmtSqlStr(String str){
+        return "'"+str+"'";
+    }
 }

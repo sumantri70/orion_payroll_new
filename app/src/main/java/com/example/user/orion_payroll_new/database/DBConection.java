@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DBConection extends SQLiteOpenHelper{
-    public DBConection(Context context) {super(context, "db_orion_payroll.db", null, 1);}
+    public DBConection(Context context) {
+        super(context, "db_orion_payroll.db", null, 1);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -20,7 +22,7 @@ public class DBConection extends SQLiteOpenHelper{
                "telpon1 text, " +
                "telpon2 text, " +
                "email text, " +
-               "gaji_pokokl real, " +
+               "gaji_pokok real, " +
                "tgl_lahir integer, " +
                "status text)";
         db.execSQL(Sql);

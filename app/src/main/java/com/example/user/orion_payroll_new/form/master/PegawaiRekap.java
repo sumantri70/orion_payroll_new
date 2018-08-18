@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -68,7 +69,6 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         this.rbt2 = (RadioButton) DialogFilter.findViewById(R.id.RbtAktif);
         this.rbt3 = (RadioButton) DialogFilter.findViewById(R.id.RbtNonAktif);
         this.RgFilter = (RadioGroup) DialogFilter.findViewById(R.id.RgFilter);
-        //this.btnOk = (Button) dialog.findViewById(R.id.BtnOK);
     }
 
     private void InitClass(){
@@ -84,32 +84,21 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         this.Data = ((OrionPayrollApplication)getApplicationContext()).TPegawai;
         this.Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, this.Data.GetRecords());
         this.ListRekap.setAdapter(Adapter);
+        //Kodeing buat ngilangin garis
+        //this.ListRekap.setDivider(null);
+        this.ListRekap.setDividerHeight(1);
     }
 
-    private void LoadData(){
-        swipe.setRefreshing(true);
-        Data.ReloadList(Fstatus, OrderBy);
-        PegawaiRekap.this.Adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pegawai_rekap);
-        CreateVew();
-        InitClass();
-
+    protected void EventClass(){
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (Data.GetDataKaryawanByIndex(i).getId() > 0) {
-                    Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
-                    s.putExtra("MODE", JCons.DETAIL_MODE);
-                    s.putExtra("POSITION",i);
-                    startActivity(s);
-                }
+            if (Data.GetDataKaryawanByIndex(i).getId() > 0) {
+                Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
+                s.putExtra("MODE", JCons.DETAIL_MODE);
+                s.putExtra("POSITION",i);
+                startActivity(s);
+            }
             }
         });
 
@@ -121,7 +110,6 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                 @Override
                 public void onCheckedChanged(RadioGroup arg0, int selectedId) {
                 int SelectedId = RgFilter.getCheckedRadioButtonId();
-
                 switch (SelectedId){
                     case R.id.RbtSemua :
                         Fstatus = "";
@@ -148,11 +136,11 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         swipe.post(new Runnable() {
                        @Override
                        public void run() {
-               swipe.setRefreshing(true);
-               Adapter.notifyDataSetChanged();
-               swipe.setRefreshing(false);
-               }
-           }
+                           swipe.setRefreshing(true);
+                           Adapter.notifyDataSetChanged();
+                           swipe.setRefreshing(false);
+                       }
+                   }
         );
 
         btnTambah.setOnClickListener(new View.OnClickListener() {
@@ -171,7 +159,6 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
             public void onClick(View view) {
                 PopupMenu PmFilter = new PopupMenu(PegawaiRekap.this, btnSort);
                 PmFilter.getMenuInflater().inflate(R.menu.sort_master_pegawai, PmFilter.getMenu());
-
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()){
@@ -184,19 +171,15 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                             default:
                                 OrderBy  = "";
                         }
-                        //Toast.makeText(PegawaiRekap.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         LoadData();
                         return true;
                     }
                 });
                 PmFilter.show();
-
             }
         });
 
-
         txtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -204,23 +187,27 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Adapter.getFilter().filter(newText);
+                PegawaiRekap.this.Adapter.getFilter().filter(newText);
                 return false;
             }
         });
+    }
 
+    private void LoadData(){
+        swipe.setRefreshing(true);
+        this.Data.ReloadList(Fstatus, OrderBy);
+        PegawaiRekap.this.Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
+        Log.d("aaaaaaaaaaaaaaaa",Integer.toString(PegawaiRekap.this.Adapter.getCount()));
+    }
 
-        /*ListRekap.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                //CdSearch.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
-            }
-        });*/
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pegawai_rekap);
+        CreateVew();
+        InitClass();
+        EventClass();
     }
 
     @Override

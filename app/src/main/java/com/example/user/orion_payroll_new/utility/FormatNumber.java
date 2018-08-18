@@ -5,14 +5,15 @@ import android.text.TextWatcher;
 import android.widget.EditText;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 
 public class FormatNumber implements TextWatcher{
     private DecimalFormat df;
     private DecimalFormat dfnd;
     private boolean hasFractionalPart;
-
     private EditText et;
+    public final static NumberFormat fmt = NumberFormat.getInstance();
 
     public FormatNumber(EditText et)
     {

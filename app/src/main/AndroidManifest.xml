@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.orion_payroll_new">
 
+    <!-- Include required permissions for Google Mobile Ads to run. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".OrionPayrollApplication"
         android:allowBackup="true"
@@ -17,13 +21,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenu"/>
+        <activity android:name=".MainMenu" />
         <activity android:name=".form.master.PegawaiInput" />
         <activity android:name=".form.master.PegawaiRekap" />
         <activity android:name=".form.search" />
         <activity android:name=".form.master.TunjanganRekap" />
         <activity android:name=".form.master.TunjanganInput" />
-
+        <!-- Include the AdActivity configChanges and theme. -->
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent" />
+        <activity android:name=".form.transaksi.PenggajianInput" />
     </application>
 
 </manifest>

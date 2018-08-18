@@ -5,10 +5,10 @@ import java.util.Date;
 public class PegawaiModel {
     private int id;
     private String nik, nama, alamat, telpon1, telpon2, email, status;
-    private Double gaji_pokokl;
+    private Double gaji_pokok;
     private long tgl_lahir;
 
-    public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email, Double gaji_pokokl, String status, long tgl_lahir) {
+    public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email, Double gaji_pokok, String status, long tgl_lahir) {
         this.id = id;
         this.nik = NIK;
         this.nama = nama;
@@ -16,7 +16,7 @@ public class PegawaiModel {
         this.telpon1 = telpon1;
         this.telpon2 = telpon2;
         this.email = email;
-        this.gaji_pokokl = gaji_pokokl;
+        this.gaji_pokok = gaji_pokok;
         this.status = status;
         this.tgl_lahir = tgl_lahir;
     }
@@ -49,8 +49,8 @@ public class PegawaiModel {
         this.email = email;
     }
 
-    public void setGaji_pokokl(Double gaji_pokokl) {
-        this.gaji_pokokl = gaji_pokokl;
+    public void setgaji_pokok(Double gaji_pokok) {
+        this.gaji_pokok = gaji_pokok;
     }
 
     public void setStatus(String status) {this.status = status;}
@@ -85,8 +85,8 @@ public class PegawaiModel {
         return email;
     }
 
-    public Double getGaji_pokokl() {
-        return gaji_pokokl;
+    public Double getgaji_pokok() {
+        return gaji_pokok;
     }
 
     public String getStatus() { return status; }

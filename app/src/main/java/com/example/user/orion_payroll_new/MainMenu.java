@@ -6,20 +6,21 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 
 import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
 import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
+import com.example.user.orion_payroll_new.form.transaksi.PenggajianInput;
 
 public class MainMenu extends AppCompatActivity {
     Toolbar toolbar;
-    private CardView BtnMenuPegawai, BtnMenuTunjangan;
+    private CardView BtnMenuPegawai, BtnMenuTunjangan, BtnMenuGajiPegawai;
 
 
     protected void CreateView(){
         BtnMenuPegawai = findViewById(R.id.BtnMenuPegawai);
         BtnMenuTunjangan = findViewById(R.id.BtnMenuTunjangan);
+        BtnMenuGajiPegawai = findViewById(R.id.BtnMenuGajiPegawai);
     }
 
     protected void InitClass(){
@@ -53,6 +54,16 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(s);
             }
         });
+
+        BtnMenuGajiPegawai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent s = new Intent(MainMenu.this, PenggajianInput.class);
+                startActivity(s);
+            }
+        });
+
+
 
     }
 
