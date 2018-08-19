@@ -5,7 +5,7 @@
     android:id="@+id/Layouts"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/animation_list"
+    android:background="@color/colorPrimary"
     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     android:focusable="true"
     android:focusableInTouchMode="true"
@@ -36,19 +36,30 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="190dp"
+                android:layout_marginTop="140dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Orion Payroll"
+                    android:layout_gravity="center"
+                    android:textSize="40dp"
+                    android:layout_marginBottom="40dp"
+                    tools:layout_editor_absoluteX="101dp"
+                    tools:layout_editor_absoluteY="93dp" />
+
 
                 <EditText
                     android:id="@+id/txtUserId"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_height="50dp"
+                    android:layout_marginBottom="10dp"
                     android:drawableLeft="@drawable/ic_group_black_24dp"
                     android:drawablePadding="10dp"
                     android:paddingBottom="10dp"
@@ -64,16 +75,17 @@
 
                 <EditText
                     android:id="@+id/txtPassword"
-                    android:theme="@style/StyleLogin"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="50dp"
                     android:layout_marginBottom="20dp"
+                    android:background="@drawable/style_txt_login"
                     android:drawableLeft="@drawable/ic_password"
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="Password"
                     android:inputType="textPassword"
-                    android:background="@drawable/style_txt_login"/>
+                    android:textColor="@color/cardview_light_background"
+                    android:theme="@style/StyleLogin" />
 
                 <Button
                     android:id="@+id/BtnLogin"
@@ -81,7 +93,7 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/style_btn_login"
                     android:text="Masuk"
-                    android:textColor="@android:color/black" />
+                    android:textColor="@color/colorblack" />
             </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

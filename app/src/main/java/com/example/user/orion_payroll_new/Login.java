@@ -34,9 +34,10 @@ public class Login extends AppCompatActivity {
         txtUserId = (EditText) findViewById(R.id.txtUserId);
         BtnLogin = (Button) findViewById(R.id.BtnLogin);
 
+        /* animasi
         animationDrawable = (AnimationDrawable) Layouts.getBackground();
         animationDrawable.setEnterFadeDuration(100);
-        animationDrawable.setExitFadeDuration(1000);
+        animationDrawable.setExitFadeDuration(1000);*/
 
 
         BtnLogin.setOnClickListener(new View.OnClickListener() {
