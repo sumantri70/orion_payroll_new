@@ -4,12 +4,14 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -146,6 +148,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         btnTambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //CdSearch.animate().translationY(-50);
                 Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
                 s.putExtra("MODE","");
                 s.putExtra("POSITION",0);

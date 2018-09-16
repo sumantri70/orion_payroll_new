@@ -30,6 +30,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
 
 public class PegawaiInput extends AppCompatActivity {
     private TextInputEditText txtNik, txtNama, txtAlamat, txtTelpon1, txtTelpon2, txtEmail, txtGajiPokok, txtTglLahir;
@@ -63,7 +64,7 @@ public class PegawaiInput extends AppCompatActivity {
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Pegawai");
         }else if (Mode.equals(DETAIL_MODE)){
-            this.setTitle("Pegawai");
+            this.setTitle("Detail Pegawai");
             this.btnSimpan.setVisibility(View.INVISIBLE);
         }else{
             this.setTitle("Input Pegawai");
@@ -81,7 +82,6 @@ public class PegawaiInput extends AppCompatActivity {
 
         txtGajiPokok.addTextChangedListener(new FormatNumber(txtGajiPokok));
         txtNik.setFilters(new InputFilter[]{new InputFilter.AllCaps()}); //untuk uppercase
-        txtTglLahir.setText(FungsiGeneral.serverNowFormated());
     }
 
     protected void EventClass(){
@@ -105,6 +105,10 @@ public class PegawaiInput extends AppCompatActivity {
             public void onClick(View view) {
                 //DialogFragment newFragment = new DatePickerDialogFragment();
                 //newFragment.show(getFragmentManager(), "datePicker");
+                hideSoftKeyboard(PegawaiInput.this);
+                if (txtTglLahir.getText().toString().equals("")){
+                    txtTglLahir.setText(FungsiGeneral.serverNowFormated());
+                }
                 Long tgl = FungsiGeneral.getMillisDate(txtTglLahir.getText().toString());
                 int mYear = (Integer.parseInt(FungsiGeneral.getTahun(tgl)));
                 int mMonth = (Integer.parseInt(FungsiGeneral.getBulan(tgl)))-1;
@@ -123,6 +127,7 @@ public class PegawaiInput extends AppCompatActivity {
                             }
                         }, mYear, mMonth, mDay);
                 datePickerDialog.show();
+                txtTglLahir.setError(null);
             }
         });
     }
@@ -197,7 +202,7 @@ public class PegawaiInput extends AppCompatActivity {
     protected boolean IsValid(){
         if (this.txtNik.getText().toString().trim().equals("")) {
             txtNik.requestFocus();
-            txtNik.setError("Nama belum diisi");
+            txtNik.setError("NIK belum diisi");
             return false;
         }
 
@@ -210,6 +215,15 @@ public class PegawaiInput extends AppCompatActivity {
         if (this.txtNama.getText().toString().equals("")) {
             txtNama.requestFocus();
             txtNama.setError("Nama belum diisi");
+            return false;
+        }
+
+        if (this.txtTglLahir.getText().toString().equals("")) {
+            txtTglLahir.setFocusableInTouchMode(true);
+            txtTglLahir.requestFocus();
+            txtTglLahir.setError("Tgl. Lahir belum diisi");
+            txtTglLahir.setFocusableInTouchMode(false);
+            hideSoftKeyboard(this);
             return false;
         }
 

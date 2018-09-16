@@ -1,7 +1,9 @@
 package com.example.user.orion_payroll_new.utility;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.view.inputmethod.InputMethodManager;
 
 import java.text.DateFormat;
 import java.text.NumberFormat;
@@ -10,7 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
+
 public class FungsiGeneral {
+    public final static NumberFormat fmt = NumberFormat.getInstance();
 
     public static String getTahun(long date){
         SimpleDateFormat format = new SimpleDateFormat("yyyy");
@@ -163,4 +168,16 @@ public class FungsiGeneral {
     public static String FmtSqlStr(String str){
         return "'"+str+"'";
     }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
+
+    public static String DoubleToStr(Double Nilai){
+        return fmt.format(Nilai);
+    }
+
+
 }

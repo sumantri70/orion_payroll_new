@@ -79,7 +79,12 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
                 po.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if (item.getTitle().equals("Edit")){
+                        if (item.getTitle().equals("Detail")){
+                            Intent s = new Intent(getContext(), PegawaiInput.class);
+                            s.putExtra("MODE", JCons.DETAIL_MODE);
+                            s.putExtra("POSITION",pos);
+                            getContext().startActivity(s);
+                        } else if (item.getTitle().equals("Edit")){
                             Intent s = new Intent(getContext(), PegawaiInput.class);
                             s.putExtra("MODE", JCons.EDIT_MODE);
                             s.putExtra("POSITION",pos);
