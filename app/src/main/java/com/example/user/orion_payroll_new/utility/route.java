@@ -1,7 +1,8 @@
 package com.example.user.orion_payroll_new.utility;
 
 public class route {
-    public static final String URL = "localhost/orion_payroll/";
+    //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
+    public static final String URL = "http://192.168.43.59/orion_payroll/";
 
     //*-- MASTER PEGAWAI --*\\
     public static final String URL_PEGAWAI = "master_pegawai/";

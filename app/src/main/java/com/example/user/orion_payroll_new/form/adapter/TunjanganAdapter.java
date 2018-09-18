@@ -27,7 +27,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 
 public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
-    TunjanganTable Tkaryawan;
+    TunjanganTable TTunjangan;
 
 
     public TunjanganAdapter(Context context, int resource, List<TunjanganModel> object) {
@@ -38,7 +38,7 @@ public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         final int pos = position;
-        Tkaryawan = new TunjanganTable(getContext());
+        TTunjangan = new TunjanganTable(getContext());
         LayoutInflater inflater = LayoutInflater.from(getContext());
         v = inflater.inflate(R.layout.list_tunjangan_rekap, null);
         final TunjanganModel Data = getItem(position);
@@ -73,7 +73,7 @@ public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
                             } else if (Data.getStatus().equals(FALSE_STRING)){
                                 StatusAktivasi = TRUE_STRING;
                             }
-                            Tkaryawan.aktivasi(Data.getId(), StatusAktivasi);
+                            TTunjangan.aktivasi(Data.getId(), StatusAktivasi);
                             Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
                             notifyDataSetChanged();
                         }

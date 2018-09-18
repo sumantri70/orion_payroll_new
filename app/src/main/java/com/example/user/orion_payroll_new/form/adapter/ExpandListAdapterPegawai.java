@@ -2,42 +2,26 @@ package com.example.user.orion_payroll_new.form.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.orion_payroll_new.R;
-import com.example.user.orion_payroll_new.form.master.PegawaiInput;
-import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
-import com.example.user.orion_payroll_new.form.transaksi.PenggajianInput;
-import com.example.user.orion_payroll_new.models.JCons;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
-import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
-import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
-import static java.security.AccessController.getContext;
-
-public class ExpandListAadapterPenggajian extends BaseExpandableListAdapter {
+public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
     private Context context;
     private List<String> ListHeader;
     private HashMap<String, List<String>> ListHasMap;
     private Dialog DialogFilter;
 
-    public ExpandListAadapterPenggajian(Context context, List<String> listHeader, HashMap<String, List<String>> listHasMap) {
+    public ExpandListAdapterPegawai(Context context, List<String> listHeader, HashMap<String, List<String>> listHasMap) {
         this.context = context;
         ListHeader = listHeader;
         ListHasMap = listHasMap;

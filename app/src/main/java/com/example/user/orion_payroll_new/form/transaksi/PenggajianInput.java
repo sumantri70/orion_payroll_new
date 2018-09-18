@@ -33,7 +33,7 @@ public class PenggajianInput extends AppCompatActivity {
     private ExpandableListView ListView;
     private ExpandListAadapterPenggajian ListAdapter;
     private List<String> ListDataHeader;
-    private HashMap<String, ArrayList<PenggajianDetailModel> > ListHash;
+    private HashMap<String, List<String>> ListHash;
     private ArrayList<PenggajianDetailModel> ArListTunjangan;
     private ArrayList<PenggajianDetailModel> ArListPotongan;
     private ArrayList<PenggajianDetailModel> ArListKasbon;
@@ -48,8 +48,8 @@ public class PenggajianInput extends AppCompatActivity {
 
     protected void InitClass(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Bundle extra = this.getIntent().getExtras();
-        this.Mode = extra.getString("MODE");
+        //Bundle extra = this.getIntent().getExtras();
+        //this.Mode = extra.getString("MODE");
 //        this.SelectedData = extra.getInt("POSITION");
 //        this.TPegawai = ((OrionPayrollApplication)getApplicationContext()).TPegawai;
 
@@ -59,23 +59,35 @@ public class PenggajianInput extends AppCompatActivity {
         ListDataHeader.add("POTONGAN");
         ListDataHeader.add("KASBON");
 
-        ArListTunjangan = new ArrayList<>();
-        ArListPotongan  = new ArrayList<>();
-        ArListKasbon    = new ArrayList<>();
+        List<String> ArListTunjangan = new ArrayList<>();
+        ArListTunjangan.add("Tunjangan 1");
+        ArListTunjangan.add("Tunjangan 2");
+
+        List<String> ArListPotongan  = new ArrayList<>();
+        ArListPotongan.add("Potongan 1");
+        ArListPotongan.add("Potongan 2");
+
+        List<String> ArListKasbon    = new ArrayList<>();
+        ArListKasbon.add("Kasbon 1");
+        ArListKasbon.add("Kasbon 2");
+
+        ListHash.put(ListDataHeader.get(0), ArListTunjangan);
+        ListHash.put(ListDataHeader.get(1), ArListPotongan);
+        ListHash.put(ListDataHeader.get(2), ArListKasbon);
 
         ListAdapter = new ExpandListAadapterPenggajian(this, ListDataHeader, ListHash);
         ListView.setAdapter(ListAdapter);
 
-        if (Mode.equals(EDIT_MODE)){
-            this.setTitle("Edit Pegawai");
-        }else if (Mode.equals(DETAIL_MODE)){
-            this.setTitle("Detail Pegawai");
-            //this.btnSimpan.setVisibility(View.INVISIBLE);
-        }else{
-            this.setTitle("Input Pegawai");
-        };
+//        if (Mode.equals(EDIT_MODE)){
+//            this.setTitle("Edit Pegawai");
+//        }else if (Mode.equals(DETAIL_MODE)){
+//            this.setTitle("Detail Pegawai");
+//            //this.btnSimpan.setVisibility(View.INVISIBLE);
+//        }else{
+//            this.setTitle("Input Pegawai");
+//        };
 
-        boolean Enabled = !Mode.equals(DETAIL_MODE);
+        //boolean Enabled = !Mode.equals(DETAIL_MODE);
 //        this.txtNik.setEnabled(Enabled);
 //        this.txtNama.setEnabled(Enabled);
 //        this.txtTelpon1.setEnabled(Enabled);
@@ -92,23 +104,23 @@ public class PenggajianInput extends AppCompatActivity {
     protected void EventClass(){
     }
 
-    protected void RefreshDetail(int idx){
-        switch (idx){
-            case 0 :
-                ListHash.put(ListDataHeader.get(0), ArListTunjangan);
-                ListHash.put(ListDataHeader.get(1), ArListPotongan);
-                ListHash.put(ListDataHeader.get(2), ArListKasbon);
-            case 1 :
-                ListHash.put(ListDataHeader.get(0), ArListTunjangan);
-                break;
-            case 2 :
-                ListHash.put(ListDataHeader.get(1), ArListPotongan);
-                break;
-            case 3 :
-                ListHash.put(ListDataHeader.get(2), ArListKasbon);
-                break;
-        }
-    }
+//    protected void RefreshDetail(int idx){
+//        switch (idx){
+//            case 0 :
+//                ListHash.put(ListDataHeader.get(0), ArListTunjangan);
+//                ListHash.put(ListDataHeader.get(1), ArListPotongan);
+//                ListHash.put(ListDataHeader.get(2), ArListKasbon);
+//            case 1 :
+//                ListHash.put(ListDataHeader.get(0), ArListTunjangan);
+//                break;
+//            case 2 :
+//                ListHash.put(ListDataHeader.get(1), ArListPotongan);
+//                break;
+//            case 3 :
+//                ListHash.put(ListDataHeader.get(2), ArListKasbon);
+//                break;
+//        }
+//    }
 
 
     @Override

@@ -11,6 +11,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
@@ -19,9 +23,14 @@ import com.example.user.orion_payroll_new.utility.EngineGeneral;
 import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.EDIT_MODE;
@@ -30,7 +39,9 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
+import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_PEGAWAI;
 
 public class PegawaiInput extends AppCompatActivity {
     private TextInputEditText txtNik, txtNama, txtAlamat, txtTelpon1, txtTelpon2, txtEmail, txtGajiPokok, txtTglLahir;
@@ -142,6 +153,7 @@ public class PegawaiInput extends AppCompatActivity {
     }
 
     @Override
+
     protected void onStart() {
         super.onStart();
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
@@ -167,19 +179,63 @@ public class PegawaiInput extends AppCompatActivity {
         this.txtTglLahir.setText(FungsiGeneral.getTglFormat(Data.getTgl_lahir()));
     }
 
+//    protected boolean IsSaved(){
+//        PegawaiModel Data = new PegawaiModel(0,txtNik.getText().toString().trim(),
+//                                             txtNama.getText().toString().trim(),
+//                                             txtAlamat.getText().toString().trim(),
+//                                             txtTelpon1.getText().toString().trim(),
+//                                             txtTelpon2.getText().toString().trim(),
+//                                             txtEmail.getText().toString().trim(),
+//                                             StrFmtToDouble(txtGajiPokok.getText().toString()),
+//                                             TRUE_STRING,
+//                                             FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
+//                                             );
+//        TPegawai.Insert(Data);
+//        PegawaiInput.this.onBackPressed();
+//        return true;
+//    }
+
     protected boolean IsSaved(){
-        PegawaiModel Data = new PegawaiModel(0,txtNik.getText().toString().trim(),
-                                             txtNama.getText().toString().trim(),
-                                             txtAlamat.getText().toString().trim(),
-                                             txtTelpon1.getText().toString().trim(),
-                                             txtTelpon2.getText().toString().trim(),
-                                             txtEmail.getText().toString().trim(),
-                                             StrFmtToDouble(txtGajiPokok.getText().toString()),
-                                             TRUE_STRING,
-                                             FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
-                                             );
-        TPegawai.Insert(Data);
-        PegawaiInput.this.onBackPressed();
+        Log.d("iiiiii",URL_INSERT_PEGAWAI);
+
+        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_PEGAWAI, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    //int isGagal;
+                    Log.d("java error","responnnnn");
+                    JSONObject jObj = new JSONObject(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("java error","gagalllllll");
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("java error",error.getMessage());
+
+            }
+        }) {
+
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("nik", String.valueOf(txtNik.getText().toString()));
+                params.put("nama", String.valueOf(txtNama.getText().toString()));
+                params.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+                params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+                params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+                params.put("email", String.valueOf(txtEmail.getText().toString()));
+                params.put("tgl_lahir", String.valueOf(getSimpleDate(txtTglLahir.getText().toString())));
+                params.put("tgl_mulai_kerja", String.valueOf(getSimpleDate(txtTglLahir.getText().toString())));
+                params.put("gaji_pokok", String.valueOf(txtGajiPokok.getText().toString()));
+                params.put("status", String.valueOf(TRUE_STRING));
+                return params;
+            }
+        };
+        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
         return true;
     }
 
@@ -192,7 +248,7 @@ public class PegawaiInput extends AppCompatActivity {
                                              txtEmail.getText().toString().trim(),
                                              StrFmtToDouble(txtGajiPokok.getText().toString()),
                                              TRUE_STRING,
-                                             FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
+                                             getSimpleDate(txtTglLahir.getText().toString())
         );
         TPegawai.Update(Data);
         PegawaiInput.this.onBackPressed();
