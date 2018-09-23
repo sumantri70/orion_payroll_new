@@ -16,6 +16,7 @@ public class route {
     public static final String URL_TUNJANGAN = "master_tunjangan/";
     public static final String URL_INSERT_TUNJANGAN   = URL + URL_TUNJANGAN + "insert.php";
     public static final String URL_SELECT_TUNJANGAN   = URL + URL_TUNJANGAN + "select.php";
+    public static final String URL_SELECT_GET         = URL + URL_TUNJANGAN + "get.php";
     public static final String URL_UPDATE_TUNJANGAN   = URL + URL_TUNJANGAN + "update.php";
     public static final String URL_DELETE_TUNJANGAN   = URL + URL_TUNJANGAN + "delete.php";
     public static final String URL_AKTIVASI_TUNJANGAN = URL + URL_TUNJANGAN + "aktivasi.php";

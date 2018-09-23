@@ -1,6 +1,7 @@
 package com.example.user.orion_payroll_new.form.master;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
@@ -19,7 +20,14 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SearchView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
@@ -27,8 +35,19 @@ import com.example.user.orion_payroll_new.database.master.TunjanganTable;
 import com.example.user.orion_payroll_new.form.adapter.PegawaiAdapter;
 import com.example.user.orion_payroll_new.form.adapter.TunjanganAdapter;
 import com.example.user.orion_payroll_new.models.JCons;
+import com.example.user.orion_payroll_new.models.TunjanganModel;
+import com.example.user.orion_payroll_new.utility.FungsiGeneral;
+import com.example.user.orion_payroll_new.utility.route;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 
 public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -49,9 +68,13 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
     private ListView ListRekap;
     public static TunjanganAdapter Adapter;
     public static TunjanganTable Data;
+    private List<TunjanganModel> ListTunjangan;
 
     public static String Fstatus;
     public static String OrderBy;
+    private ProgressDialog Loading;
+
+    static final int FROM_INPUT_TUNJANGAN = 1;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
@@ -80,21 +103,23 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 
         Fstatus = TRUE_STRING;
         OrderBy = "kode";
-
-//        this.Data = ((OrionPayrollApplication)getApplicationContext()).TTunjangan;
-//        this.Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tupegawai_rekap, this.Data.GetRecords());
-//        this.ListRekap.setAdapter(Adapter);
-//        this.ListRekap.setDividerHeight(1);
+        ListTunjangan = new ArrayList<TunjanganModel>();
+        Loading = new ProgressDialog(TunjanganRekap.this);
+        this.Data =  new TunjanganTable(getApplicationContext());
+        this.Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, this.Data.GetRecords());
+        this.ListRekap.setAdapter(Adapter);
+        this.ListRekap.setDividerHeight(1);
     }
 
     protected void EventClass(){
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (Data.GetDataKaryawanByIndex(i).getId() > 0) {
+                if (Data.GetDataByIndex(i).getId() > 0) {
                     Intent s = new Intent(TunjanganRekap.this, TunjanganInput.class);
                     s.putExtra("MODE", JCons.DETAIL_MODE);
                     s.putExtra("POSITION",i);
+                    s.putExtra("ID",Data.GetDataByIndex(i).getId());
                     startActivity(s);
                 }
             }
@@ -134,9 +159,9 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         swipe.post(new Runnable() {
                        @Override
                        public void run() {
-//                           swipe.setRefreshing(true);
-//                           Adapter.notifyDataSetChanged();
-//                           swipe.setRefreshing(false);
+                           swipe.setRefreshing(true);
+                           Adapter.notifyDataSetChanged();
+                           swipe.setRefreshing(false);
                        }
                    }
         );
@@ -148,21 +173,21 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
                 Intent s = new Intent(TunjanganRekap.this, TunjanganInput.class);
                 s.putExtra("MODE","");
                 s.putExtra("POSITION",0);
-                startActivity(s);
-                LoadData();
+                startActivityForResult(s, FROM_INPUT_TUNJANGAN);
             }
         });
+
 
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 PopupMenu PmFilter = new PopupMenu(TunjanganRekap.this, btnSort);
-                PmFilter.getMenuInflater().inflate(R.menu.sort_master_pegawai, PmFilter.getMenu());
+                PmFilter.getMenuInflater().inflate(R.menu.sort_master_tunjangan, PmFilter.getMenu());
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()){
-                            case "NIK" :
-                                OrderBy = "NIK";
+                            case "Kode" :
+                                OrderBy = "kode";
                                 break;
                             case "Nama" :
                                 OrderBy = "nama";
@@ -192,11 +217,48 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         });
     }
 
-    private void LoadData(){
-//        swipe.setRefreshing(true);
-//        this.Data.ReloadList("");
-//        TunjanganRekap.this.Adapter.notifyDataSetChanged();
-//        swipe.setRefreshing(false);
+    public void LoadData(){
+        swipe.setRefreshing(true);
+        String filter;
+        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+        String url = route.URL_SELECT_TUNJANGAN + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                TunjanganModel Data;
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        Data = new TunjanganModel(
+                                obj.getInt("id"),
+                                obj.getString("kode"),
+                                obj.getString("nama"),
+                                obj.getString("keterangan"),
+                                obj.getString("status")
+                        );
+                        ListTunjangan.add(Data);
+                    }
+                    //Satu baris kosong di akhir
+                    Data = new TunjanganModel(0,"","","","HIDE");
+                    ListTunjangan.add(Data);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error", "Error: " + error.getMessage());
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+        ListTunjangan.clear();
+        this.Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, ListTunjangan);
+        this.Adapter.notifyDataSetChanged();
+        this.ListRekap.setAdapter(Adapter);
+        swipe.setRefreshing(false);
     }
 
     @Override
@@ -211,7 +273,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
     @Override
     protected void onResume() {
         super.onResume();
-//        this.Adapter.notifyDataSetChanged();
+        this.Adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -222,8 +284,19 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 
     @Override
     public void onRefresh() {
-//        swipe.setRefreshing(true);
-//        Adapter.notifyDataSetChanged();
-//        swipe.setRefreshing(false);
+        LoadData();
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == FROM_INPUT_TUNJANGAN) {
+            if (resultCode == RESULT_OK) {
+                LoadData();
+            }else{
+
+            }
+        }
+    }
+
+
 }

@@ -1,6 +1,8 @@
 package com.example.user.orion_payroll_new.form.master;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,14 +16,19 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
+import com.example.user.orion_payroll_new.database.master.TunjanganTable;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
+import com.example.user.orion_payroll_new.utility.route;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,12 +51,14 @@ import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_TUNJAN
 
 public class TunjanganInput extends AppCompatActivity {
     private TextInputEditText txtKode, txtNama, txtKeterangan;
+    private TunjanganModel Tunjangan;
     private Button btnSimpan;
-
+    private TunjanganTable TData;
     public Boolean EditMode;
     private String Mode;
     private int SelectedData;
     private int IdMst;
+    private ProgressDialog Loading;
 
     protected void CreateView(){
         txtKode       = (TextInputEditText) findViewById(R.id.txtKode);
@@ -62,7 +71,11 @@ public class TunjanganInput extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Bundle extra = this.getIntent().getExtras();
         this.Mode = extra.getString("MODE");
+        this.IdMst = extra.getInt("ID");
         this.SelectedData = extra.getInt("POSITION");
+        this.TData = new TunjanganTable(getApplicationContext());
+        Loading = new ProgressDialog(TunjanganInput.this);
+        this.Tunjangan = new TunjanganModel(0,"","","","");
 
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Tinjangan");
@@ -85,15 +98,18 @@ public class TunjanganInput extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (IsValid() == true){
-                    if(Mode.equals(EDIT_MODE)){
-                        IsSavedEdit();
-                        Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                    }else{
-                        IsSaved();
-                        Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                    }
+            if (IsValid() == true){
+                if(Mode.equals(EDIT_MODE)){
+                    IsSavedEdit();
+                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                }else{
+                    IsSaved();
+                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                    Intent intent = getIntent();
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
+            }
             }
         });
     }
@@ -120,62 +136,58 @@ public class TunjanganInput extends AppCompatActivity {
     }
 
     protected void LoadData(){
-        //PegawaiModel Data = this.TPegawai.GetDataKaryawanByIndex(this.SelectedData);
-//        this.IdMst = Data.getId();
-//        this.txtNik.setText(Data.getNik());
-//        this.txtNama.setText(Data.getNama());
-//        this.txtTelpon1.setText(Data.getTelpon1());
-//        this.txtTelpon2.setText(Data.getTelpon2());
-//        this.txtEmail.setText(Data.getEmail());
-//        this.txtGajiPokok.setText(fmt.format(Data.getgaji_pokok()));
-//        this.txtTglLahir.setText(FungsiGeneral.getTglFormat(Data.getTgl_lahir()));
+        Loading.setMessage("Loading.");
+        Loading.setCancelable(false);
+        Loading.show();
+        String filter;
+        filter = "?id="+IdMst;
+        String url = route.URL_SELECT_GET + filter;
+        Log.d("URLLL",url);
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                TunjanganModel Data;
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    txtKode.setText(obj.getString("kode"));
+                    txtNama.setText(obj.getString("nama"));
+                    txtKeterangan.setText(obj.getString("keterangan"));
+                    Loading.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Loading.dismiss();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error", "Error: " + error.getMessage());
+                Loading.dismiss();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
     protected boolean IsSaved(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_TUNJANGAN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("kode", String.valueOf(txtKode.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("status", String.valueOf(TRUE_STRING));
-                return params;
-            }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+        TunjanganModel Data = new TunjanganModel(
+                            0,txtKode.getText().toString().trim(),
+                            txtNama.getText().toString().trim(),
+                            txtKeterangan.getText().toString().trim(),
+                            TRUE_STRING);
+        TData.Insert(Data);
         return true;
     }
 
     protected boolean IsSavedEdit(){
-//        PegawaiModel Data = new PegawaiModel(IdMst,txtNik.getText().toString().trim(),
-//                txtNama.getText().toString().trim(),
-//                txtAlamat.getText().toString().trim(),
-//                txtTelpon1.getText().toString().trim(),
-//                txtTelpon2.getText().toString().trim(),
-//                txtEmail.getText().toString().trim(),
-//                StrFmtToDouble(txtGajiPokok.getText().toString()),
-//                TRUE_STRING,
-//                getSimpleDate(txtTglLahir.getText().toString())
-//        );
-//        TPegawai.Update(Data);
-//        PegawaiInput.this.onBackPressed();
+        TunjanganModel Data = new TunjanganModel(
+                this.IdMst,
+                txtKode.getText().toString().trim(),
+                txtNama.getText().toString().trim(),
+                txtKeterangan.getText().toString().trim(),
+                TRUE_STRING);
+        TData.Update(Data);
         return true;
     }
 

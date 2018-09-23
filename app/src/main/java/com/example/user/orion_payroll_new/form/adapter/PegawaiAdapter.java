@@ -46,12 +46,10 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
         final int pos = position;
-        //Tkaryawan = new PegawaiTable(getContext());
         LayoutInflater inflater = LayoutInflater.from(getContext());
         v = inflater.inflate(R.layout.list_pegawai_rekap, null);
         final PegawaiModel Data = getItem(position);
 
-        final int id = Data.getId();
         TextView lblNik      = (TextView) v.findViewById(R.id.lblNik);
         TextView lblNama     = (TextView) v.findViewById(R.id.lblNama);
         TextView lblNoTelpon = (TextView) v.findViewById(R.id.lblNoTelpon);

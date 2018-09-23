@@ -11,6 +11,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.database.master.TunjanganTable;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.utility.EngineGeneral;
 
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
@@ -24,12 +25,16 @@ public class OrionPayrollApplication extends Application {
     public PegawaiTable TPegawai;
     public TunjanganTable TTunjangan;
 
+    public TunjanganModel DtTunjangan;
+
+
     @Override
     public void onCreate() {
         super.onCreate();
+        mInstance = this;
         this.TPegawai = new PegawaiTable(getApplicationContext(), TRUE_STRING, "NIK");
         this.TTunjangan = new TunjanganTable(getApplicationContext());
-        mInstance = this;
+        this.DtTunjangan = new TunjanganModel(0,"","","","");
     }
 
     public static synchronized OrionPayrollApplication getInstance() {
@@ -47,7 +52,6 @@ public class OrionPayrollApplication extends Application {
     public <T> void addToRequestQueue(Request<T> req, String tag) {
         req.setTag(TextUtils.isEmpty(tag) ? TAG : tag);
         req.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        Log.d("eeeeeeeee",req.getUrl().toString());
         getRequestQueue().add(req);
     }
 
@@ -55,6 +59,7 @@ public class OrionPayrollApplication extends Application {
         req.setTag(TAG);
         req.setRetryPolicy(new DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         getRequestQueue().add(req);
+        Log.d("ADa kesini","ADa kesini");
     }
 
     public void cancelPendingRequests(Object tag) {

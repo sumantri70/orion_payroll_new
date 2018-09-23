@@ -51,4 +51,9 @@ public class TunjanganModel {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return this.kode +" "+ this.nama;
+    }
 }

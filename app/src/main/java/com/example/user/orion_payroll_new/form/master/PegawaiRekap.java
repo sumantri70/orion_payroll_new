@@ -201,7 +201,6 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         this.Data.ReloadList(Fstatus, OrderBy);
         PegawaiRekap.this.Adapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
-        Log.d("aaaaaaaaaaaaaaaa",Integer.toString(PegawaiRekap.this.Adapter.getCount()));
     }
 
     @Override
