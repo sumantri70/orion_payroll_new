@@ -14,6 +14,8 @@ public class JCons extends Application {
     public static String MSG_SUCCESS_ACTIVE    = "Data berhasil diaktif / non aktifkan";
     public static String MSG_UNSUCCESS_ACTIVE  = "Data gagal diaktif / non aktifkan";
 
+    public static String MSG_UNSUCCESS_CONECT  = "Terjadi kesalahan";
+
     public static String DETAIL_MODE  = "D";
     public static String EDIT_MODE    = "E";
 

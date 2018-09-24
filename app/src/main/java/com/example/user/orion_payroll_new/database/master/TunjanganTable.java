@@ -161,7 +161,7 @@ public class TunjanganTable {
     public void Get_master_tunjangan(int id){
         String filter;
         filter = "?id="+id;
-        String url = route.URL_SELECT_GET + filter;
+        String url = route.URL_GET_TUNJANGAN + filter;
         Log.d("masuk urllll",url);
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override

@@ -23,13 +23,29 @@ import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.form.adapter.PegawaiAdapter;
+import com.example.user.orion_payroll_new.form.adapter.TunjanganAdapter;
 import com.example.user.orion_payroll_new.models.JCons;
+import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.models.TunjanganModel;
+import com.example.user.orion_payroll_new.utility.route;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 
 public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -44,9 +60,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 
     private SwipeRefreshLayout swipe;
 
-    private LayoutInflater inflater;
-    private View dialogView;
-
+    private List<PegawaiModel> ListPegawai;
     private ListView ListRekap;
     public static PegawaiAdapter Adapter;
     public static PegawaiTable Data;
@@ -74,18 +88,15 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void InitClass(){
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
         //getSupportActionBar().setLogo(R.drawable.ic_group_black_24dp); buat munculin icon
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        //getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Pegawai");
 
         Fstatus = TRUE_STRING;
         OrderBy = "NIK";
-
-        this.Data = ((OrionPayrollApplication)getApplicationContext()).TPegawai;
-        this.Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, this.Data.GetRecords());
-        this.ListRekap.setAdapter(Adapter);
+        ListPegawai = new ArrayList<PegawaiModel>();
         //Kodeing buat ngilangin garis
         //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
@@ -95,12 +106,13 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            if (Data.GetDataKaryawanByIndex(i).getId() > 0) {
-                Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
-                s.putExtra("MODE", JCons.DETAIL_MODE);
-                s.putExtra("POSITION",i);
-                startActivity(s);
-            }
+                int Id =  ListPegawai.get(i).getId();
+                if (Id > 0) {
+                        Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
+                        s.putExtra("MODE", JCons.DETAIL_MODE);
+                        s.putExtra("ID",Id);
+                        startActivity(s);
+                }
             }
         });
 
@@ -129,6 +141,17 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                 DialogFilter.dismiss();
                 }
             });
+
+            switch (Fstatus){
+                case "T" :
+                    RgFilter.check(R.id.RbtAktif);
+                    break;
+                case "F" :
+                    RgFilter.check(R.id.RbtNonAktif);
+                    break;
+                default:
+                    RgFilter.check(R.id.RbtSemua);
+            }
             DialogFilter.show();
             }
         });
@@ -138,9 +161,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         swipe.post(new Runnable() {
                        @Override
                        public void run() {
-                           swipe.setRefreshing(true);
-                           Adapter.notifyDataSetChanged();
-                           swipe.setRefreshing(false);
+                          LoadData();
                        }
                    }
         );
@@ -151,9 +172,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                 //CdSearch.animate().translationY(-50);
                 Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
                 s.putExtra("MODE","");
-                s.putExtra("POSITION",0);
-                startActivity(s);
-                LoadData();
+                startActivityForResult(s, 1);
             }
         });
 
@@ -196,11 +215,60 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
-    private void LoadData(){
+    public void LoadData(){
         swipe.setRefreshing(true);
-        this.Data.ReloadList(Fstatus, OrderBy);
-        PegawaiRekap.this.Adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
+        String filter;
+        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+        String url = route.URL_SELECT_PEGAWAI + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                PegawaiModel Data;
+                ListPegawai.clear();
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        Data = new PegawaiModel(
+                                obj.getInt("id"),
+                                obj.getString("nik"),
+                                obj.getString("nama"),
+                                obj.getString("alamat"),
+                                obj.getString("no_telpon_1"),
+                                obj.getString("no_telpon_2"),
+                                obj.getString("email"),
+                                obj.getDouble("gaji_pokok"),
+                                obj.getString("status"),
+                                obj.getLong("tgl_lahir"),
+                                obj.getLong("tgl_mulai_kerja"),
+                                obj.getString("keterangan")
+                        );
+                        ListPegawai.add(Data);
+                    }
+                    //Satu baris kosong di akhir
+                    Data = new PegawaiModel(0,"","","","","","",0.0,"HIDE",0,0,"");
+                    ListPegawai.add(Data);
+
+                    Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_tunjangan_rekap, ListPegawai);
+                    Adapter.notifyDataSetChanged();
+                    ListRekap.setAdapter(Adapter);
+                    swipe.setRefreshing(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    swipe.setRefreshing(false);
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ListPegawai.clear();
+                swipe.setRefreshing(false);
+                Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
     @Override
@@ -210,12 +278,12 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         CreateVew();
         InitClass();
         EventClass();
+        LoadData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.Adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -226,8 +294,27 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 
     @Override
     public void onRefresh() {
-        swipe.setRefreshing(true);
-        Adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
+        LoadData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                LoadData();
+            }else{
+
+            }
+        }
     }
 }
+
+
+
+
+//    private void LoadData(){
+//        swipe.setRefreshing(true);
+//        this.Data.ReloadList(Fstatus, OrderBy);
+//        PegawaiRekap.this.Adapter.notifyDataSetChanged();
+//        swipe.setRefreshing(false);
+//    }

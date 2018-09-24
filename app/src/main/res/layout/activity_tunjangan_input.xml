@@ -52,7 +52,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:background="@drawable/style_txt_default"
-                            android:hint="NIK"
+                            android:hint="Kode"
                             android:inputType="text" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:background="@drawable/style_txt_default"
-                            android:hint="Alamat" />
+                            android:hint="Keterangan" />
                     </android.support.design.widget.TextInputLayout>
 
                     <Button

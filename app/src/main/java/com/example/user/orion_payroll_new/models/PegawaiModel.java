@@ -4,11 +4,12 @@ import java.util.Date;
 
 public class PegawaiModel {
     private int id;
-    private String nik, nama, alamat, telpon1, telpon2, email, status;
+    private String nik, nama, alamat, telpon1, telpon2, email, status, keterangan;
     private Double gaji_pokok;
-    private long tgl_lahir;
+    private long tgl_lahir, tgl_mulai_kerja;
 
-    public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email, Double gaji_pokok, String status, long tgl_lahir) {
+    public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email,
+                        Double gaji_pokok, String status, long tgl_lahir, long tgl_mulai_kerja, String keterangan) {
         this.id = id;
         this.nik = NIK;
         this.nama = nama;
@@ -19,6 +20,7 @@ public class PegawaiModel {
         this.gaji_pokok = gaji_pokok;
         this.status = status;
         this.tgl_lahir = tgl_lahir;
+        this.keterangan = keterangan;
     }
 
     public void setId(int id) {
@@ -49,13 +51,25 @@ public class PegawaiModel {
         this.email = email;
     }
 
-    public void setgaji_pokok(Double gaji_pokok) {
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
+    }
+
+    public void setGaji_pokok(Double gaji_pokok) {
         this.gaji_pokok = gaji_pokok;
     }
 
-    public void setStatus(String status) {this.status = status;}
+    public void setTgl_lahir(long tgl_lahir) {
+        this.tgl_lahir = tgl_lahir;
+    }
 
-    public void setTgl_lahir(Integer tgl_lahir) {this.tgl_lahir = tgl_lahir; }
+    public void setTgl_mulai_kerja(long tgl_mulai_kerja) {
+        this.tgl_mulai_kerja = tgl_mulai_kerja;
+    }
 
     public int getId() {
         return id;
@@ -85,14 +99,24 @@ public class PegawaiModel {
         return email;
     }
 
-    public Double getgaji_pokok() {
+    public String getStatus() {
+        return status;
+    }
+
+    public String getKeterangan() {
+        return keterangan;
+    }
+
+    public Double getGaji_pokok() {
         return gaji_pokok;
     }
 
-    public String getStatus() { return status; }
-
     public long getTgl_lahir() {
         return tgl_lahir;
+    }
+
+    public long getTgl_mulai_kerja() {
+        return tgl_mulai_kerja;
     }
 
     @Override

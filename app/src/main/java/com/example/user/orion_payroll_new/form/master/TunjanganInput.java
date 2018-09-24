@@ -41,6 +41,9 @@ import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.EDIT_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_SAVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_UPDATE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
@@ -48,15 +51,12 @@ import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimple
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_PEGAWAI;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_TUNJANGAN;
+import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_TUNJANGAN;
 
 public class TunjanganInput extends AppCompatActivity {
     private TextInputEditText txtKode, txtNama, txtKeterangan;
-    private TunjanganModel Tunjangan;
     private Button btnSimpan;
-    private TunjanganTable TData;
-    public Boolean EditMode;
     private String Mode;
-    private int SelectedData;
     private int IdMst;
     private ProgressDialog Loading;
 
@@ -72,18 +72,15 @@ public class TunjanganInput extends AppCompatActivity {
         Bundle extra = this.getIntent().getExtras();
         this.Mode = extra.getString("MODE");
         this.IdMst = extra.getInt("ID");
-        this.SelectedData = extra.getInt("POSITION");
-        this.TData = new TunjanganTable(getApplicationContext());
         Loading = new ProgressDialog(TunjanganInput.this);
-        this.Tunjangan = new TunjanganModel(0,"","","","");
 
         if (Mode.equals(EDIT_MODE)){
-            this.setTitle("Edit Tinjangan");
+            this.setTitle("Edit Tunjangan");
         }else if (Mode.equals(DETAIL_MODE)){
-            this.setTitle("Detail Tinjangan");
+            this.setTitle("Detail Tunjangan");
             this.btnSimpan.setVisibility(View.INVISIBLE);
         }else{
-            this.setTitle("Input Tinjangan");
+            this.setTitle("Input Tunjangan");
         };
 
         boolean Enabled = !Mode.equals(DETAIL_MODE);
@@ -101,13 +98,8 @@ public class TunjanganInput extends AppCompatActivity {
             if (IsValid() == true){
                 if(Mode.equals(EDIT_MODE)){
                     IsSavedEdit();
-                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
                 }else{
                     IsSaved();
-                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
                 }
             }
             }
@@ -136,13 +128,12 @@ public class TunjanganInput extends AppCompatActivity {
     }
 
     protected void LoadData(){
-        Loading.setMessage("Loading.");
+        Loading.setMessage("Loading...");
         Loading.setCancelable(false);
         Loading.show();
         String filter;
         filter = "?id="+IdMst;
-        String url = route.URL_SELECT_GET + filter;
-        Log.d("URLLL",url);
+        String url = route.URL_GET_TUNJANGAN + filter;
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -156,6 +147,7 @@ public class TunjanganInput extends AppCompatActivity {
                     Loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
                     Loading.dismiss();
                 }
             }
@@ -170,25 +162,73 @@ public class TunjanganInput extends AppCompatActivity {
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
-    protected boolean IsSaved(){
-        TunjanganModel Data = new TunjanganModel(
-                            0,txtKode.getText().toString().trim(),
-                            txtNama.getText().toString().trim(),
-                            txtKeterangan.getText().toString().trim(),
-                            TRUE_STRING);
-        TData.Insert(Data);
-        return true;
+    protected void IsSaved(){
+        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_TUNJANGAN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                    Intent intent = getIntent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("kode", String.valueOf(txtKode.getText().toString()));
+                params.put("nama", String.valueOf(txtNama.getText().toString()));
+                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+                params.put("status", String.valueOf(TRUE_STRING));
+                return params;
+            }
+        };
+        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
     }
 
-    protected boolean IsSavedEdit(){
-        TunjanganModel Data = new TunjanganModel(
-                this.IdMst,
-                txtKode.getText().toString().trim(),
-                txtNama.getText().toString().trim(),
-                txtKeterangan.getText().toString().trim(),
-                TRUE_STRING);
-        TData.Update(Data);
-        return true;
+    protected void IsSavedEdit(){
+        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_TUNJANGAN, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONObject jObj = new JSONObject(response);
+                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                    Intent intent = getIntent();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("id", String.valueOf(Integer.toString(IdMst)));
+                params.put("kode", String.valueOf(txtKode.getText().toString()));
+                params.put("nama", String.valueOf(txtNama.getText().toString()));
+                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+                params.put("status", String.valueOf(TRUE_STRING));
+                return params;
+            }
+        };
+        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
     }
 
     protected boolean IsValid(){
@@ -212,3 +252,25 @@ public class TunjanganInput extends AppCompatActivity {
         return true;
     }
 }
+
+
+//    protected boolean IsSaved(){
+//        TunjanganModel Data = new TunjanganModel(
+//                            0,txtKode.getText().toString().trim(),
+//                            txtNama.getText().toString().trim(),
+//                            txtKeterangan.getText().toString().trim(),
+//                            TRUE_STRING);
+//        TData.Insert(Data);
+//        return true;
+//    }
+
+//    protected boolean IsSavedEdit(){
+//        TunjanganModel Data = new TunjanganModel(
+//                this.IdMst,
+//                txtKode.getText().toString().trim(),
+//                txtNama.getText().toString().trim(),
+//                txtKeterangan.getText().toString().trim(),
+//                TRUE_STRING);
+//        TData.Update(Data);
+//        return true;
+//    }

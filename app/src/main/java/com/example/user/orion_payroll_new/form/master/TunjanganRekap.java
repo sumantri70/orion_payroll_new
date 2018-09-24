@@ -48,6 +48,7 @@ import java.util.List;
 
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_SAVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 
 public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -62,19 +63,12 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 
     private SwipeRefreshLayout swipe;
 
-    private LayoutInflater inflater;
-    private View dialogView;
-
     private ListView ListRekap;
     public static TunjanganAdapter Adapter;
-    public static TunjanganTable Data;
     private List<TunjanganModel> ListTunjangan;
 
     public static String Fstatus;
     public static String OrderBy;
-    private ProgressDialog Loading;
-
-    static final int FROM_INPUT_TUNJANGAN = 1;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
@@ -96,18 +90,14 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
     }
 
     private void InitClass(){
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        //getSupportActionBar().setDisplayShowHomeEnabled(true);
+        //getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Tunjangan");
 
         Fstatus = TRUE_STRING;
         OrderBy = "kode";
         ListTunjangan = new ArrayList<TunjanganModel>();
-        Loading = new ProgressDialog(TunjanganRekap.this);
-        this.Data =  new TunjanganTable(getApplicationContext());
-        this.Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, this.Data.GetRecords());
-        this.ListRekap.setAdapter(Adapter);
         this.ListRekap.setDividerHeight(1);
     }
 
@@ -115,11 +105,11 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (Data.GetDataByIndex(i).getId() > 0) {
+                int Id =  ListTunjangan.get(i).getId();
+                if (Id > 0) {
                     Intent s = new Intent(TunjanganRekap.this, TunjanganInput.class);
                     s.putExtra("MODE", JCons.DETAIL_MODE);
-                    s.putExtra("POSITION",i);
-                    s.putExtra("ID",Data.GetDataByIndex(i).getId());
+                    s.putExtra("ID",Id);
                     startActivity(s);
                 }
             }
@@ -128,29 +118,40 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
+            RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
 
-                    @Override
-                    public void onCheckedChanged(RadioGroup arg0, int selectedId) {
-                        int SelectedId = RgFilter.getCheckedRadioButtonId();
-                        switch (SelectedId){
-                            case R.id.RbtSemua :
-                                Fstatus = "";
-                                break;
-                            case R.id.RbtAktif :
-                                Fstatus = TRUE_STRING;
-                                break;
-                            case R.id.RbtNonAktif:
-                                Fstatus = FALSE_STRING;
-                                break;
-                            default:
-                                Fstatus = "";
-                        }
-                        LoadData();
-                        DialogFilter.dismiss();
-                    }
-                });
-                DialogFilter.show();
+                @Override
+                public void onCheckedChanged(RadioGroup arg0, int selectedId) {
+                int SelectedId = RgFilter.getCheckedRadioButtonId();
+                switch (SelectedId){
+                    case R.id.RbtSemua :
+                        Fstatus = "";
+                        break;
+                    case R.id.RbtAktif :
+                        Fstatus = TRUE_STRING;
+                        break;
+                    case R.id.RbtNonAktif:
+                        Fstatus = FALSE_STRING;
+                        break;
+                    default:
+                        Fstatus = "";
+                }
+                LoadData();
+                DialogFilter.dismiss();
+                }
+            });
+
+            switch (Fstatus){
+                case "T" :
+                    RgFilter.check(R.id.RbtAktif);
+                    break;
+                case "F" :
+                    RgFilter.check(R.id.RbtNonAktif);
+                    break;
+                default:
+                    RgFilter.check(R.id.RbtSemua);
+            }
+            DialogFilter.show();
             }
         });
 
@@ -159,9 +160,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         swipe.post(new Runnable() {
                        @Override
                        public void run() {
-                           swipe.setRefreshing(true);
-                           Adapter.notifyDataSetChanged();
-                           swipe.setRefreshing(false);
+                           LoadData();
                        }
                    }
         );
@@ -172,8 +171,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
                 //CdSearch.animate().translationY(-50);
                 Intent s = new Intent(TunjanganRekap.this, TunjanganInput.class);
                 s.putExtra("MODE","");
-                s.putExtra("POSITION",0);
-                startActivityForResult(s, FROM_INPUT_TUNJANGAN);
+                startActivityForResult(s, 1);
             }
         });
 
@@ -226,6 +224,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
             @Override
             public void onResponse(JSONObject response) {
                 TunjanganModel Data;
+                ListTunjangan.clear();
                 try {
                     JSONArray jsonArray = response.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -242,23 +241,28 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
                     //Satu baris kosong di akhir
                     Data = new TunjanganModel(0,"","","","HIDE");
                     ListTunjangan.add(Data);
+
+                    Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, ListTunjangan);
+                    Adapter.notifyDataSetChanged();
+                    ListRekap.setAdapter(Adapter);
+                    swipe.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    Toast.makeText(TunjanganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    swipe.setRefreshing(false);
                 }
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error: " + error.getMessage());
+                ListTunjangan.clear();
+                swipe.setRefreshing(false);
+                Toast.makeText(TunjanganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
             }
         });
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-        ListTunjangan.clear();
-        this.Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, ListTunjangan);
-        this.Adapter.notifyDataSetChanged();
-        this.ListRekap.setAdapter(Adapter);
-        swipe.setRefreshing(false);
+
     }
 
     @Override
@@ -268,12 +272,12 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         CreateVew();
         InitClass();
         EventClass();
+        LoadData();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.Adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -289,7 +293,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == FROM_INPUT_TUNJANGAN) {
+        if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 LoadData();
             }else{
@@ -297,6 +301,9 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
             }
         }
     }
+
+
+
 
 
 }

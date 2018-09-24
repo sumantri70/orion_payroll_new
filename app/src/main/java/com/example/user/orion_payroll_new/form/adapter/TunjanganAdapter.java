@@ -44,6 +44,7 @@ import java.util.Map;
 import static android.app.Activity.RESULT_OK;
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_TUNJANGAN;
@@ -51,22 +52,22 @@ import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_TUNJAN
 
 public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
     private ProgressDialog Loading;
+    private Context ctx;
 
     public TunjanganAdapter(Context context, int resource, List<TunjanganModel> object) {
         super(context, resource, object);
+        this.ctx = context;
     }
-
 
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View v = convertView;
-        final int pos = position;
         LayoutInflater inflater = LayoutInflater.from(getContext());
         v = inflater.inflate(R.layout.list_tunjangan_rekap, null);
         final TunjanganModel Data = getItem(position);
 
-        TextView lblNik      = (TextView) v.findViewById(R.id.lblKode);
-        TextView lblNama     = (TextView) v.findViewById(R.id.lblNama);
+        TextView lblNik  = (TextView) v.findViewById(R.id.lblKode);
+        TextView lblNama = (TextView) v.findViewById(R.id.lblNama);
 
         final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
 
@@ -83,7 +84,7 @@ public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
             public void onClick(View view) {
                 PopupMenu po = new PopupMenu(getContext(), btnAction);
                 po.getMenuInflater().inflate(R.menu.menu_action_master, po.getMenu());
-
+                po.getMenu().getItem(1).setEnabled(Data.getStatus().equals(TRUE_STRING));
                 po.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -91,21 +92,21 @@ public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
                             if (item.getTitle().equals("Detail")){
                                 Intent s = new Intent(getContext(), TunjanganInput.class);
                                 s.putExtra("MODE", JCons.DETAIL_MODE);
-                                s.putExtra("POSITION",pos);
                                 s.putExtra("ID",IdMSt);
                                 getContext().startActivity(s);
                             } else if (item.getTitle().equals("Edit")){
                                 Intent s = new Intent(getContext(), TunjanganInput.class);
                                 s.putExtra("MODE", JCons.EDIT_MODE);
-                                s.putExtra("POSITION",pos);
                                 s.putExtra("ID",IdMSt);
-                                getContext().startActivity(s);
+                                ((TunjanganRekap)ctx).startActivityForResult(s, 1);
                             } else if (item.getTitle().equals("Aktivasi")){
                                 StringRequest strReq = new StringRequest(Request.Method.POST, URL_AKTIVASI_TUNJANGAN, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         try {
                                             JSONObject jObj = new JSONObject(response);
+                                            ((TunjanganRekap)ctx).LoadData();
+                                            Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -113,20 +114,17 @@ public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
                                 }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-
+                                        Toast.makeText(getContext(),MSG_UNSUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
                                     }
                                 }) {
                                     @Override
                                     protected Map<String, String> getParams() {
                                         Map<String, String> params = new HashMap<String, String>();
-                                        Log.d("ididi",URL_AKTIVASI_TUNJANGAN);
-                                        Log.d("ididi","idididi"+String.valueOf(IdMSt));
                                         params.put("id", String.valueOf(IdMSt));
                                         return params;
                                     }
                                 };
                                 OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-                                Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
                             }
                         }
                         return false;
