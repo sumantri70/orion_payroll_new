@@ -79,13 +79,30 @@ public class FungsiGeneral {
 
     public static String FormatMySqlDate(String tanggal){
         String inputPattern = "dd-MM-yyyy";
-        String outputPattern = " yyyy-MM-dd";
+        String outputPattern = "yyyy-MM-dd";
         SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
         SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
 
         Date date = null;
         String str = null;
 
+        try {
+            date = inputFormat.parse(tanggal);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
+    }
+
+    public static String FormatDateFromSql(String tanggal){
+        String inputPattern = "yyyy-MM-dd";
+        String outputPattern = "dd-MM-yyyy";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date = null;
+        String str = null;
         try {
             date = inputFormat.parse(tanggal);
             str = outputFormat.format(date);
@@ -181,6 +198,19 @@ public class FungsiGeneral {
             date = d.getTime();
         }
         return date;
+    }
+
+    public static String FloatToStrFmt(double input){
+
+        double koma, isi;
+        isi = Math.floor(input);
+        koma = input - isi;
+        String hasil1, hasil2;
+        NumberFormat format = NumberFormat.getInstance();
+        hasil1 = format.format(isi);
+        hasil2 = String.format("%.2f", koma);
+
+        return hasil1+hasil2.substring(1);
     }
 
     public static String FmtSqlStr(String str){

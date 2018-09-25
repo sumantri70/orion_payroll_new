@@ -47,6 +47,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_SAVE
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_UPDATE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
@@ -223,15 +224,14 @@ public class PegawaiInput extends AppCompatActivity {
                 try {
                     JSONArray jsonArray = response.getJSONArray("data");
                     JSONObject obj = jsonArray.getJSONObject(0);
-
                     txtNik.setText(obj.getString("nik"));
                     txtNama.setText(obj.getString("nama"));
                     txtAlamat.setText(obj.getString("alamat"));
                     txtTelpon1.setText(obj.getString("no_telpon_1"));
                     txtTelpon2.setText(obj.getString("no_telpon_2"));
                     txtEmail.setText(obj.getString("email"));
-                    txtTglLahir.setText(obj.getString("tgl_lahir"));
-                    txtTglMulaiBekerja.setText(obj.getString("tgl_mulai_kerja"));
+                    txtTglLahir.setText(FormatDateFromSql(obj.getString("tgl_lahir")));
+                    txtTglMulaiBekerja.setText(FormatDateFromSql(obj.getString("tgl_mulai_kerja")));
                     txtGajiPokok.setText(obj.getString("gaji_pokok"));
                     txtKeterangan.setText(obj.getString("keterangan"));
                     Loading.dismiss();
@@ -286,7 +286,7 @@ public class PegawaiInput extends AppCompatActivity {
                 params.put("email", String.valueOf(txtEmail.getText().toString()));
                 params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
                 params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
-                params.put("gaji_pokok", String.valueOf(txtGajiPokok.getText().toString()));
+                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
                 params.put("status", String.valueOf(TRUE_STRING));
                 params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
                 return params;
@@ -319,6 +319,7 @@ public class PegawaiInput extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                Log.d("iddd",Integer.toString(IdMst));
                 params.put("id", String.valueOf(Integer.toString(IdMst)));
                 params.put("nik", String.valueOf(txtNik.getText().toString()));
                 params.put("nama", String.valueOf(txtNama.getText().toString()));
@@ -326,9 +327,9 @@ public class PegawaiInput extends AppCompatActivity {
                 params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
                 params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
                 params.put("email", String.valueOf(txtEmail.getText().toString()));
-                params.put("tgl_lahir", String.valueOf(getSimpleDate(txtTglLahir.getText().toString())));
-                params.put("tgl_mulai_kerja", String.valueOf(getSimpleDate(txtTglLahir.getText().toString())));
-                params.put("gaji_pokok", String.valueOf(txtGajiPokok.getText().toString()));
+                params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+                params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
                 params.put("status", String.valueOf(TRUE_STRING));
                 params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
                 return params;

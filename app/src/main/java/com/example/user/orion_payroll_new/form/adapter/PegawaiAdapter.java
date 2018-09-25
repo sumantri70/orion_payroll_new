@@ -26,7 +26,6 @@ import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.form.master.PegawaiInput;
 import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
-import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
@@ -46,7 +45,6 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTI
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_PEGAWAI;
-import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_TUNJANGAN;
 
 public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
     private ProgressDialog Loading;
@@ -109,7 +107,7 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
                                     public void onResponse(String response) {
                                         try {
                                             JSONObject jObj = new JSONObject(response);
-                                            ((TunjanganRekap)ctx).LoadData();
+                                            ((PegawaiRekap)ctx).LoadData();
                                             Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();

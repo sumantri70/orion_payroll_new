@@ -35,6 +35,7 @@ import com.example.user.orion_payroll_new.form.adapter.TunjanganAdapter;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.TunjanganModel;
+import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 import com.example.user.orion_payroll_new.utility.route;
 
 import org.json.JSONArray;
@@ -47,6 +48,7 @@ import java.util.List;
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
 
 public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private SearchView txtSearch;
@@ -190,6 +192,9 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                             case "Nama" :
                                 OrderBy = "nama";
                                 break;
+                            case "Gaji" :
+                                OrderBy = "gaji_pokok";
+                                break;
                             default:
                                 OrderBy  = "";
                         }
@@ -239,8 +244,8 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                                 obj.getString("email"),
                                 obj.getDouble("gaji_pokok"),
                                 obj.getString("status"),
-                                obj.getLong("tgl_lahir"),
-                                obj.getLong("tgl_mulai_kerja"),
+                                getMillisDate(obj.getString("tgl_lahir")),
+                                getMillisDate(obj.getString("tgl_mulai_kerja")),
                                 obj.getString("keterangan")
                         );
                         ListPegawai.add(Data);
