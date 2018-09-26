@@ -3,6 +3,7 @@ package com.example.user.orion_payroll_new.models;
 public class TunjanganModel {
     private int id;
     private String kode, nama, keterangan, status;
+    private double jumlah;
 
     public TunjanganModel(int id, String kode, String nama, String keterangan, String status) {
         this.id = id;
@@ -32,6 +33,10 @@ public class TunjanganModel {
         return status;
     }
 
+    public double getJumlah() {
+        return jumlah;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
@@ -50,6 +55,10 @@ public class TunjanganModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public void setJumlah(double jumlah) {
+        this.jumlah = jumlah;
     }
 
     @Override

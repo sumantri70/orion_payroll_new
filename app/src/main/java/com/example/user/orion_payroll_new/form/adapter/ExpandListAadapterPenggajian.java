@@ -2,34 +2,18 @@ package com.example.user.orion_payroll_new.form.adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Typeface;
-import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.user.orion_payroll_new.R;
-import com.example.user.orion_payroll_new.form.master.PegawaiInput;
-import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
-import com.example.user.orion_payroll_new.form.transaksi.PenggajianInput;
-import com.example.user.orion_payroll_new.models.JCons;
 
 import java.util.HashMap;
 import java.util.List;
-
-import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
-import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
-import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
-import static java.security.AccessController.getContext;
 
 public class ExpandListAadapterPenggajian extends BaseExpandableListAdapter {
     private Context context;
@@ -83,16 +67,13 @@ public class ExpandListAadapterPenggajian extends BaseExpandableListAdapter {
         String HeaderTitle = (String)getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_group_penggajian, null);
+            convertView = inflater.inflate(R.layout.list_group_tunjangan_pegawai, null);
         }
 
         TextView lblGroup = (TextView)convertView.findViewById(R.id.lblGroup);
-        TextView lblTotal = (TextView)convertView.findViewById(R.id.lblTotal);
         ImageButton btnTambah = (ImageButton)convertView.findViewById(R.id.btnTambah);
         lblGroup.setTypeface(null, Typeface.BOLD);
-        lblTotal.setTypeface(null, Typeface.BOLD);
         lblGroup.setText(HeaderTitle);
-        lblTotal.setText("Jumlah : " + Integer.toString(getGroupCount()));
 
 
         this.DialogFilter = new Dialog(context);
@@ -113,17 +94,13 @@ public class ExpandListAadapterPenggajian extends BaseExpandableListAdapter {
         final String ChildText = (String) getChild(groupPosition, childPosition);
         if(convertView == null){
             LayoutInflater inflater = (LayoutInflater)this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = inflater.inflate(R.layout.list_item_penggajian, null);
+            convertView = inflater.inflate(R.layout.list_item_tunjangan_pegawai, null);
         }
         TextView lblItem = (TextView)convertView.findViewById(R.id.lblItem1);
         TextView lblItem2 = (TextView)convertView.findViewById(R.id.lblItem2);
 
         lblItem.setText(ChildText);
         lblItem2.setText(ChildText);
-
-
-
-
         return convertView;
     }
 

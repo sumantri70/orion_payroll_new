@@ -43,7 +43,7 @@
         app:layout_constraintVertical_bias="0.115" />
 
     <ImageButton
-        android:id="@+id/btnAction"
+        android:id="@+id/btnHapus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -66,7 +66,7 @@
         android:layout_marginTop="8dp"
         android:gravity="right"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/btnAction"
+        app:layout_constraintEnd_toStartOf="@+id/btnHapus"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -80,7 +80,7 @@
         android:gravity="right"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnAction"
+        app:layout_constraintEnd_toStartOf="@+id/btnHapus"
         app:layout_constraintTop_toBottomOf="@+id/lblNoTelpon"
         app:layout_constraintVertical_bias="0.113" />
 

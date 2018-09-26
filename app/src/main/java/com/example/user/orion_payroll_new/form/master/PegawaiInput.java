@@ -9,8 +9,10 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ExpandableListView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,9 +20,13 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.example.user.orion_payroll_new.ModelsHelper.PenggajianDetailModel;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
+import com.example.user.orion_payroll_new.form.adapter.ExpandListAadapterPenggajian;
+import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPegawai;
+import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.utility.EngineGeneral;
@@ -34,8 +40,10 @@ import org.json.JSONObject;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
@@ -45,6 +53,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_UPDATE;
+import static com.example.user.orion_payroll_new.models.JCons.RESULT_SEARCH_TUNJANGAN;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
@@ -64,6 +73,12 @@ public class PegawaiInput extends AppCompatActivity {
     private int IdMst;
     private ProgressDialog Loading;
 
+    public ExpandableListView ListView;
+    public ExpandListAdapterPegawai ListAdapter;
+    private List<String> ListDataHeader;
+    private HashMap<String, List<TunjanganModel>> ListHash;
+    public List<TunjanganModel> ArListTunjangan;
+
     protected void CreateView(){
         txtNik             = (TextInputEditText) findViewById(R.id.txtNik);
         txtNama            = (TextInputEditText) findViewById(R.id.txtNama);
@@ -76,6 +91,7 @@ public class PegawaiInput extends AppCompatActivity {
         txtKeterangan      = (TextInputEditText) findViewById(R.id.txtKeterangan);
         txtTglMulaiBekerja = (TextInputEditText) findViewById(R.id.txtTglMulaiBekerja);
         btnSimpan          = (Button) findViewById(R.id.btnSimpan);
+        ListView           = (ExpandableListView)findViewById(R.id.ExpLv);
     }
 
     protected void InitClass(){
@@ -85,7 +101,6 @@ public class PegawaiInput extends AppCompatActivity {
         this.IdMst = extra.getInt("ID");
         Loading = new ProgressDialog(PegawaiInput.this);
 
-
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Pegawai");
         }else if (Mode.equals(DETAIL_MODE)){
@@ -94,6 +109,15 @@ public class PegawaiInput extends AppCompatActivity {
         }else{
             this.setTitle("Input Pegawai");
         };
+
+
+        ListDataHeader = new ArrayList<>();
+        ListHash = new HashMap<>();
+        ListDataHeader.add("TUNJANGAN");
+        ArListTunjangan = new ArrayList<>();
+        ListHash.put(ListDataHeader.get(0), ArListTunjangan);
+        ListAdapter = new ExpandListAdapterPegawai(this, ListDataHeader, ListHash);
+        ListView.setAdapter(ListAdapter);
 
         boolean Enabled = !Mode.equals(DETAIL_MODE);
         this.txtNik.setEnabled(Enabled);
@@ -382,6 +406,27 @@ public class PegawaiInput extends AppCompatActivity {
             return false;
         }
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_SEARCH_TUNJANGAN) {
+                Bundle extra = data.getExtras();
+                TunjanganModel Tunjangan = new TunjanganModel(
+                        extra.getInt("id"),
+                        extra.getString("kode"),
+                        extra.getString("nama"),
+                        extra.getString("keterangan"),
+                        extra.getString("status")
+                );
+                ArListTunjangan.add(Tunjangan);
+                Log.d("hasilll","asupppp bossss");
+                ListAdapter.notifyDataSetChanged();
+            }else{
+
+            }
+        }
     }
 }
 

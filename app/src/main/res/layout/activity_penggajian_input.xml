@@ -125,7 +125,7 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="0dp"
+                    android:layout_marginBottom="3dp"
 
                     android:background="@drawable/style_btn_default"
                     android:text="Simpan"

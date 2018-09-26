@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.R;
-import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.form.master.PegawaiInput;
 import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
 import com.example.user.orion_payroll_new.models.JCons;
@@ -33,13 +29,11 @@ import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
@@ -68,7 +62,7 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
         TextView lblNoTelpon = (TextView) v.findViewById(R.id.lblNoTelpon);
         TextView lblGaji     = (TextView) v.findViewById(R.id.lblGaji);
 
-        final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
+        final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnHapus);
 
         if (Data.getStatus() == "HIDE"){
             btnAction.setVisibility(View.GONE);

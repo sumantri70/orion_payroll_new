@@ -27,6 +27,9 @@ public class JCons extends Application {
     public static String TDP_POTONGAN   = "P";
     public static String TDP_KASBON     = "K";
 
+    //RESULT
+    public static int RESULT_SEARCH_TUNJANGAN = 2;
+
 
 
 
