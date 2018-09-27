@@ -213,6 +213,23 @@ public class FungsiGeneral {
         return hasil1+hasil2.substring(1);
     }
 
+    public static float StrFmtToFloatInput(String input){
+
+        final NumberFormat formatter = NumberFormat.getInstance();
+        String koma = formatter.format(0.1);
+        if (koma.contains(",")){
+            if (!input.contains(",")) {
+                input = input.replace(".", ",");
+            }
+        }
+        try {
+            Number n = formatter.parse(input);
+            return n.floatValue();
+        }catch(ParseException e){
+            return 0;
+        }
+    }
+
     public static String FmtSqlStr(String str){
         return "'"+str+"'";
     }

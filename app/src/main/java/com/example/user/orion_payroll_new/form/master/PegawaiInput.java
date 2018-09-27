@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.Toast;
 
@@ -72,6 +73,7 @@ public class PegawaiInput extends AppCompatActivity {
     private String Mode;
     private int IdMst;
     private ProgressDialog Loading;
+    public EditText txtTmp;
 
     public ExpandableListView ListView;
     public ExpandListAdapterPegawai ListAdapter;
@@ -92,6 +94,8 @@ public class PegawaiInput extends AppCompatActivity {
         txtTglMulaiBekerja = (TextInputEditText) findViewById(R.id.txtTglMulaiBekerja);
         btnSimpan          = (Button) findViewById(R.id.btnSimpan);
         ListView           = (ExpandableListView)findViewById(R.id.ExpLv);
+
+        txtTmp = (EditText) findViewById(R.id.txtTmp);// BUAT NUPANG FOCUSIN AJA
     }
 
     protected void InitClass(){
@@ -109,7 +113,6 @@ public class PegawaiInput extends AppCompatActivity {
         }else{
             this.setTitle("Input Pegawai");
         };
-
 
         ListDataHeader = new ArrayList<>();
         ListHash = new HashMap<>();
@@ -130,6 +133,8 @@ public class PegawaiInput extends AppCompatActivity {
         this.txtTglLahir.setEnabled(Enabled);
         this.txtTglMulaiBekerja.setEnabled(Enabled);
         this.txtKeterangan.setEnabled(Enabled);
+
+        txtTmp.setVisibility(View.INVISIBLE);
 
         txtGajiPokok.addTextChangedListener(new FormatNumber(txtGajiPokok));
         txtNik.setFilters(new InputFilter[]{new InputFilter.AllCaps()}); //untuk uppercase
@@ -421,7 +426,6 @@ public class PegawaiInput extends AppCompatActivity {
                         extra.getString("status")
                 );
                 ArListTunjangan.add(Tunjangan);
-                Log.d("hasilll","asupppp bossss");
                 ListAdapter.notifyDataSetChanged();
             }else{
 
