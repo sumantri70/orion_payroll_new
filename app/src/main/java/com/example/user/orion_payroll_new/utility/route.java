@@ -27,6 +27,7 @@ public class route {
     public static final String URL_POTONGAN = "master_potongan/";
     public static final String URL_INSERT_POTONGAN   = URL + URL_POTONGAN + "insert.php";
     public static final String URL_SELECT_POTONGAN   = URL + URL_POTONGAN + "select.php";
+    public static final String URL_GET_POTONGAN      = URL + URL_POTONGAN + "get.php";
     public static final String URL_UPDATE_POTONGAN   = URL + URL_POTONGAN + "update.php";
     public static final String URL_DELETE_POTONGAN   = URL + URL_POTONGAN + "delete.php";
     public static final String URL_AKTIVASI_POTONGAN = URL + URL_POTONGAN + "aktivasi.php";

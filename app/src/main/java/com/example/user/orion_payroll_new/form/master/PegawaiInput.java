@@ -318,6 +318,22 @@ public class PegawaiInput extends AppCompatActivity {
                 params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
                 params.put("status", String.valueOf(TRUE_STRING));
                 params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+
+//                JSONArray ArTunjangan = new JSONArray();
+//
+//                for(int i=0; i < ArListTunjangan.size();i++){
+//                    JSONObject obj=new JSONObject();
+//                    try {
+//                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
+//                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    ArTunjangan.put(obj);
+//                }
+//                params.put("ArTunjangan", ArTunjangan);
+
+
                 return params;
             }
         };
@@ -412,6 +428,7 @@ public class PegawaiInput extends AppCompatActivity {
         }
         return true;
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

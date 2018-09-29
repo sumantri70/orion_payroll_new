@@ -36,6 +36,9 @@
         <activity android:name=".form.transaksi.PenggajianInput" />
         <activity android:name=".form.transaksi.PenggajianPilihTunjangan" />
         <activity android:name=".form.lov.lov_tunjangan" />
+        <activity android:name=".form.master.PotonganInput" />
+        <activity android:name=".form.master.PotonganRekap" />
+        <activity android:name=".form.testMenu"></activity>
     </application>
 
 </manifest>
