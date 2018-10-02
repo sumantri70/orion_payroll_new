@@ -4,6 +4,7 @@ public class route {
     //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
     public static final String URL = "http://192.168.43.59/orion_payroll/";
     //public static final String URL = "http://10.146.168.145/orion_payroll/";
+    //public static final String URL = "http://192.168.1.8/orion_payroll/";
 
     //*-- MASTER PEGAWAI --*\\
     public static final String URL_PEGAWAI = "master_pegawai/";
@@ -13,6 +14,15 @@ public class route {
     public static final String URL_UPDATE_PEGAWAI   = URL + URL_PEGAWAI + "update.php";
     public static final String URL_DELETE_PEGAWAI   = URL + URL_PEGAWAI + "delete.php";
     public static final String URL_AKTIVASI_PEGAWAI = URL + URL_PEGAWAI + "aktivasi.php";
+
+    //*-- DETAIL TUNJANGAN PEGAWAI --*\\
+    public static final String URL_DET_TUNJANGAN_PEGAWAI = "detail_tunjangan_pegawai/";
+    public static final String URL_DET_TUNJANGAN_PEGAWAI_INSERT   = URL + URL_DET_TUNJANGAN_PEGAWAI + "insert.php";
+    public static final String URL_DET_TUNJANGAN_PEGAWAI_SELECT_PEGAWAI   = URL + URL_DET_TUNJANGAN_PEGAWAI + "select.php";
+    public static final String URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI      = URL + URL_DET_TUNJANGAN_PEGAWAI + "get.php";
+    public static final String URL_DET_TUNJANGAN_PEGAWAI_UPDATE_PEGAWAI   = URL + URL_DET_TUNJANGAN_PEGAWAI + "update.php";
+    public static final String URL_DET_TUNJANGAN_PEGAWAI_DELETE_PEGAWAI   = URL + URL_DET_TUNJANGAN_PEGAWAI + "delete.php";
+    public static final String URL_DET_TUNJANGAN_PEGAWAI_AKTIVASI_PEGAWAI = URL + URL_DET_TUNJANGAN_PEGAWAI + "aktivasi.php";
 
     //*-- MASTER TUNJANGAN --*\\
     public static final String URL_TUNJANGAN = "master_tunjangan/";

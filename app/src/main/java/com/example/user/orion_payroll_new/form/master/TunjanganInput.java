@@ -113,13 +113,13 @@ public class TunjanganInput extends AppCompatActivity {
         CreateView();
         InitClass();
         EventClass();
+        if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
+            LoadData();
+        }
     }
 
     protected void onStart() {
         super.onStart();
-        if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
-            LoadData();
-        }
     }
 
     public boolean onSupportNavigateUp(){
@@ -191,6 +191,26 @@ public class TunjanganInput extends AppCompatActivity {
                 params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
                 params.put("status", String.valueOf(TRUE_STRING));
                 return params;
+
+
+//                Map<String, String> params = new HashMap<String, String>();
+//                JSONArray ArTunjangan = new JSONArray();
+//                for(int i=0; i < 2;i++){
+//                    JSONObject obj= new JSONObject();
+//                    try {
+//                        obj.put("kode", String.valueOf(txtKode.getText().toString()));
+//                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
+//                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                        obj.put("status", String.valueOf(TRUE_STRING));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    ArTunjangan.put(obj);
+//                }
+//
+//                //Log.d("tahhhhhhhhhhhhhh",ArTunjangan.toString());
+//                params.put("data", ArTunjangan.toString());
+//                return params;
             }
         };
         OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);

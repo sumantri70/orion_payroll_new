@@ -60,6 +60,7 @@ import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormatMySql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
@@ -70,7 +71,7 @@ import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_TUNJAN
 public class PegawaiInput extends AppCompatActivity {
     private TextInputEditText txtNik, txtNama, txtAlamat, txtTelpon1, txtTelpon2, txtEmail, txtGajiPokok, txtTglLahir, txtTglMulaiBekerja, txtKeterangan;
     private Button btnSimpan;
-    private String Mode;
+    public String Mode;
     private int IdMst;
     private ProgressDialog Loading;
     public EditText txtTmp;
@@ -94,8 +95,7 @@ public class PegawaiInput extends AppCompatActivity {
         txtTglMulaiBekerja = (TextInputEditText) findViewById(R.id.txtTglMulaiBekerja);
         btnSimpan          = (Button) findViewById(R.id.btnSimpan);
         ListView           = (ExpandableListView)findViewById(R.id.ExpLv);
-
-        txtTmp = (EditText) findViewById(R.id.txtTmp);// BUAT NUPANG FOCUSIN AJA
+        txtTmp             = (EditText) findViewById(R.id.txtTmp);// BUAT NUPANG FOCUSIN AJA
     }
 
     protected void InitClass(){
@@ -144,6 +144,9 @@ public class PegawaiInput extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                txtTmp.setVisibility(View.VISIBLE);
+                txtTmp.requestFocus();
+                txtTmp.setVisibility(View.INVISIBLE);
                 if (IsValid() == true){
                     if(Mode.equals(EDIT_MODE)){
                         IsSavedEdit();
@@ -222,15 +225,15 @@ public class PegawaiInput extends AppCompatActivity {
         CreateView();
         InitClass();
         EventClass();
+        if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
+            LoadData();
+        }
     }
 
     @Override
 
     protected void onStart() {
         super.onStart();
-        if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
-            LoadData();
-        }
     }
 
     @Override
@@ -249,7 +252,6 @@ public class PegawaiInput extends AppCompatActivity {
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                TunjanganModel Data;
                 try {
                     JSONArray jsonArray = response.getJSONArray("data");
                     JSONObject obj = jsonArray.getJSONObject(0);
@@ -263,7 +265,48 @@ public class PegawaiInput extends AppCompatActivity {
                     txtTglMulaiBekerja.setText(FormatDateFromSql(obj.getString("tgl_mulai_kerja")));
                     txtGajiPokok.setText(obj.getString("gaji_pokok"));
                     txtKeterangan.setText(obj.getString("keterangan"));
+                    LoadDetail();
                     Loading.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Loading.dismiss();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error", "Error: " + error.getMessage());
+                Loading.dismiss();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+    }
+
+    protected void LoadDetail(){
+        String filter;
+        filter = "?id_pegawai="+IdMst;
+        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                TunjanganModel Data;
+                try {
+                    JSONArray jsonArrayDetail = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
+                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
+                        Data = new TunjanganModel(
+                                objDetail.getInt("id_tunjangan"),
+                                objDetail.getString("kode"),
+                                objDetail.getString("nama"),
+                                "",
+                                ""
+                        );
+                        Data.setJumlah(objDetail.getDouble("jumlah"));
+                        ArListTunjangan.add(Data);
+                    }
+                    ListAdapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
@@ -306,34 +349,44 @@ public class PegawaiInput extends AppCompatActivity {
 
             @Override
             protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("nik", String.valueOf(txtNik.getText().toString()));
+//                params.put("nama", String.valueOf(txtNama.getText().toString()));
+//                params.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+//                params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+//                params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+//                params.put("email", String.valueOf(txtEmail.getText().toString()));
+//                params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+//                params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+//                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
+//                params.put("status", String.valueOf(TRUE_STRING));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+
                 Map<String, String> params = new HashMap<String, String>();
-                params.put("nik", String.valueOf(txtNik.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("alamat", String.valueOf(txtAlamat.getText().toString()));
-                params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
-                params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
-                params.put("email", String.valueOf(txtEmail.getText().toString()));
-                params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
-                params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
-                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
-                params.put("status", String.valueOf(TRUE_STRING));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+                JSONArray ArParms = new JSONArray();
+                for(int i=0; i < ArListTunjangan.size() ;i++){
+                    JSONObject obj= new JSONObject();
+                    try {
+                        obj.put("nik", String.valueOf(txtNik.getText().toString()));
+                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
+                        obj.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+                        obj.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+                        obj.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+                        obj.put("email", String.valueOf(txtEmail.getText().toString()));
+                        obj.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+                        obj.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+                        obj.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
+                        obj.put("status", String.valueOf(TRUE_STRING));
+                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
 
-//                JSONArray ArTunjangan = new JSONArray();
-//
-//                for(int i=0; i < ArListTunjangan.size();i++){
-//                    JSONObject obj=new JSONObject();
-//                    try {
-//                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
-//                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    ArTunjangan.put(obj);
-//                }
-//                params.put("ArTunjangan", ArTunjangan);
-
-
+                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
+                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ArParms.put(obj);
+                }
+                params.put("data", ArParms.toString());
                 return params;
             }
         };
@@ -345,6 +398,7 @@ public class PegawaiInput extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    Log.d("sqlllllll",response);
                     JSONObject jObj = new JSONObject(response);
                     Toast.makeText(PegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
                     Intent intent = getIntent();
@@ -363,20 +417,48 @@ public class PegawaiInput extends AppCompatActivity {
         }) {
             @Override
             protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("id", String.valueOf(Integer.toString(IdMst)));
+//                params.put("nik", String.valueOf(txtNik.getText().toString()));
+//                params.put("nama", String.valueOf(txtNama.getText().toString()));
+//                params.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+//                params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+//                params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+//                params.put("email", String.valueOf(txtEmail.getText().toString()));
+//                params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+//                params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+//                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
+//                params.put("status", String.valueOf(TRUE_STRING));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                return params;
+
                 Map<String, String> params = new HashMap<String, String>();
-                Log.d("iddd",Integer.toString(IdMst));
-                params.put("id", String.valueOf(Integer.toString(IdMst)));
-                params.put("nik", String.valueOf(txtNik.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("alamat", String.valueOf(txtAlamat.getText().toString()));
-                params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
-                params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
-                params.put("email", String.valueOf(txtEmail.getText().toString()));
-                params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
-                params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
-                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
-                params.put("status", String.valueOf(TRUE_STRING));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+                JSONArray ArParms = new JSONArray();
+                for(int i=0; i < ArListTunjangan.size() ;i++){
+                    JSONObject obj= new JSONObject();
+                    try {
+                        obj.put("id", String.valueOf(Integer.toString(IdMst)));
+                        obj.put("nik", String.valueOf(txtNik.getText().toString()));
+                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
+                        obj.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+                        obj.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+                        obj.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+                        obj.put("email", String.valueOf(txtEmail.getText().toString()));
+                        obj.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+                        obj.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+                        obj.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
+                        obj.put("status", String.valueOf(TRUE_STRING));
+                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+
+                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
+                        Log.d("iddddddddddd", String.valueOf(ArListTunjangan.get(i).getId()));
+                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ArParms.put(obj);
+                }
+                params.put("data", ArParms.toString());
                 return params;
             }
         };
@@ -426,6 +508,27 @@ public class PegawaiInput extends AppCompatActivity {
             txtGajiPokok.setError("Gaji pokok belum diisi");
             return false;
         }
+
+        if (ArListTunjangan.size() == 0) {
+            Toast.makeText(PegawaiInput.this, "Belum ada tunjangan yang diinput", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+//        for(int i=0; i < ArListTunjangan.size(); i++){
+//            if (ArListTunjangan.get(i).getJumlah() == 0) {
+//
+//
+//                return false;
+//            }
+//
+//            for(int j=i+1; j < ArListTunjangan.size(); j++){
+//                if (ArListTunjangan.get(i).getId() == ArListTunjangan.get(j).getId()) {
+//                    Toast.makeText(PegawaiInput.this, ArListTunjangan.get(i).getNama()+" tidak boleh diinput > 1 kali", Toast.LENGTH_SHORT).show();
+//                    return false;
+//                }
+//            }
+//        }
+
         return true;
     }
 
@@ -444,6 +547,10 @@ public class PegawaiInput extends AppCompatActivity {
                 );
                 ArListTunjangan.add(Tunjangan);
                 ListAdapter.notifyDataSetChanged();
+
+                if (ArListTunjangan.size() > 0 ){
+                    ListView.expandGroup(0);
+                }
             }else{
 
             }

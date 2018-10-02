@@ -101,13 +101,13 @@ public class PotonganInput extends AppCompatActivity {
         CreateView();
         InitClass();
         EventClass();
+        if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
+            LoadData();
+        }
     }
 
     protected void onStart() {
         super.onStart();
-        if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
-            LoadData();
-        }
     }
 
     public boolean onSupportNavigateUp(){
@@ -156,6 +156,9 @@ public class PotonganInput extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jObj = new JSONObject(response);
+
+                    Log.d("jsonnnnnnn",jObj.toString());
+                    Toast.makeText(PotonganInput.this, jObj.toString(), Toast.LENGTH_SHORT).show();
                     Toast.makeText(PotonganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
                     Intent intent = getIntent();
                     setResult(RESULT_OK, intent);

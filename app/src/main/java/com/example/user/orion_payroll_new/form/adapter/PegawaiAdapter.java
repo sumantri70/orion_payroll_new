@@ -6,11 +6,14 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +33,7 @@ import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,13 +44,18 @@ import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_PEGAWAI;
 
-public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
+public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> implements Filterable {
     private ProgressDialog Loading;
     private Context ctx;
+    private List<PegawaiModel> objects;
+    private List<PegawaiModel> filteredData;
+    private ItemFilter mFilter = new ItemFilter();
 
     public PegawaiAdapter(Context context, int resource, List<PegawaiModel> object) {
         super(context, resource, object);
         this.ctx = context;
+        this.objects = object;
+        this.filteredData = objects;
     }
 
     @Override
@@ -130,5 +139,53 @@ public class PegawaiAdapter extends ArrayAdapter<PegawaiModel> {
             }
         });
         return v;
+    }
+
+    public int getCount() {
+        return filteredData.size();
+    }
+
+    public PegawaiModel getItem(int position) {
+        return filteredData.get(position);
+    }
+
+    public Filter getFilter() {
+        return mFilter;
+    }
+
+    private class ItemFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final List<PegawaiModel> list = objects;
+
+            int count = list.size();
+            final ArrayList<PegawaiModel> nlist = new ArrayList<PegawaiModel>(count);
+
+            String nik ;
+            String nama ;
+            Log.d("filter", filterString);
+            for (int i = 0; i < count; i++) {
+                nik = list.get(i).getNik();
+                nama = list.get(i).getNama();
+                if ((nik.toLowerCase().contains(filterString)) || (nama.toLowerCase().contains(filterString))) {
+                    nlist.add(list.get(i));
+                }
+            }
+            results.values = nlist;
+            results.count = nlist.size();
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredData = (ArrayList<PegawaiModel>) results.values;
+            notifyDataSetChanged();
+        }
+
     }
 }
