@@ -121,6 +121,8 @@ public class PegawaiInput extends AppCompatActivity {
         ListHash.put(ListDataHeader.get(0), ArListTunjangan);
         ListAdapter = new ExpandListAdapterPegawai(this, ListDataHeader, ListHash);
         ListView.setAdapter(ListAdapter);
+        ListView.getLayoutParams().height = 150;
+
 
         boolean Enabled = !Mode.equals(DETAIL_MODE);
         this.txtNik.setEnabled(Enabled);
@@ -227,6 +229,7 @@ public class PegawaiInput extends AppCompatActivity {
         EventClass();
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
             LoadData();
+            ListView.expandGroup(0);
         }
     }
 
@@ -307,6 +310,7 @@ public class PegawaiInput extends AppCompatActivity {
                         ArListTunjangan.add(Data);
                     }
                     ListAdapter.notifyDataSetChanged();
+                    ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + 150;
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
@@ -550,7 +554,10 @@ public class PegawaiInput extends AppCompatActivity {
 
                 if (ArListTunjangan.size() > 0 ){
                     ListView.expandGroup(0);
+
                 }
+                ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + 150;
+                //ListView.getChildAt(0).getLayoutParams().height = 200 * ArListTunjangan.size();
             }else{
 
             }

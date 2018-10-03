@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.user.orion_payroll_new.R;
@@ -21,6 +22,7 @@ import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
+import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 
 import java.util.HashMap;
@@ -43,6 +45,8 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
         ListHasMap = listHasMap;
         this.ctx = context;
     }
+
+
 
     @Override
     public int getGroupCount() {
@@ -101,9 +105,10 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
             @Override
             public void onClick(View view) {
             btnTambah.requestFocus();
-            ((PegawaiInput)ctx).txtTmp.setVisibility(View.VISIBLE);
-            ((PegawaiInput)ctx).txtTmp.requestFocus();
-            ((PegawaiInput)ctx).txtTmp.setVisibility(View.INVISIBLE);
+            LostFocus();
+//            ((PegawaiInput)ctx).txtTmp.setVisibility(View.VISIBLE);
+//            ((PegawaiInput)ctx).txtTmp.requestFocus();
+//            ((PegawaiInput)ctx).txtTmp.setVisibility(View.INVISIBLE);
 
             Intent s = new Intent(((PegawaiInput)ctx), lov_tunjangan.class);
             s.putExtra("MODE","");
@@ -166,12 +171,23 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
         holder.HbtnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+             LostFocus();
             ((PegawaiInput)ctx).ArListTunjangan.remove(idx);
             ((PegawaiInput)ctx).ListAdapter.notifyDataSetChanged();
+            ((PegawaiInput)ctx).ListView.getLayoutParams().height = 200 * ((PegawaiInput)ctx).ArListTunjangan.size() + 150;
             }
         });
         return v;
+
     }
+
+    protected void LostFocus(){
+        ((PegawaiInput)ctx).txtTmp.setVisibility(View.VISIBLE);
+        ((PegawaiInput)ctx).txtTmp.requestFocus();
+        ((PegawaiInput)ctx).txtTmp.setVisibility(View.INVISIBLE);
+    }
+
+
 
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
@@ -183,5 +199,19 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
         private TextView Hnama;
         public EditText Hjumlah;
         public ImageButton HbtnHapus;
+    }
+
+    @Override
+    public void onGroupCollapsed(int groupPosition) {
+        super.onGroupCollapsed(groupPosition);
+        LostFocus();
+        ((PegawaiInput)ctx).ListView.getLayoutParams().height = 150;
+    }
+
+    @Override
+    public void onGroupExpanded(int groupPosition) {
+        super.onGroupExpanded(groupPosition);
+        LostFocus();
+        ((PegawaiInput)ctx).ListView.getLayoutParams().height = 200 * ((PegawaiInput)ctx).ArListTunjangan.size() + 150;
     }
 }
