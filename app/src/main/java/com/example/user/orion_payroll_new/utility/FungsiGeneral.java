@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.inputmethod.InputMethodManager;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -228,6 +229,12 @@ public class FungsiGeneral {
         }catch(ParseException e){
             return 0;
         }
+    }
+
+    public static double RoundTwoDecimal(double d)
+    {
+        DecimalFormat twoDForm = new DecimalFormat("#.##");
+        return Double.valueOf(twoDForm.format(d));
     }
 
     public static String FmtSqlStr(String str){

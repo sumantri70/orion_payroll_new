@@ -38,7 +38,8 @@
         <activity android:name=".form.lov.lov_tunjangan" />
         <activity android:name=".form.master.PotonganInput" />
         <activity android:name=".form.master.PotonganRekap" />
-        <activity android:name=".form.testMenu"></activity>
+        <activity android:name=".form.testMenu" />
+        <activity android:name=".form.master.PegawaiInputGaji"></activity>
     </application>
 
 </manifest>

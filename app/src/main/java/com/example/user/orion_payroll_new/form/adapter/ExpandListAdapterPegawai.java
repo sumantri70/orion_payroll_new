@@ -39,6 +39,7 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
     private HashMap<String, List<TunjanganModel>> ListHasMap;
     private Context ctx;
 
+
     public ExpandListAdapterPegawai(Context context, List<String> listHeader, HashMap<String, List<TunjanganModel>> listHasMap) {
         this.context = context;
         ListHeader = listHeader;
@@ -106,10 +107,6 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
             public void onClick(View view) {
             btnTambah.requestFocus();
             LostFocus();
-//            ((PegawaiInput)ctx).txtTmp.setVisibility(View.VISIBLE);
-//            ((PegawaiInput)ctx).txtTmp.requestFocus();
-//            ((PegawaiInput)ctx).txtTmp.setVisibility(View.INVISIBLE);
-
             Intent s = new Intent(((PegawaiInput)ctx), lov_tunjangan.class);
             s.putExtra("MODE","");
             ((PegawaiInput)ctx).startActivityForResult(s, RESULT_SEARCH_TUNJANGAN);
@@ -175,6 +172,7 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
             ((PegawaiInput)ctx).ArListTunjangan.remove(idx);
             ((PegawaiInput)ctx).ListAdapter.notifyDataSetChanged();
             ((PegawaiInput)ctx).ListView.getLayoutParams().height = 200 * ((PegawaiInput)ctx).ArListTunjangan.size() + 150;
+
             }
         });
         return v;
@@ -214,4 +212,5 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
         LostFocus();
         ((PegawaiInput)ctx).ListView.getLayoutParams().height = 200 * ((PegawaiInput)ctx).ArListTunjangan.size() + 150;
     }
+
 }
