@@ -1,17 +1,14 @@
 package com.example.user.orion_payroll_new.form.adapter;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.user.orion_payroll_new.R;
@@ -22,16 +19,13 @@ import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
-import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static com.example.user.orion_payroll_new.models.JCons.RESULT_SEARCH_TUNJANGAN;
-import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FloatToStrFmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
-import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToFloatInput;
 
 public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
     private Context context;
@@ -130,7 +124,7 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
             holder.Hkode   = (TextView) v.findViewById(R.id.lblItem1);
             holder.Hnama   = (TextView) v.findViewById(R.id.lblItem2);
             holder.Hjumlah = (EditText) v.findViewById(R.id.txtJumlah);
-            holder.HbtnHapus = (ImageButton)v.findViewById(R.id.btnHapus);
+            holder.HbtnHapus = (ImageButton)v.findViewById(R.id.btnAction);
             holder.Hjumlah.addTextChangedListener(new FormatNumber(holder.Hjumlah));
 
             boolean Enabled = !((PegawaiInput)ctx).Mode.equals(DETAIL_MODE);

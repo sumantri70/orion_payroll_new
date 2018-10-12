@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,8 +25,6 @@ import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
 import com.example.user.orion_payroll_new.form.master.TunjanganInput;
 import com.example.user.orion_payroll_new.models.JCons;
-import com.example.user.orion_payroll_new.models.PotonganModel;
-import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
@@ -68,7 +65,7 @@ public class TunjanganAdapter extends ArrayAdapter<TunjanganModel> {
         TextView lblNik  = (TextView) v.findViewById(R.id.lblKode);
         TextView lblNama = (TextView) v.findViewById(R.id.lblNama);
 
-        final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnHapus);
+        final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
 
         if (Data.getStatus() == "HIDE"){
             btnAction.setVisibility(View.GONE);

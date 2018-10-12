@@ -39,7 +39,9 @@
         <activity android:name=".form.master.PotonganInput" />
         <activity android:name=".form.master.PotonganRekap" />
         <activity android:name=".form.testMenu" />
-        <activity android:name=".form.master.PegawaiInputGaji"></activity>
+        <activity android:name=".form.master.PegawaiInputGaji" />
+        <activity android:name=".form.transaksi.KasbonPegawaiInput" />
+        <activity android:name=".form.transaksi.KasbonPegawaiRekap"></activity>
     </application>
 
 </manifest>

@@ -19,7 +19,6 @@
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:textColor="@color/colorblack"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
         app:layout_constraintHorizontal_bias="0.028"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,14 +35,13 @@
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
         app:layout_constraintHorizontal_bias="0.029"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblNik"
         app:layout_constraintVertical_bias="0.115" />
 
     <ImageButton
-        android:id="@+id/btnHapus"
+        android:id="@+id/btnAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -66,7 +64,7 @@
         android:layout_marginTop="8dp"
         android:gravity="right"
         android:text="TextView"
-        app:layout_constraintEnd_toStartOf="@+id/btnHapus"
+        app:layout_constraintEnd_toStartOf="@+id/btnAction"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -80,7 +78,7 @@
         android:gravity="right"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnHapus"
+        app:layout_constraintEnd_toStartOf="@+id/btnAction"
         app:layout_constraintTop_toBottomOf="@+id/lblNoTelpon"
         app:layout_constraintVertical_bias="0.113" />
 

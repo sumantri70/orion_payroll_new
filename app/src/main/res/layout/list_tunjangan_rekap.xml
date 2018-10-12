@@ -43,7 +43,7 @@
         app:layout_constraintVertical_bias="0.115" />
 
     <ImageButton
-        android:id="@+id/btnHapus"
+        android:id="@+id/btnAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

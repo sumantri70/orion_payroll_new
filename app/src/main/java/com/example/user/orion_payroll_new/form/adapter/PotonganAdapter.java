@@ -27,8 +27,6 @@ import com.example.user.orion_payroll_new.form.master.PotonganInput;
 import com.example.user.orion_payroll_new.form.master.PotonganRekap;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PotonganModel;
-import com.example.user.orion_payroll_new.models.PotonganModel;
-import com.example.user.orion_payroll_new.models.PotonganModel;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import org.json.JSONException;
@@ -42,7 +40,6 @@ import java.util.Map;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
-import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_POTONGAN;
 import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_POTONGAN;
 
 public class PotonganAdapter extends ArrayAdapter<PotonganModel> {
@@ -69,7 +66,7 @@ public class PotonganAdapter extends ArrayAdapter<PotonganModel> {
         TextView lblNik  = (TextView) v.findViewById(R.id.lblKode);
         TextView lblNama = (TextView) v.findViewById(R.id.lblNama);
 
-        final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnHapus);
+        final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
 
         if (Data.getStatus() == "HIDE"){
             btnAction.setVisibility(View.GONE);

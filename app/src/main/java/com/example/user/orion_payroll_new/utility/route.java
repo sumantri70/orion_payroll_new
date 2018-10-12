@@ -43,4 +43,16 @@ public class route {
     public static final String URL_UPDATE_POTONGAN   = URL + URL_POTONGAN + "update.php";
     public static final String URL_DELETE_POTONGAN   = URL + URL_POTONGAN + "delete.php";
     public static final String URL_AKTIVASI_POTONGAN = URL + URL_POTONGAN + "aktivasi.php";
+
+
+    //=====================================================================================================================================
+
+    //*-- KASBON PEGAWAI --*\\
+    public static final String URL_KASBON = "master_kasbon/";
+    public static final String URL_INSERT_KASBON   = URL + URL_KASBON + "insert.php";
+    public static final String URL_SELECT_KASBON   = URL + URL_KASBON + "select.php";
+    public static final String URL_GET_KASBON      = URL + URL_KASBON + "get.php";
+    public static final String URL_UPDATE_KASBON   = URL + URL_KASBON + "update.php";
+    public static final String URL_DELETE_KASBON   = URL + URL_KASBON + "delete.php";
+
 }

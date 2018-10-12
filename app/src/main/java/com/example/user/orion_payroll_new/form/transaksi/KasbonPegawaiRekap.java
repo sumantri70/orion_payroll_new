@@ -1,18 +1,14 @@
-package com.example.user.orion_payroll_new.form.master;
+package com.example.user.orion_payroll_new.form.transaksi;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,12 +26,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
-import com.example.user.orion_payroll_new.form.adapter.PegawaiAdapter;
-import com.example.user.orion_payroll_new.form.adapter.TunjanganAdapter;
+import com.example.user.orion_payroll_new.form.adapter.KasbonPegawaiAdapter;
 import com.example.user.orion_payroll_new.models.JCons;
-import com.example.user.orion_payroll_new.models.PegawaiModel;
-import com.example.user.orion_payroll_new.models.TunjanganModel;
-import com.example.user.orion_payroll_new.utility.FungsiGeneral;
+import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import com.example.user.orion_payroll_new.utility.route;
 
 import org.json.JSONArray;
@@ -50,7 +43,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONE
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
 
-public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private SearchView txtSearch;
     private RadioGroup RgFilter;
     private Dialog DialogFilter;
@@ -58,29 +51,27 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 
     private ImageButton btnFilter, btnSort;
     private FloatingActionButton btnTambah;
-    private CardView CdSearch;
 
     private SwipeRefreshLayout swipe;
 
-    private List<PegawaiModel> ListPegawai;
+    private List<KasbonPegawaiModel> ListData;
     private ListView ListRekap;
-    public static PegawaiAdapter Adapter;
+    public static KasbonPegawaiAdapter Adapter;
     public static PegawaiTable Data;
 
     public static String Fstatus;
     public static String OrderBy;
 
     private void CreateVew(){
-        this.ListRekap  = (ListView) findViewById(R.id.ListRekapPegawai);
+        this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
         this.btnTambah  = (FloatingActionButton) findViewById(R.id.btnTambah);
         this.btnSort    = (ImageButton) findViewById(R.id.BtnSort);
         this.btnFilter  = (ImageButton) findViewById(R.id.BtnFilter);
         this.txtSearch  = (SearchView) findViewById(R.id.txtSearch);
-        this.CdSearch   = (CardView) findViewById(R.id.CdSearch);
         this.swipe      = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         this.swipe.setColorSchemeColors(Color.DKGRAY, Color.GREEN, Color.BLUE, Color.CYAN);
 
-        this.DialogFilter = new Dialog(PegawaiRekap.this);
+        this.DialogFilter = new Dialog(KasbonPegawaiRekap.this);
         this.DialogFilter.setContentView(R.layout.filter_aktivasi);
         this.DialogFilter.setTitle("Filter");
         this.rbt1 = (RadioButton) DialogFilter.findViewById(R.id.RbtSemua);
@@ -94,11 +85,11 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         //getSupportActionBar().setLogo(R.drawable.ic_group_black_24dp); buat munculin icon
         //getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Pegawai");
+        setTitle("Kasbon Pegawai");
 
         Fstatus = TRUE_STRING;
         OrderBy = "NIK";
-        ListPegawai = new ArrayList<PegawaiModel>();
+        ListData = new ArrayList<KasbonPegawaiModel>();
         //Kodeing buat ngilangin garis
         //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
@@ -108,12 +99,12 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int Id =  ListPegawai.get(i).getId();
+                int Id =  ListData.get(i).getId();
                 if (Id > 0) {
-                        Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
-                        s.putExtra("MODE", JCons.DETAIL_MODE);
-                        s.putExtra("ID",Id);
-                        startActivity(s);
+                    Intent s = new Intent(KasbonPegawaiRekap.this, KasbonPegawaiInput.class);
+                    s.putExtra("MODE", JCons.DETAIL_MODE);
+                    s.putExtra("ID",Id);
+                    startActivity(s);
                 }
             }
         });
@@ -121,58 +112,58 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
+                RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
 
-                @Override
-                public void onCheckedChanged(RadioGroup arg0, int selectedId) {
-                int SelectedId = RgFilter.getCheckedRadioButtonId();
-                switch (SelectedId){
-                    case R.id.RbtSemua :
-                        Fstatus = "";
+                    @Override
+                    public void onCheckedChanged(RadioGroup arg0, int selectedId) {
+                        int SelectedId = RgFilter.getCheckedRadioButtonId();
+                        switch (SelectedId){
+                            case R.id.RbtSemua :
+                                Fstatus = "";
+                                break;
+                            case R.id.RbtAktif :
+                                Fstatus = TRUE_STRING;
+                                break;
+                            case R.id.RbtNonAktif:
+                                Fstatus = FALSE_STRING;
+                                break;
+                            default:
+                                Fstatus = "";
+                        }
+                        LoadData();
+                        DialogFilter.dismiss();
+                    }
+                });
+
+                switch (Fstatus){
+                    case "T" :
+                        RgFilter.check(R.id.RbtAktif);
                         break;
-                    case R.id.RbtAktif :
-                        Fstatus = TRUE_STRING;
-                        break;
-                    case R.id.RbtNonAktif:
-                        Fstatus = FALSE_STRING;
+                    case "F" :
+                        RgFilter.check(R.id.RbtNonAktif);
                         break;
                     default:
-                        Fstatus = "";
+                        RgFilter.check(R.id.RbtSemua);
                 }
-                LoadData();
-                DialogFilter.dismiss();
-                }
-            });
-
-            switch (Fstatus){
-                case "T" :
-                    RgFilter.check(R.id.RbtAktif);
-                    break;
-                case "F" :
-                    RgFilter.check(R.id.RbtNonAktif);
-                    break;
-                default:
-                    RgFilter.check(R.id.RbtSemua);
-            }
-            DialogFilter.show();
+                DialogFilter.show();
             }
         });
 
         swipe.setOnRefreshListener(this);
 
         swipe.post(new Runnable() {
-                       @Override
-                       public void run() {
-                          LoadData();
-                       }
-                   }
+               @Override
+               public void run() {
+                   LoadData();
+               }
+           }
         );
 
         btnTambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //CdSearch.animate().translationY(-50);
-                Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
+                Intent s = new Intent(KasbonPegawaiRekap.this, KasbonPegawaiInput.class);
                 s.putExtra("MODE","");
                 startActivityForResult(s, 1);
             }
@@ -181,7 +172,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu PmFilter = new PopupMenu(PegawaiRekap.this, btnSort);
+                PopupMenu PmFilter = new PopupMenu(KasbonPegawaiRekap.this, btnSort);
                 PmFilter.getMenuInflater().inflate(R.menu.sort_master_pegawai, PmFilter.getMenu());
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
@@ -214,7 +205,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                PegawaiRekap.this.Adapter.getFilter().filter(newText);
+                KasbonPegawaiRekap.this.Adapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -228,39 +219,39 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                PegawaiModel Data;
-                ListPegawai.clear();
+                KasbonPegawaiModel Data;
+                ListData.clear();
                 try {
                     JSONArray jsonArray = response.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new PegawaiModel(
+                        Data = new KasbonPegawaiModel(
                                 obj.getInt("id"),
-                                obj.getString("nik"),
-                                obj.getString("nama"),
-                                obj.getString("alamat"),
-                                obj.getString("no_telpon_1"),
-                                obj.getString("no_telpon_2"),
-                                obj.getString("email"),
-                                obj.getDouble("gaji_pokok"),
-                                obj.getString("status"),
-                                getMillisDate(obj.getString("tgl_lahir")),
-                                getMillisDate(obj.getString("tgl_mulai_kerja")),
-                                obj.getString("keterangan")
+                                getMillisDate(obj.getString("tanggal")),
+                                obj.getString("nomor"),
+                                obj.getInt("id_pegawai"),
+                                obj.getDouble("jumlah"),
+                                obj.getDouble("sisa"),
+                                obj.getInt("cicilan"),                                
+                                obj.getString("keterangan"),
+                                obj.getString("user_id"),
+                                getMillisDate(obj.getString("tgl_input")),
+                                obj.getString("user_Edit"),
+                                getMillisDate(obj.getString("tgl_edit"))
                         );
-                        ListPegawai.add(Data);
+                        ListData.add(Data);
                     }
                     //Satu baris kosong di akhir
-                    Data = new PegawaiModel(0,"","","","","","",0.0,"HIDE",0,0,"");
-                    ListPegawai.add(Data);
+                    Data = new KasbonPegawaiModel(0,0,"",0,0,0,0,"","HIDE",0,"",0);
+                    ListData.add(Data);
 
-                    Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, ListPegawai);
+                    Adapter = new KasbonPegawaiAdapter(KasbonPegawaiRekap.this, R.layout.list_kasbon_pegawai_rekap, ListData);
                     Adapter.notifyDataSetChanged();
                     ListRekap.setAdapter(Adapter);
                     swipe.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(KasbonPegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
                     swipe.setRefreshing(false);
                 }
             }
@@ -268,9 +259,9 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                ListPegawai.clear();
+                ListData.clear();
                 swipe.setRefreshing(false);
-                Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                Toast.makeText(KasbonPegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
             }
         });
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
@@ -279,7 +270,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pegawai_rekap);
+        setContentView(R.layout.activity_kasbon_pegawai_rekap);
         CreateVew();
         InitClass();
         EventClass();
@@ -314,12 +305,3 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
     }
 }
 
-
-
-
-//    private void LoadData(){
-//        swipe.setRefreshing(true);
-//        this.Data.ReloadList(Fstatus, OrderBy);
-//        PegawaiRekap.this.Adapter.notifyDataSetChanged();
-//        swipe.setRefreshing(false);
-//    }
