@@ -41,7 +41,9 @@
         <activity android:name=".form.testMenu" />
         <activity android:name=".form.master.PegawaiInputGaji" />
         <activity android:name=".form.transaksi.KasbonPegawaiInput" />
-        <activity android:name=".form.transaksi.KasbonPegawaiRekap"></activity>
+        <activity android:name=".form.transaksi.KasbonPegawaiRekap" />
+        <activity android:name=".form.lov.lov_pegawai" />
+        <activity android:name=".form.filter.FilterKasbonPegawai"></activity>
     </application>
 
 </manifest>

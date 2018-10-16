@@ -67,12 +67,12 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
         View v = convertView;
         final int pos = position;
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        v = inflater.inflate(R.layout.list_pegawai_rekap, null);
+        v = inflater.inflate(R.layout.list_kasbon_pegawai_rekap, null);
         final KasbonPegawaiModel Data = getItem(position);
 
         TextView lblNomor      = (TextView) v.findViewById(R.id.lblNomor);
         TextView lblTanggal     = (TextView) v.findViewById(R.id.lblTanggal);
-        TextView lblPegawai = (TextView) v.findViewById(R.id.lblPegawai);
+        TextView lblPegawai    = (TextView) v.findViewById(R.id.lblPegawai);
         TextView lblJumlah     = (TextView) v.findViewById(R.id.lblJumlah);
 
         final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);

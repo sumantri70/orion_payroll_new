@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -27,8 +28,10 @@ import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.form.adapter.KasbonPegawaiAdapter;
+import com.example.user.orion_payroll_new.form.filter.FilterKasbonPegawai;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
+import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 import com.example.user.orion_payroll_new.utility.route;
 
 import org.json.JSONArray;
@@ -42,6 +45,7 @@ import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
 
 public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private SearchView txtSearch;
@@ -61,6 +65,9 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
 
     public static String Fstatus;
     public static String OrderBy;
+
+    private Long tgl_dari, tgl_Sampai;
+    private int IdPegawai;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -88,11 +95,15 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         setTitle("Kasbon Pegawai");
 
         Fstatus = TRUE_STRING;
-        OrderBy = "NIK";
+        OrderBy = "tanggal";
         ListData = new ArrayList<KasbonPegawaiModel>();
         //Kodeing buat ngilangin garis
         //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
+
+        tgl_dari   = serverNowLong();
+        tgl_Sampai = serverNowLong();
+        IdPegawai  = 0;
     }
 
     protected void EventClass(){
@@ -112,40 +123,12 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RgFilter.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()            {
-
-                    @Override
-                    public void onCheckedChanged(RadioGroup arg0, int selectedId) {
-                        int SelectedId = RgFilter.getCheckedRadioButtonId();
-                        switch (SelectedId){
-                            case R.id.RbtSemua :
-                                Fstatus = "";
-                                break;
-                            case R.id.RbtAktif :
-                                Fstatus = TRUE_STRING;
-                                break;
-                            case R.id.RbtNonAktif:
-                                Fstatus = FALSE_STRING;
-                                break;
-                            default:
-                                Fstatus = "";
-                        }
-                        LoadData();
-                        DialogFilter.dismiss();
-                    }
-                });
-
-                switch (Fstatus){
-                    case "T" :
-                        RgFilter.check(R.id.RbtAktif);
-                        break;
-                    case "F" :
-                        RgFilter.check(R.id.RbtNonAktif);
-                        break;
-                    default:
-                        RgFilter.check(R.id.RbtSemua);
-                }
-                DialogFilter.show();
+                Intent s = new Intent(KasbonPegawaiRekap.this, FilterKasbonPegawai.class);
+                s.putExtra("TGL_DARI", tgl_dari);
+                s.putExtra("TGL_SAMPAI", tgl_Sampai);
+                s.putExtra("STATUS", 0);
+                s.putExtra("PEGAWAI_ID", 73);
+                startActivity(s);
             }
         });
 
@@ -214,14 +197,17 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
     public void LoadData(){
         swipe.setRefreshing(true);
         String filter;
-        filter = "?status="+Fstatus+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_PEGAWAI + filter;
+        Fstatus = "";
+        filter = "?tgl_dari="+"01-10-2018"+ "&tgl_sampai="+"29-10-2018"+ "&status="+Fstatus+ "&id_pegawai="+Fstatus+"&order_by="+OrderBy;
+        String url = route.URL_SELECT_KASBON + filter;
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 KasbonPegawaiModel Data;
                 ListData.clear();
+                Log.d("errorrrr",response.toString());
                 try {
+
                     JSONArray jsonArray = response.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);

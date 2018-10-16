@@ -67,6 +67,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:background="@drawable/style_txt_default"
+                            android:focusable="false"
                             android:hint="Pegawai"
                             android:inputType="text" />
                     </android.support.design.widget.TextInputLayout>

@@ -60,7 +60,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_UPDATE;
-import static com.example.user.orion_payroll_new.models.JCons.RESULT_SEARCH_TUNJANGAN;
+import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.DoubleToStr;
@@ -462,7 +462,6 @@ public class PegawaiInput extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.d("errorrrrrrrrr", response.toString());
                     JSONObject jObj = new JSONObject(response);
                     Toast.makeText(PegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
                     Intent intent = getIntent();
@@ -673,7 +672,6 @@ public class PegawaiInput extends AppCompatActivity {
             txtGGajiPokok.setError("Gaji Pokok belum diisi");
             return false;
         }
-
         return true;
     }
 
@@ -681,15 +679,18 @@ public class PegawaiInput extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == RESULT_SEARCH_TUNJANGAN) {
+            if (requestCode == RESULT_LOV) {
                 Bundle extra = data.getExtras();
+                TunjanganModel ModelTmp = OrionPayrollApplication.getInstance().ListHashTunjanganGlobal.get(Integer.toString(extra.getInt("id")));
+
                 TunjanganModel Tunjangan = new TunjanganModel(
-                        extra.getInt("id"),
-                        extra.getString("kode"),
-                        extra.getString("nama"),
-                        extra.getString("keterangan"),
-                        extra.getString("status")
+                    ModelTmp.getId(),
+                    ModelTmp.getKode(),
+                    ModelTmp.getNama(),
+                    ModelTmp.getKeterangan(),
+                    ModelTmp.getStatus()
                 );
+
                 ArListTunjangan.add(Tunjangan);
                 ListAdapter.notifyDataSetChanged();
 

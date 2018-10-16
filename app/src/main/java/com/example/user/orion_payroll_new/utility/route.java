@@ -48,7 +48,7 @@ public class route {
     //=====================================================================================================================================
 
     //*-- KASBON PEGAWAI --*\\
-    public static final String URL_KASBON = "master_kasbon/";
+    public static final String URL_KASBON = "kasbon_pegawai/";
     public static final String URL_INSERT_KASBON   = URL + URL_KASBON + "insert.php";
     public static final String URL_SELECT_KASBON   = URL + URL_KASBON + "select.php";
     public static final String URL_GET_KASBON      = URL + URL_KASBON + "get.php";

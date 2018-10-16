@@ -19,12 +19,13 @@ import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
+import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.user.orion_payroll_new.models.JCons.RESULT_SEARCH_TUNJANGAN;
+import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 
 public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
@@ -102,8 +103,7 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
             btnTambah.requestFocus();
             LostFocus();
             Intent s = new Intent(((PegawaiInput)ctx), lov_tunjangan.class);
-            s.putExtra("MODE","");
-            ((PegawaiInput)ctx).startActivityForResult(s, RESULT_SEARCH_TUNJANGAN);
+            ((PegawaiInput)ctx).startActivityForResult(s, RESULT_LOV);
             }
         });
         return convertView;
