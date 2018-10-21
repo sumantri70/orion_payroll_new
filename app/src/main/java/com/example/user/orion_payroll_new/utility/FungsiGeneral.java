@@ -2,8 +2,14 @@ package com.example.user.orion_payroll_new.utility;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiInput;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -13,6 +19,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
+import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 
 public class FungsiGeneral {
@@ -120,8 +129,15 @@ public class FungsiGeneral {
     }
 
     public static long serverNowLong(){
-        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        //DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calender = Calendar.getInstance();
+        return calender.getTimeInMillis();
+    }
+
+    public static long serverNowStartOfTheMonthLong(){
+        //DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar calender = Calendar.getInstance();
+        calender.set(Calendar.DAY_OF_MONTH, 1);
         return calender.getTimeInMillis();
     }
 
@@ -130,9 +146,9 @@ public class FungsiGeneral {
         Calendar calender = Calendar.getInstance();
         return formatter.format(calender.getTimeInMillis());
     }
+
     public static String serverNow(){
         DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-
         Calendar calender = Calendar.getInstance();
         return formatter.format(calender.getTime());
     }

@@ -25,7 +25,8 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.form.master.PegawaiInput;
-import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
+import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiInput;
+import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiRekap;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
@@ -40,12 +41,15 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_DELETE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_DELETE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
 import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_PEGAWAI;
+import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_KASBON;
 
 public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> implements Filterable {
 
@@ -77,15 +81,20 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
 
         final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
 
-        if (Data.getUser_id() == "HIDE"){
-            btnAction.setVisibility(View.GONE);
-            lblJumlah.setVisibility(View.GONE);
-        }
         final int IdMSt = Data.getId();
         lblNomor.setText(Data.getNomor());
         lblTanggal.setText(getTglFormat(Data.getTanggal()));
-        //lblPegawai.setText(Data.getTelpon1());
+        if (Data.getId_pegawai() > 0){
+            lblPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(Data.getId_pegawai())).getNama());
+        }
         lblJumlah.setText(fmt.format(Data.getJumlah()));
+
+        if (Data.getUser_id() == "HIDE"){
+            lblTanggal.setText("");
+            lblJumlah.setText("");
+            lblPegawai.setText("");
+            btnAction.setVisibility(View.GONE);
+        }
 
         btnAction.setOnClickListener(new View.OnClickListener() {
 
@@ -98,41 +107,41 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
                     public boolean onMenuItemClick(MenuItem item) {
                         if (IdMSt > 0){
                             if (item.getTitle().equals("Detail")){
-                                Intent s = new Intent(getContext(), PegawaiInput.class);
+                                Intent s = new Intent(getContext(), KasbonPegawaiInput.class);
                                 s.putExtra("MODE", JCons.DETAIL_MODE);
                                 s.putExtra("ID",IdMSt);
                                 getContext().startActivity(s);
                             } else if (item.getTitle().equals("Edit")){
-                                Intent s = new Intent(getContext(), PegawaiInput.class);
+                                Intent s = new Intent(getContext(), KasbonPegawaiInput.class);
                                 s.putExtra("MODE", JCons.EDIT_MODE);
                                 s.putExtra("ID",IdMSt);
-                                ((PegawaiRekap)ctx).startActivityForResult(s, 1);
+                                ((KasbonPegawaiRekap)ctx).startActivityForResult(s, 1);
                             } else if (item.getTitle().equals("Hapus")){
-//                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_AKTIVASI_PEGAWAI, new Response.Listener<String>() {
-//                                    @Override
-//                                    public void onResponse(String response) {
-//                                        try {
-//                                            JSONObject jObj = new JSONObject(response);
-//                                            ((PegawaiRekap)ctx).LoadData();
-//                                            Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                    }
-//                                }, new Response.ErrorListener() {
-//                                    @Override
-//                                    public void onErrorResponse(VolleyError error) {
-//                                        Toast.makeText(getContext(),MSG_UNSUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }) {
-//                                    @Override
-//                                    protected Map<String, String> getParams() {
-//                                        Map<String, String> params = new HashMap<String, String>();
-//                                        params.put("id", String.valueOf(IdMSt));
-//                                        return params;
-//                                    }
-//                                };
-//                                OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_DELETE_KASBON, new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        try {
+                                            JSONObject jObj = new JSONObject(response);
+                                            ((KasbonPegawaiRekap)ctx).LoadData();
+                                            Toast.makeText(getContext(),MSG_SUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+                                    }
+                                }) {
+                                    @Override
+                                    protected Map<String, String> getParams() {
+                                        Map<String, String> params = new HashMap<String, String>();
+                                        params.put("id", String.valueOf(IdMSt));
+                                        return params;
+                                    }
+                                };
+                                OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
                             }
                         }
                         return false;
@@ -169,19 +178,27 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
             final ArrayList<KasbonPegawaiModel> nlist = new ArrayList<KasbonPegawaiModel>(count);
 
             String nomor ;
-            String nama ;
+            String nama_pegawai ;
+            String jumlah;
+            String tanggal;
             for (int i = 0; i < count; i++) {
-                nomor = list.get(i).getNomor();
-                //nama = list.get(i).getNama();
-//                if ((nomor.toLowerCase().contains(filterString)) || (nama.toLowerCase().contains(filterString))) {
-//                    nlist.add(list.get(i));
-//                }
-                if ((nomor.toLowerCase().contains(filterString))) {
+                nomor         = list.get(i).getNomor();
+                nama_pegawai  = list.get(i).getNama_pegawai();
+                jumlah        = Double.toString(list.get(i).getJumlah()) ;
+                tanggal       = getTglFormat(list.get(i).getTanggal());
+                Log.w("-----------","-----------");
+                Log.w("nomor nomor",nomor);
+                Log.w("nama_pegawai ",nama_pegawai);
+                Log.w("jumlah",jumlah);
+                Log.w("tanggal",tanggal);
+
+                if ((nomor.toLowerCase().contains(filterString)) || (nama_pegawai.toLowerCase().contains(filterString))
+                    ||(jumlah.toLowerCase().contains(filterString)) || (tanggal.toLowerCase().contains(filterString))) {
                     nlist.add(list.get(i));
                 }
             }
             results.values = nlist;
-            results.count = nlist.size();
+            results.count  = nlist.size();
             return results;
         }
 

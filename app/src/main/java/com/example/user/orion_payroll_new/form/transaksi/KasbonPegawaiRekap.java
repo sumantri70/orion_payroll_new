@@ -3,6 +3,7 @@ package com.example.user.orion_payroll_new.form.transaksi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.customtabs.IPostMessageService;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -43,9 +44,14 @@ import java.util.List;
 
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
+import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormatMySql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 
 public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private SearchView txtSearch;
@@ -67,7 +73,7 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
     public static String OrderBy;
 
     private Long tgl_dari, tgl_Sampai;
-    private int IdPegawai;
+    private int IdPegawai, status;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -88,9 +94,6 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
     }
 
     private void InitClass(){
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setLogo(R.drawable.ic_group_black_24dp); buat munculin icon
-        //getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Kasbon Pegawai");
 
@@ -101,9 +104,10 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
 
-        tgl_dari   = serverNowLong();
+        tgl_dari   = serverNowStartOfTheMonthLong();
         tgl_Sampai = serverNowLong();
         IdPegawai  = 0;
+        status     = 0;
     }
 
     protected void EventClass(){
@@ -126,9 +130,9 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
                 Intent s = new Intent(KasbonPegawaiRekap.this, FilterKasbonPegawai.class);
                 s.putExtra("TGL_DARI", tgl_dari);
                 s.putExtra("TGL_SAMPAI", tgl_Sampai);
-                s.putExtra("STATUS", 0);
-                s.putExtra("PEGAWAI_ID", 73);
-                startActivity(s);
+                s.putExtra("STATUS", status);
+                s.putExtra("PEGAWAI_ID", IdPegawai);
+                KasbonPegawaiRekap.this.startActivityForResult(s, RESULT_LOV);
             }
         });
 
@@ -145,7 +149,6 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         btnTambah.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //CdSearch.animate().translationY(-50);
                 Intent s = new Intent(KasbonPegawaiRekap.this, KasbonPegawaiInput.class);
                 s.putExtra("MODE","");
                 startActivityForResult(s, 1);
@@ -156,18 +159,21 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
             @Override
             public void onClick(View view) {
                 PopupMenu PmFilter = new PopupMenu(KasbonPegawaiRekap.this, btnSort);
-                PmFilter.getMenuInflater().inflate(R.menu.sort_master_pegawai, PmFilter.getMenu());
+                PmFilter.getMenuInflater().inflate(R.menu.sort_kabon_pegawai, PmFilter.getMenu());
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()){
-                            case "NIK" :
-                                OrderBy = "NIK";
+                            case "Nomor" :
+                                OrderBy = "nomor";
                                 break;
-                            case "Nama" :
-                                OrderBy = "nama";
+                            case "Tanggal" :
+                                OrderBy = "tanggal";
                                 break;
-                            case "Gaji" :
-                                OrderBy = "gaji_pokok";
+                            case "Pegawai" :
+                                OrderBy = "nama_pegawai";
+                                break;
+                            case "Jumlah" :
+                                OrderBy = "jumlah";
                                 break;
                             default:
                                 OrderBy  = "";
@@ -198,22 +204,20 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         swipe.setRefreshing(true);
         String filter;
         Fstatus = "";
-        filter = "?tgl_dari="+"01-10-2018"+ "&tgl_sampai="+"29-10-2018"+ "&status="+Fstatus+ "&id_pegawai="+Fstatus+"&order_by="+OrderBy;
+        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
         String url = route.URL_SELECT_KASBON + filter;
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 KasbonPegawaiModel Data;
                 ListData.clear();
-                Log.d("errorrrr",response.toString());
                 try {
-
                     JSONArray jsonArray = response.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
                         Data = new KasbonPegawaiModel(
                                 obj.getInt("id"),
-                                getMillisDate(obj.getString("tanggal")),
+                                getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
                                 obj.getString("nomor"),
                                 obj.getInt("id_pegawai"),
                                 obj.getDouble("jumlah"),
@@ -221,10 +225,11 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
                                 obj.getInt("cicilan"),                                
                                 obj.getString("keterangan"),
                                 obj.getString("user_id"),
-                                getMillisDate(obj.getString("tgl_input")),
-                                obj.getString("user_Edit"),
-                                getMillisDate(obj.getString("tgl_edit"))
+                                getMillisDate(FormatDateFromSql(obj.getString("tgl_input"))),
+                                obj.getString("user_edit"),
+                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit")))
                         );
+                        Data.setNama_pegawai(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
                         ListData.add(Data);
                     }
                     //Satu baris kosong di akhir
@@ -281,12 +286,15 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                LoadData();
-            }else{
-
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOV) {
+                Bundle extra = data.getExtras();
+                IdPegawai  = extra.getInt("PEGAWAI_ID");
+                tgl_dari   = extra.getLong("TGL_DARI");
+                tgl_Sampai = extra.getLong("TGL_SAMPAI");
+                status     = extra.getInt("STATUS");
             }
+            LoadData();
         }
     }
 }

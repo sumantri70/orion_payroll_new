@@ -16,6 +16,6 @@
     <item
         android:id="@+id/nav_hapus"
         android:orderInCategory="100"
-        android:title="Aktivasi"
+        android:title="Hapus"
         app:showAsAction="never"/>
 </menu>

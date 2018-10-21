@@ -74,9 +74,9 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
                 PegawaiModel data;
                 data =  ListData.get(i);
                 if (data.getId() > 0) {
-                    if (OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(data.getId())).getClass() == null ){
-                        OrionPayrollApplication.getInstance().GetHashPegawai();
-                    }
+//                    if (OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(data.getId())).getClass() == null ){
+//                        OrionPayrollApplication.getInstance().GetHashPegawai();
+//                    }
 
                     Intent intent = getIntent();
                     intent.putExtra("id", data.getId() );

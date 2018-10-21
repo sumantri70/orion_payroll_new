@@ -43,7 +43,11 @@
         <activity android:name=".form.transaksi.KasbonPegawaiInput" />
         <activity android:name=".form.transaksi.KasbonPegawaiRekap" />
         <activity android:name=".form.lov.lov_pegawai" />
-        <activity android:name=".form.filter.FilterKasbonPegawai"></activity>
+        <activity
+            android:name=".form.filter.FilterKasbonPegawai"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".form.filter.FilterPenggajianKaryawan" />
+        <activity android:name=".form.transaksi.PenggajianInputNew"></activity>
     </application>
 
 </manifest>

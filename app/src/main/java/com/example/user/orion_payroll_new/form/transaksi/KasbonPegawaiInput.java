@@ -2,8 +2,11 @@ package com.example.user.orion_payroll_new.form.transaksi;
 
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputFilter;
@@ -24,6 +27,7 @@ import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPegawai;
 import com.example.user.orion_payroll_new.form.lov.lov_pegawai;
 import com.example.user.orion_payroll_new.form.master.PegawaiInput;
+import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
@@ -41,6 +45,9 @@ import java.util.Map;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.EDIT_MODE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_NEGATIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_POSITIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
@@ -52,6 +59,7 @@ import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getBulan;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_KASBON;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_PEGAWAI;
@@ -59,20 +67,26 @@ import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_KASBON
 import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_TUNJANGAN;
 
 public class KasbonPegawaiInput extends AppCompatActivity {
-    private TextInputEditText txtTanggal, txtPegawai, txtJumlah, txtCicilan, txtKeterangan;
+    private TextInputEditText txtTanggal, txtPegawai, txtJumlah, txtCicilan, txtKeterangan, txtNomor;
     private Button btnSimpan;
+    private TextInputLayout LayoutNomor;
+
 
     public String Mode;
     private int IdMst, IdPegawai;
     private ProgressDialog Loading;
+    private KasbonPegawaiModel DtMasterTmp;
+
 
     protected void CreateView(){
-        txtTanggal    = (TextInputEditText) findViewById(R.id.txtTanggal);
-        txtPegawai    = (TextInputEditText) findViewById(R.id.txtPegawai);
-        txtJumlah     = (TextInputEditText) findViewById(R.id.txtJumlah);
-        txtCicilan    = (TextInputEditText) findViewById(R.id.txtCicilan);
-        txtKeterangan = (TextInputEditText) findViewById(R.id.txtKeterangan);
-        btnSimpan     = (Button) findViewById(R.id.btnSimpan);
+        txtNomor        = (TextInputEditText) findViewById(R.id.txtNomor);
+        txtTanggal      = (TextInputEditText) findViewById(R.id.txtTanggal);
+        txtPegawai      = (TextInputEditText) findViewById(R.id.txtPegawai);
+        txtJumlah       = (TextInputEditText) findViewById(R.id.txtJumlah);
+        txtCicilan      = (TextInputEditText) findViewById(R.id.txtCicilan);
+        txtKeterangan   = (TextInputEditText) findViewById(R.id.txtKeterangan);
+        LayoutNomor     = (TextInputLayout) findViewById(R.id.LayoutNomor);
+        btnSimpan       = (Button) findViewById(R.id.btnSimpan);
     }
 
     protected void InitClass(){
@@ -89,12 +103,15 @@ public class KasbonPegawaiInput extends AppCompatActivity {
             this.btnSimpan.setVisibility(View.INVISIBLE);
         }else{
             this.setTitle("Input Kasbon Pegawai");
+            this.txtNomor.setVisibility(View.GONE);
+            this.LayoutNomor.setVisibility(View.GONE);
         };
 
         IdPegawai = 0;
         txtTanggal.setText(FungsiGeneral.serverNowFormated());
 
         boolean Enabled = !Mode.equals(DETAIL_MODE);
+        this.txtNomor.setEnabled(Enabled);
         this.txtTanggal.setEnabled(Enabled);
         this.txtPegawai.setEnabled(Enabled);
         this.txtJumlah.setEnabled(Enabled);
@@ -108,11 +125,31 @@ public class KasbonPegawaiInput extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (IsValid() == true){
-                    if(Mode.equals(EDIT_MODE)){
-                        IsSavedEdit();
-                    }else{
-                        IsSaved();
-                    }
+                    AlertDialog.Builder bld = new AlertDialog.Builder(KasbonPegawaiInput.this);
+                    bld.setTitle("Konfirmasi");
+                    bld.setCancelable(true);
+                    bld.setMessage(MSG_SAVE_CONFIRMATION);
+
+                    bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if(Mode.equals(EDIT_MODE)){
+                                IsSavedEdit();
+                            }else{
+                                IsSaved();
+                            }
+                        }
+                    });
+
+                    bld.setNegativeButton(MSG_NEGATIVE, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    AlertDialog dialog = bld.create();
+                    dialog.show();
                 }
             }
         });
@@ -148,8 +185,10 @@ public class KasbonPegawaiInput extends AppCompatActivity {
             public void onClick(View v) {
                 IdPegawai = 0;
                 txtPegawai.setText("");
+                txtPegawai.setError(null);
                 Intent s = new Intent(KasbonPegawaiInput.this, lov_pegawai.class);
                 KasbonPegawaiInput.this.startActivityForResult(s, RESULT_LOV);
+
             }
         });
     }
@@ -191,12 +230,12 @@ public class KasbonPegawaiInput extends AppCompatActivity {
                     JSONArray jsonArray = response.getJSONArray("data");
                     JSONObject obj = jsonArray.getJSONObject(0);
                     IdPegawai = obj.getInt("id_pegawai");
+                    txtNomor.setText(obj.getString("nomor"));
                     txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
-                    //txtPegawai.setText(obj.getString("pegawai"));
+                    txtPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(obj.getInt("id_pegawai"))).getNama());
                     txtJumlah.setText(fmt.format(obj.getDouble("jumlah")));
                     txtCicilan.setText(obj.getString("cicilan"));
                     txtKeterangan.setText(obj.getString("keterangan"));
-
                     Loading.dismiss();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -220,7 +259,6 @@ public class KasbonPegawaiInput extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.w("gagal save", response.toString());
                     JSONObject jObj = new JSONObject(response);
                     Toast.makeText(KasbonPegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
                     Intent intent = getIntent();
@@ -238,7 +276,6 @@ public class KasbonPegawaiInput extends AppCompatActivity {
                 Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
             }
         }) {
-
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
@@ -248,7 +285,7 @@ public class KasbonPegawaiInput extends AppCompatActivity {
                 params.put("sisa", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
                 params.put("cicilan", String.valueOf(StrFmtToDouble(txtCicilan.getText().toString())));
                 params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("user_id", String.valueOf("Sumantri"));
+                params.put("user_id", String.valueOf(OrionPayrollApplication.getInstance().USER_LOGIN));
                 return params;
             }
         };
@@ -279,12 +316,15 @@ public class KasbonPegawaiInput extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<String, String>();
+                params.put("id", String.valueOf(IdMst));
+                params.put("nomor", String.valueOf(txtNomor.getText()));
                 params.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
-                //params.put("id_pegawai", String.valueOf(txtNama.getText().toString()));
+                params.put("id_pegawai", String.valueOf(IdPegawai));
                 params.put("jumlah", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
+                params.put("sisa", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
                 params.put("cicilan", String.valueOf(StrFmtToDouble(txtCicilan.getText().toString())));
                 params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("user_id", String.valueOf("Sumantri"));
+                params.put("user_edit", String.valueOf(OrionPayrollApplication.getInstance().USER_LOGIN));
                 return params;
             }
         };
@@ -293,8 +333,10 @@ public class KasbonPegawaiInput extends AppCompatActivity {
 
     protected boolean IsValid(){
         if (this.txtPegawai.getText().toString().trim().equals("")) {
+            txtPegawai.setFocusableInTouchMode(true);
             txtPegawai.requestFocus();
             txtPegawai.setError("Pegawai belum dipilih");
+            txtPegawai.setFocusableInTouchMode(false);
             return false;
         }
 

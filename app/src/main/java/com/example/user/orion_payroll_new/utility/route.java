@@ -4,9 +4,9 @@ public class route {
     //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
     public static final String URL = "http://192.168.43.59/orion_payroll/";
     //public static final String URL = "http://192.168.42.221/orion_payroll/";
-    //public static final String URL = "http://10.146.237.198/orion_payroll/";
+    //public static final String URL = "http://10.146.112.166/orion_payroll/";
     //public static final String URL = "http://192.168.1.8/orion_payroll/";
-    //public static final String URL = "http://localhost/orion_payroll/";
+    //public static final String URL = "http://127.0.0.1/orion_payroll/";
 
     //*-- MASTER PEGAWAI --*\\
     public static final String URL_PEGAWAI = "master_pegawai/";

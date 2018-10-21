@@ -211,6 +211,7 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
         String filter;
         filter = "?status="+Fstatus+"&order_by="+OrderBy;
         String url = route.URL_SELECT_POTONGAN + filter;
+
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -254,7 +255,54 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
         });
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 
+
+//        getrequest(new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                PotonganModel Data;
+//                ListPotongan.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new PotonganModel(
+//                                obj.getInt("id"),
+//                                obj.getString("kode"),
+//                                obj.getString("nama"),
+//                                obj.getString("keterangan"),
+//                                obj.getString("status")
+//                        );
+//                        ListPotongan.add(Data);
+//                    }
+//                    //Satu baris kosong di akhir
+//                    Data = new PotonganModel(0,"","","","HIDE");
+//                    ListPotongan.add(Data);
+//
+//                    Adapter = new PotonganAdapter(PotonganRekap.this, R.layout.list_potongan_rekap, ListPotongan);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PotonganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListPotongan.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(PotonganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
+
+//    void getrequest(Response.Listener<JSONObject> listener, Response.ErrorListener errorListener){
+//         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null,listener);
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

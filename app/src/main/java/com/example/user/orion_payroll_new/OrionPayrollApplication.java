@@ -44,6 +44,8 @@ public class OrionPayrollApplication extends Application {
     public HashMap<String, TunjanganModel> ListHashTunjanganGlobal;
     public HashMap<String, PotonganModel> ListHashPotonganGlobal;
 
+    public String USER_LOGIN = "Sumantri";
+
     @Override
     public void onCreate() {
         super.onCreate();

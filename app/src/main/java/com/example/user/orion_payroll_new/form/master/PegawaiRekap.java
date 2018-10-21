@@ -252,7 +252,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                         ListPegawai.add(Data);
                     }
                     //Satu baris kosong di akhir
-                    Data = new PegawaiModel(0,"","","","","","",0.0,"HIDE",0,0,"");
+                    Data = new PegawaiModel();
                     ListPegawai.add(Data);
 
                     Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, ListPegawai);
@@ -308,6 +308,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 LoadData();
+                OrionPayrollApplication.getInstance().GetHashPegawai();
             }else{
 
             }

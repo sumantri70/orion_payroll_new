@@ -29,7 +29,6 @@ public class EngineGeneral {
         if (Id != 0){
             Filter = " AND id <> "+Integer.toString(Id);
         };
-        Log.d("aaa","assssssssss");
 
         SQL = "SELECT COUNT(*) FROM " + NamaTabel + " WHERE " + NamaField + "=" + FmtSqlStr(IsiField) + Filter;
         Cursor cr = db.rawQuery(SQL,null);

@@ -78,13 +78,9 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TunjanganModel data;
-                data =  ListTunjangan.get(i);
+            TunjanganModel data;
+            data =  ListTunjangan.get(i);
                 if (data.getId() > 0) {
-                    if (OrionPayrollApplication.getInstance().ListHashTunjanganGlobal.get(Integer.toString(data.getId())).getClass() == null ){
-                        OrionPayrollApplication.getInstance().GetHashTunjangan();
-                    }
-
                     Intent intent = getIntent();
                     intent.putExtra("id", data.getId() );
                     setResult(RESULT_OK, intent);

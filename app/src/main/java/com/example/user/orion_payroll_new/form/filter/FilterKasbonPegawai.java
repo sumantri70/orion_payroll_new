@@ -3,40 +3,47 @@ package com.example.user.orion_payroll_new.form.filter;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.Filter;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.form.lov.lov_pegawai;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-
-import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
-import static com.example.user.orion_payroll_new.models.JCons.RESULT_FILTER;
 import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV;
-import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
+import static com.example.user.orion_payroll_new.utility.JEngine.*;
+
 
 public class FilterKasbonPegawai extends AppCompatActivity {
 
     private TextInputEditText txtTglDari, txtTglSampai, txtPegawai;
     private Spinner txtStatus;
-    private Button btnSimpan;
+    private Button btnSimpan, btnReset;
 
     private long tgl_dari, tgl_Sampai;
-    private int Status, IdPegawai;
+    private int Status, IdPegawai, IdPegawaiTmp, StatusTmp;
     private List<String> ListStatus;
     private ArrayAdapter<String> AdapterStatus;
 
@@ -50,10 +57,15 @@ public class FilterKasbonPegawai extends AppCompatActivity {
         txtPegawai   = (TextInputEditText) findViewById(R.id.txtPegawai);
         txtStatus    = (Spinner) findViewById(R.id.txtStatus);
         btnSimpan    = (Button) findViewById(R.id.btnSet);
+        btnReset     = (Button) findViewById(R.id.btnReset);
+
     }
 
     protected void InitClass(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_24dp);
         this.setTitle("Filter");
 
         Bundle extra = this.getIntent().getExtras();
@@ -61,10 +73,15 @@ public class FilterKasbonPegawai extends AppCompatActivity {
         this.tgl_Sampai = extra.getLong("TGL_SAMPAI");
         this.Status     = extra.getInt("STATUS");
         this.IdPegawai  = extra.getInt("PEGAWAI_ID");
+        IdPegawaiTmp    = IdPegawai;
+        StatusTmp       = Status;
 
         this.txtTglDari.setText(FungsiGeneral.getTglFormat(tgl_dari));
-        this.txtTglSampai.setText(FungsiGeneral.getTglFormat(tgl_dari));
-        this.txtPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)).getNama());
+        this.txtTglSampai.setText(FungsiGeneral.getTglFormat(tgl_Sampai));
+
+        if(IdPegawai != 0){
+            this.txtPegawai.setText(Get_Nama_Master_Pegawai(IdPegawai));
+        }
 
         ListStatus = new ArrayList<>();
         ListStatus.add(TEXT_SEMUA);
@@ -75,6 +92,7 @@ public class FilterKasbonPegawai extends AppCompatActivity {
         AdapterStatus.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         txtStatus.setAdapter(AdapterStatus);
         txtStatus.setSelection(Status);
+
     }
 
     protected void EventClass(){
@@ -146,17 +164,69 @@ public class FilterKasbonPegawai extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String Stat = parent.getItemAtPosition(position).toString();
                 if (Stat.equals(TEXT_SEMUA)){
-                    Status = 0;
+                    StatusTmp = 0;
                 } else if (Stat.equals(TEXT_LUNAS)){
-                    Status = 1;
+                    StatusTmp = 1;
                 } else if (Stat.equals(TEXT_BELUM_LUNAS)){
-                    Status = 2;
+                    StatusTmp = 2;
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        txtPegawai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IdPegawaiTmp = 0;
+                txtPegawai.setText("");
+                Intent s = new Intent(FilterKasbonPegawai.this, lov_pegawai.class);
+                FilterKasbonPegawai.this.startActivityForResult(s, RESULT_LOV);
+            }
+        });
+
+        btnSimpan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tgl_Sampai = getSimpleDate(txtTglSampai.getText().toString());
+                tgl_dari   = getSimpleDate(txtTglDari.getText().toString());
+                IdPegawai  = IdPegawaiTmp;
+                Status     = StatusTmp;
+
+                Intent intent = getIntent();
+                intent.putExtra("PEGAWAI_ID", IdPegawai);
+                intent.putExtra("TGL_DARI", tgl_dari);
+                intent.putExtra("TGL_SAMPAI", tgl_Sampai);
+                intent.putExtra("STATUS", Status);
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tgl_dari      = serverNowStartOfTheMonthLong();
+                tgl_Sampai    = serverNowLong();
+                Status        = 0;
+                IdPegawai     = 0;
+                IdPegawaiTmp  = 0;
+                StatusTmp     = 0;
+
+                txtPegawai.setText("");
+                txtStatus.setSelection(Status);
+                txtTglDari.setText(FungsiGeneral.getTglFormat(tgl_dari));
+                txtTglSampai.setText(FungsiGeneral.getTglFormat(tgl_Sampai));
+
+                Intent intent = getIntent();
+                intent.putExtra("PEGAWAI_ID", IdPegawai);
+                intent.putExtra("TGL_DARI", tgl_dari);
+                intent.putExtra("TGL_SAMPAI", tgl_Sampai);
+                intent.putExtra("STATUS", Status);
+                setResult(RESULT_OK, intent);
             }
         });
     }
@@ -181,16 +251,17 @@ public class FilterKasbonPegawai extends AppCompatActivity {
         return false;
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            if (requestCode == RESULT_FILTER) {
+            if (requestCode == RESULT_LOV) {
                 Bundle extra = data.getExtras();
-
+                IdPegawaiTmp = extra.getInt("id");
+                txtPegawai.setText(Get_Nama_Master_Pegawai(IdPegawaiTmp));
             }else{
 
             }
         }
     }
-
 }

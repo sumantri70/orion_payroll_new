@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".form.filter.FilterKasbonPegawai">
+    tools:context=".form.filter.FilterPenggajianKaryawan">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -234,7 +234,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
-                            android:text="Pegawai dan Status"
+                            android:text="Pegawai"
                             android:textColor="@android:color/black"
                             android:textSize="15dp"
                             android:textStyle="bold" />
@@ -273,15 +273,6 @@
                                     android:layout_weight="1"
                                     android:text="Pegawai" />
 
-                                <TextView
-                                    android:id="@+id/textView15"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginTop="17dp"
-                                    android:layout_marginBottom="15dp"
-                                    android:layout_weight="1"
-                                    android:text="Status" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -317,14 +308,6 @@
                                         android:focusable="false"
                                         android:inputType="date" />
 
-                                    <Spinner
-                                        android:id="@+id/txtStatus"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginBottom="6dp"
-
-                                        android:background="@drawable/style_txt_default"
-                                        android:persistentDrawingCache="animation" />
                                 </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>

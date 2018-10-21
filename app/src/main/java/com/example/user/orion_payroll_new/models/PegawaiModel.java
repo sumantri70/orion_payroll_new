@@ -23,6 +23,35 @@ public class PegawaiModel {
         this.keterangan = keterangan;
     }
 
+    public PegawaiModel(){
+        this.id = 0;
+        this.nik = "";
+        this.nama = "";
+        this.alamat = "";
+        this.telpon1 = "";
+        this.telpon2 = "";
+        this.email = "";
+        this.gaji_pokok = 0.0;
+        this.status = "";
+        this.tgl_lahir = 0;
+        this.keterangan = "";
+    }
+
+
+    public PegawaiModel(PegawaiModel data){
+        this.id = data.getId();
+        this.nik = data.getNik();
+        this.nama = data.getNama();
+        this.alamat = data.getAlamat();
+        this.telpon1 = data.getTelpon1();
+        this.telpon2 = data.getTelpon2();
+        this.email = data.getEmail();
+        this.gaji_pokok = data.getGaji_pokok();
+        this.status = data.getStatus();
+        this.tgl_lahir = data.getTgl_lahir();
+        this.keterangan = data.getKeterangan();
+    }
+
     public void setId(int id) {
         this.id = id;
     }

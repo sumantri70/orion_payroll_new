@@ -13,6 +13,7 @@ public class KasbonPegawaiModel {
     private long tgl_input;
     private String user_edit;
     private long tgl_edit;
+    private String nama_pegawai;
 
     public KasbonPegawaiModel(int id, long tanggal, String nomor, int id_pegawai, double jumlah, double sisa, int cicilan, String keterangan, String user_id, long tgl_input, String user_edit, long tgl_edit) {
         this.id = id;
@@ -27,6 +28,22 @@ public class KasbonPegawaiModel {
         this.tgl_input = tgl_input;
         this.user_edit = user_edit;
         this.tgl_edit = tgl_edit;
+        this.nama_pegawai = "";
+    }
+
+    public KasbonPegawaiModel() {
+        this.id = 0;
+        this.tanggal = 0;
+        this.nomor = "";
+        this.id_pegawai = 0;
+        this.jumlah = 0;
+        this.sisa = 0;
+        this.cicilan = 0;
+        this.keterangan = "";
+        this.user_id = "";
+        this.tgl_input = 0;
+        this.user_edit = "";
+        this.tgl_edit = 0;
     }
 
     public void setId(int id) {
@@ -81,6 +98,10 @@ public class KasbonPegawaiModel {
         this.tgl_edit = tgl_edit;
     }
 
+    public void setNama_pegawai(String nama_pegawai) {
+        this.nama_pegawai = nama_pegawai;
+    }
+
     public int getId() {
         return id;
     }
@@ -127,5 +148,9 @@ public class KasbonPegawaiModel {
 
     public long getTgl_edit() {
         return tgl_edit;
+    }
+
+    public String getNama_pegawai() {
+        return nama_pegawai;
     }
 }

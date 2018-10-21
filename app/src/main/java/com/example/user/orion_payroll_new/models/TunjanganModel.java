@@ -13,6 +13,15 @@ public class TunjanganModel {
         this.status = status;
     }
 
+    public TunjanganModel() {
+        this.id = 0;
+        this.kode = "";
+        this.nama = "";
+        this.keterangan = "";
+        this.status = "";
+        this.jumlah = 0;
+    }
+
     public int getId() {
         return id;
     }
