@@ -46,8 +46,10 @@
         <activity
             android:name=".form.filter.FilterKasbonPegawai"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".form.filter.FilterPenggajianKaryawan" />
-        <activity android:name=".form.transaksi.PenggajianInputNew"></activity>
+        <activity android:name=".form.filter.FilterPenggajian" />
+        <activity android:name=".form.transaksi.PenggajianInputNew" />
+        <activity android:name=".form.test_act" />
+        <activity android:name=".form.transaksi.PenggajianRekapNew"></activity>
     </application>
 
 </manifest>

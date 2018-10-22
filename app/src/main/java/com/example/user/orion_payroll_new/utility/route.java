@@ -4,7 +4,7 @@ public class route {
     //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
     public static final String URL = "http://192.168.43.59/orion_payroll/";
     //public static final String URL = "http://192.168.42.221/orion_payroll/";
-    //public static final String URL = "http://10.146.112.166/orion_payroll/";
+    //public static final String URL = "http://10.146.185.72/orion_payroll/";
     //public static final String URL = "http://192.168.1.8/orion_payroll/";
     //public static final String URL = "http://127.0.0.1/orion_payroll/";
 
@@ -54,5 +54,13 @@ public class route {
     public static final String URL_GET_KASBON      = URL + URL_KASBON + "get.php";
     public static final String URL_UPDATE_KASBON   = URL + URL_KASBON + "update.php";
     public static final String URL_DELETE_KASBON   = URL + URL_KASBON + "delete.php";
+
+    //*-- KASBON PEGAWAI --*\\
+    public static final String URL_PENGGAJIAN = "penggajian/";
+    public static final String URL_INSERT_PENGGAJIAN   = URL + URL_PENGGAJIAN + "insert.php";
+    public static final String URL_SELECT_PENGGAJIAN   = URL + URL_PENGGAJIAN + "select.php";
+    public static final String URL_GET_PENGGAJIAN      = URL + URL_PENGGAJIAN + "get.php";
+    public static final String URL_UPDATE_PENGGAJIAN   = URL + URL_PENGGAJIAN + "update.php";
+    public static final String URL_DELETE_PENGGAJIAN   = URL + URL_PENGGAJIAN + "delete.php";
 
 }

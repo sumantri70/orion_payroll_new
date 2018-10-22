@@ -24,12 +24,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
-import com.example.user.orion_payroll_new.form.master.PegawaiInput;
-import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiInput;
-import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiRekap;
+import com.example.user.orion_payroll_new.form.transaksi.PenggajianInputNew;
+import com.example.user.orion_payroll_new.form.transaksi.PenggajianRekapNew;
 import com.example.user.orion_payroll_new.models.JCons;
-import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
-import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
+import com.example.user.orion_payroll_new.models.PenggajianModel;
+import com.example.user.orion_payroll_new.models.PenggajianModel;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
 import org.json.JSONException;
@@ -40,26 +39,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_DELETE;
-import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_DELETE;
-import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
-import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
-import static com.example.user.orion_payroll_new.utility.route.URL_AKTIVASI_PEGAWAI;
 import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_KASBON;
+import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_PENGGAJIAN;
 
-public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> implements Filterable {
+public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implements Filterable {
 
     private ProgressDialog Loading;
     private Context ctx;
-    private List<KasbonPegawaiModel> objects;
-    private List<KasbonPegawaiModel> filteredData;
-    private KasbonPegawaiAdapter.ItemFilter mFilter = new KasbonPegawaiAdapter.ItemFilter();
+    private List<PenggajianModel> objects;
+    private List<PenggajianModel> filteredData;
+    private PenggajianAdapterNew.ItemFilter mFilter = new PenggajianAdapterNew.ItemFilter();
 
-    public KasbonPegawaiAdapter(Context context, int resource, List<KasbonPegawaiModel> object) {
+    public PenggajianAdapterNew(Context context, int resource, List<PenggajianModel> object) {
         super(context, resource, object);
         this.ctx = context;
         this.objects = object;
@@ -71,25 +66,25 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
         View v = convertView;
         final int pos = position;
         LayoutInflater inflater = LayoutInflater.from(getContext());
-        v = inflater.inflate(R.layout.list_kasbon_pegawai_rekap, null);
-        final KasbonPegawaiModel Data = getItem(position);
+        v = inflater.inflate(R.layout.list_penggajian_rekap_new, null);
+        final PenggajianModel Data = getItem(position);
 
-        TextView lblNomor      = (TextView) v.findViewById(R.id.lblNomor);
-        TextView lblTanggal     = (TextView) v.findViewById(R.id.lblTanggal);
-        TextView lblPegawai    = (TextView) v.findViewById(R.id.lblPegawai);
-        TextView lblJumlah     = (TextView) v.findViewById(R.id.lblJumlah);
+        TextView lblNomor = (TextView) v.findViewById(R.id.lblNomor);
+        TextView lblTanggal = (TextView) v.findViewById(R.id.lblTanggal);
+        TextView lblPegawai = (TextView) v.findViewById(R.id.lblPegawai);
+        TextView lblJumlah = (TextView) v.findViewById(R.id.lblJumlah);
 
         final ImageButton btnAction = (ImageButton) v.findViewById(R.id.btnAction);
 
         final int IdMSt = Data.getId();
         lblNomor.setText(Data.getNomor());
         lblTanggal.setText(getTglFormat(Data.getTanggal()));
-        if (Data.getId_pegawai() > 0){
+        if (Data.getId_pegawai() > 0) {
             lblPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(Data.getId_pegawai())).getNama());
         }
-        lblJumlah.setText(fmt.format(Data.getJumlah()));
+        lblJumlah.setText(fmt.format(Data.getTotal()));
 
-        if (Data.getUser_id() == "HIDE"){
+        if (Data.getUser_id() == "HIDE") {
             lblTanggal.setText("");
             lblJumlah.setText("");
             lblPegawai.setText("");
@@ -105,25 +100,25 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
                 po.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        if (IdMSt > 0){
-                            if (item.getTitle().equals("Detail")){
-                                Intent s = new Intent(getContext(), KasbonPegawaiInput.class);
+                        if (IdMSt > 0) {
+                            if (item.getTitle().equals("Detail")) {
+                                Intent s = new Intent(getContext(), PenggajianInputNew.class);
                                 s.putExtra("MODE", JCons.DETAIL_MODE);
-                                s.putExtra("ID",IdMSt);
+                                s.putExtra("ID", IdMSt);
                                 getContext().startActivity(s);
-                            } else if (item.getTitle().equals("Edit")){
-                                Intent s = new Intent(getContext(), KasbonPegawaiInput.class);
+                            } else if (item.getTitle().equals("Edit")) {
+                                Intent s = new Intent(getContext(), PenggajianInputNew.class);
                                 s.putExtra("MODE", JCons.EDIT_MODE);
-                                s.putExtra("ID",IdMSt);
-                                ((KasbonPegawaiRekap)ctx).startActivityForResult(s, 1);
-                            } else if (item.getTitle().equals("Hapus")){
-                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_DELETE_KASBON, new Response.Listener<String>() {
+                                s.putExtra("ID", IdMSt);
+                                ((PenggajianRekapNew) ctx).startActivityForResult(s, 1);
+                            } else if (item.getTitle().equals("Hapus")) {
+                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_DELETE_PENGGAJIAN, new Response.Listener<String>() {
                                     @Override
                                     public void onResponse(String response) {
                                         try {
                                             JSONObject jObj = new JSONObject(response);
-                                            ((KasbonPegawaiRekap)ctx).LoadData();
-                                            Toast.makeText(getContext(),MSG_SUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+                                            ((PenggajianRekapNew) ctx).LoadData();
+                                            Toast.makeText(getContext(), MSG_SUCCESS_DELETE, Toast.LENGTH_SHORT).show();
                                         } catch (JSONException e) {
                                             e.printStackTrace();
                                         }
@@ -131,7 +126,7 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
                                 }, new Response.ErrorListener() {
                                     @Override
                                     public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
                                     }
                                 }) {
                                     @Override
@@ -157,7 +152,7 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
         return filteredData.size();
     }
 
-    public KasbonPegawaiModel getItem(int position) {
+    public PenggajianModel getItem(int position) {
         return filteredData.get(position);
     }
 
@@ -172,35 +167,34 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
 
             FilterResults results = new FilterResults();
 
-            final List<KasbonPegawaiModel> list = objects;
+            final List<PenggajianModel> list = objects;
 
             int count = list.size();
-            final ArrayList<KasbonPegawaiModel> nlist = new ArrayList<KasbonPegawaiModel>(count);
+            final ArrayList<PenggajianModel> nlist = new ArrayList<PenggajianModel>(count);
 
-            String nomor ;
-            String nama_pegawai ;
+            String nomor;
+            String nama_pegawai;
             String jumlah;
             String tanggal;
             for (int i = 0; i < count; i++) {
-                nomor         = list.get(i).getNomor();
-                nama_pegawai  = list.get(i).getNama_pegawai();
-                jumlah        = Double.toString(list.get(i).getJumlah()) ;
-                tanggal       = getTglFormat(list.get(i).getTanggal());
-
+                nomor = list.get(i).getNomor();
+                nama_pegawai = list.get(i).getNama_pegawai();
+                jumlah = Double.toString(list.get(i).getTotal());
+                tanggal = getTglFormat(list.get(i).getTanggal());
                 if ((nomor.toLowerCase().contains(filterString)) || (nama_pegawai.toLowerCase().contains(filterString))
-                    ||(jumlah.toLowerCase().contains(filterString)) || (tanggal.toLowerCase().contains(filterString))) {
+                        || (jumlah.toLowerCase().contains(filterString)) || (tanggal.toLowerCase().contains(filterString))) {
                     nlist.add(list.get(i));
                 }
             }
             results.values = nlist;
-            results.count  = nlist.size();
+            results.count = nlist.size();
             return results;
         }
 
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredData = (ArrayList<KasbonPegawaiModel>) results.values;
+            filteredData = (ArrayList<PenggajianModel>) results.values;
             notifyDataSetChanged();
         }
 

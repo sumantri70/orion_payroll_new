@@ -110,7 +110,8 @@
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="5dp">
 
                         <TextView
                             android:id="@+id/textView5"
@@ -124,7 +125,13 @@
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
+
                     </android.support.constraint.ConstraintLayout>
+
+                    <View
+                        android:layout_width="fill_parent"
+                        android:layout_height="1dp"
+                        android:background="#f1f1f1"/>
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
@@ -336,6 +343,7 @@
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -345,60 +353,308 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    tools:layout_editor_absoluteX="24dp"
-                    tools:layout_editor_absoluteY="249dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical"
+                        android:paddingLeft="34dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:paddingBottom="5dp">
+
                         <TextView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="3dp"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="Keterlambatan"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:text="KETERLAMBATAN"
                             android:textSize="15dp"
-                            android:textStyle="bold"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:background="#f1f1f1"/>
+
+                    </LinearLayout>
+
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="6dp">
+
+                        <LinearLayout
+                            android:id="@+id/Ll1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toStartOf="@+id/textInputEditText"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.design.widget.TextInputLayout>
+                            tools:layout_editor_absoluteY="20dp">
 
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/txtTelat1"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="6dp"
+                                        android:background="@drawable/style_txt_default"
+                                        android:hint="Kurang 15 menit"
+                                        android:inputType="number" />
+                                </android.support.design.widget.TextInputLayout>
+
+                            </LinearLayout>
+                        </LinearLayout>
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtTelat1"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textInputEditText"
+                            android:layout_width="1dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="8dp"
                             android:background="@drawable/style_txt_default"
-                            android:hint="Kurang Dari 15 menit"
-                            android:inputType="number"/>
-                    </android.support.design.widget.TextInputLayout>
+                            android:hint=""
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.75" />
 
-                    <android.support.design.widget.TextInputLayout
+                        <LinearLayout
+                            android:id="@+id/linearLayout2"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textInputEditText"
+                            tools:layout_editor_absoluteY="16dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <android.support.design.widget.TextInputEditText
+                                            android:id="@+id/txtTelat2"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="6dp"
+                                            android:background="@drawable/style_txt_default"
+                                            android:hint="Lebih 15 menit"
+                                            android:inputType="number" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.constraint.ConstraintLayout>
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                app:cardElevation="0dp"
+                app:cardCornerRadius="0.5dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:orientation="vertical"
+                        android:paddingLeft="34dp"
+                        android:paddingTop="20dp"
+                        android:paddingRight="30dp"
+                        android:paddingBottom="5dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="5dp"
+                            android:layout_weight="1"
+                            android:text="IZIN"
+                            android:textSize="15dp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:background="#f1f1f1"/>
+                    </LinearLayout>
+
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="6dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toStartOf="@+id/textInputEditText2"
+                            app:layout_constraintStart_toStartOf="parent"
+                            tools:layout_editor_absoluteY="20dp">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/txtDokter"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="6dp"
+                                        android:background="@drawable/style_txt_default"
+                                        android:hint="Dokter"
+                                        android:inputType="number" />
+                                </android.support.design.widget.TextInputLayout>
+
+                                <android.support.design.widget.TextInputLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <android.support.design.widget.TextInputEditText
+                                        android:id="@+id/txtNonCuti"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginBottom="6dp"
+                                        android:background="@drawable/style_txt_default"
+                                        android:hint="Non Cuti"
+                                        android:inputType="number"/>
+                                </android.support.design.widget.TextInputLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtTelat2"
-                            android:layout_width="match_parent"
+                            android:id="@+id/textInputEditText2"
+                            android:layout_width="1dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="8dp"
                             android:background="@drawable/style_txt_default"
-                            android:hint="Lebih Dari 15 menit"
-                            android:inputType="number"/>
-                    </android.support.design.widget.TextInputLayout>
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.75" />
 
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/textInputEditText2"
+                            tools:layout_editor_absoluteY="16dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <android.support.design.widget.TextInputEditText
+                                            android:id="@+id/txtstghHari"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="6dp"
+                                            android:background="@drawable/style_txt_default"
+                                            android:hint="Setengah Hari"
+                                            android:inputType="number" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <android.support.design.widget.TextInputEditText
+                                            android:id="@+id/txtCuti"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="6dp"
+                                            android:background="@drawable/style_txt_default"
+                                            android:hint="Cuti"
+                                            android:inputType="number"/>
+                                    </android.support.design.widget.TextInputLayout>
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                    </android.support.constraint.ConstraintLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -429,101 +685,7 @@
                             android:layout_marginLeft="3dp"
                             android:layout_marginTop="0dp"
                             android:layout_marginBottom="8dp"
-                            android:text="Izin"
-                            android:textSize="15dp"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.design.widget.TextInputLayout>
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtDokter"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/style_txt_default"
-                            android:hint="Dokter"
-                            android:inputType="number"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtstghHari"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/style_txt_default"
-                            android:hint="Setengah Hari"
-                            android:inputType="number"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtNonCuti"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/style_txt_default"
-                            android:hint="Non Cuti"
-                            android:inputType="number"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtCuti"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="6dp"
-                            android:background="@drawable/style_txt_default"
-                            android:hint="Cuti"
-                            android:inputType="number"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="20dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    tools:layout_editor_absoluteX="24dp"
-                    tools:layout_editor_absoluteY="249dp">
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="3dp"
-                            android:layout_marginLeft="3dp"
-                            android:layout_marginTop="0dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="Lembur"
+                            android:text="LEMBUR"
                             android:textSize="15dp"
                             android:textStyle="bold"
                             app:layout_constraintStart_toStartOf="parent"
