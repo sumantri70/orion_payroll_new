@@ -3,10 +3,10 @@ package com.example.user.orion_payroll_new.models;
 public class PenggajianModel {
     private int id, id_pegawai, telat_satu, telat_dua, dokter, izin_stgh_hari, izin_cuti, izin_non_cuti;
     private String nomor, keterangan, user_id, user_edit, nama_pegawai;
-    private Double gaji_pokok, uang_ikatan, uang_kehadiran, premi_harian, premi_perjam, jam_lembur, total_tunjangan, total_potongan, total_lembur, total;
+    private Double gaji_pokok, uang_ikatan, uang_kehadiran, premi_harian, premi_perjam, jam_lembur, total_tunjangan, total_potongan, total_lembur, total_kasbon, total;
     private long tanggal, tgl_input, tgl_edit;
 
-    public PenggajianModel(int id, int id_pegawai, int telat_satu, int telat_dua, int dokter, int izin_stgh_hari, int izin_cuti, int izin_non_cuti, String nomor, String keterangan, String user_id, String user_edit, Double gaji_pokok, Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam, Double jam_lembur, Double total_tunjangan, Double total_potongan, Double total_lembur, Double total, long tanggal, long tgl_input, long tgl_edit) {
+    public PenggajianModel(int id, int id_pegawai, int telat_satu, int telat_dua, int dokter, int izin_stgh_hari, int izin_cuti, int izin_non_cuti, String nomor, String keterangan, String user_id, String user_edit, Double gaji_pokok, Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam, Double jam_lembur, Double total_tunjangan, Double total_potongan, Double total_lembur, Double total_kasbon, Double total, long tanggal, long tgl_input, long tgl_edit) {
         this.id = id;
         this.id_pegawai = id_pegawai;
         this.telat_satu = telat_satu;
@@ -28,6 +28,7 @@ public class PenggajianModel {
         this.total_tunjangan = total_tunjangan;
         this.total_potongan = total_potongan;
         this.total_lembur = total_lembur;
+        this.total_kasbon = total_kasbon;
         this.total = total;
         this.tanggal = tanggal;
         this.tgl_input = tgl_input;
@@ -57,6 +58,8 @@ public class PenggajianModel {
         this.total_tunjangan = 0.0;
         this.total_potongan = 0.0;
         this.total_lembur = 0.0;
+        this.total_kasbon = 0.0;
+        this.total = 0.0;
         this.tanggal = 0;
         this.tgl_input = 0;
         this.tgl_edit = 0;
@@ -132,6 +135,10 @@ public class PenggajianModel {
 
     public void setJam_lembur(Double jam_lembur) {
         this.jam_lembur = jam_lembur;
+    }
+
+    public void setTotal_kasbon(Double total_kasbon) {
+        this.total_kasbon = total_kasbon;
     }
 
     public void setTotal_tunjangan(Double total_tunjangan) {
@@ -264,6 +271,10 @@ public class PenggajianModel {
 
     public Double getTotal() {
         return total;
+    }
+
+    public Double getTotal_kasbon() {
+        return total_kasbon;
     }
 
     public String getNama_pegawai() {

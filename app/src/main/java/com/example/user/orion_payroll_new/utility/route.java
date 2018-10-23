@@ -2,9 +2,9 @@ package com.example.user.orion_payroll_new.utility;
 
 public class route {
     //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
-    public static final String URL = "http://192.168.43.59/orion_payroll/";
+    //public static final String URL = "http://192.168.43.59/orion_payroll/";
     //public static final String URL = "http://192.168.42.221/orion_payroll/";
-    //public static final String URL = "http://10.146.185.72/orion_payroll/";
+    public static final String URL = "http://10.146.70.194/orion_payroll/";
     //public static final String URL = "http://192.168.1.8/orion_payroll/";
     //public static final String URL = "http://127.0.0.1/orion_payroll/";
 
