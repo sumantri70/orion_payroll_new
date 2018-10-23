@@ -24,7 +24,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
-import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.form.adapter.PenggajianAdapterNew;
 import com.example.user.orion_payroll_new.form.filter.FilterPenggajian;
 import com.example.user.orion_payroll_new.models.JCons;
@@ -49,10 +48,8 @@ import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNow
 import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 
 public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
-
     private SearchView txtSearch;
-    private RadioGroup RgFilter;
-    private Dialog DialogFilter;
+
     private RadioButton rbt1, rbt2, rbt3;
 
     private ImageButton btnFilter, btnSort;
@@ -63,13 +60,11 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
     private List<PenggajianModel> ListData;
     private ListView ListRekap;
     public static PenggajianAdapterNew Adapter;
-    public static PegawaiTable Data;
 
-    public static String Fstatus;
     public static String OrderBy;
 
     private Long tgl_dari, tgl_Sampai;
-    private int IdPegawai, status;
+    private int IdPegawai;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -79,31 +74,20 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         this.txtSearch  = (SearchView) findViewById(R.id.txtSearch);
         this.swipe      = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         this.swipe.setColorSchemeColors(Color.DKGRAY, Color.GREEN, Color.BLUE, Color.CYAN);
-
-        this.DialogFilter = new Dialog(PenggajianRekapNew.this);
-        this.DialogFilter.setContentView(R.layout.filter_aktivasi);
-        this.DialogFilter.setTitle("Filter");
-        this.rbt1 = (RadioButton) DialogFilter.findViewById(R.id.RbtSemua);
-        this.rbt2 = (RadioButton) DialogFilter.findViewById(R.id.RbtAktif);
-        this.rbt3 = (RadioButton) DialogFilter.findViewById(R.id.RbtNonAktif);
-        this.RgFilter = (RadioGroup) DialogFilter.findViewById(R.id.RgFilter);
     }
 
     private void InitClass(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Penggajian");
 
-        Fstatus = TRUE_STRING;
+
         OrderBy = "tanggal";
         ListData = new ArrayList<PenggajianModel>();
-        //Kodeing buat ngilangin garis
-        //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
 
         tgl_dari   = serverNowStartOfTheMonthLong();
         tgl_Sampai = serverNowLong();
         IdPegawai  = 0;
-        status     = 0;
     }
 
     protected void EventClass(){
@@ -126,7 +110,6 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
                 Intent s = new Intent(PenggajianRekapNew.this, FilterPenggajian.class);
                 s.putExtra("TGL_DARI", tgl_dari);
                 s.putExtra("TGL_SAMPAI", tgl_Sampai);
-                s.putExtra("STATUS", status);
                 s.putExtra("PEGAWAI_ID", IdPegawai);
                 PenggajianRekapNew.this.startActivityForResult(s, RESULT_LOV);
             }
@@ -197,61 +180,75 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
     }
 
     public void LoadData(){
-//        swipe.setRefreshing(true);
-//        String filter;
-//        Fstatus = "";
-//        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
-//        String url = route.URL_SELECT_PENGGAJIAN + filter;
-//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                PenggajianModel Data;
-//                ListData.clear();
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("data");
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        JSONObject obj = jsonArray.getJSONObject(i);
-//                        Data = new PenggajianModel(
-//                                obj.getInt("id"),
-//                                getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
-//                                obj.getString("nomor"),
-//                                obj.getInt("id_pegawai"),
-//                                obj.getDouble("jumlah"),
-//                                obj.getDouble("sisa"),
-//                                obj.getInt("cicilan"),
-//                                obj.getString("keterangan"),
-//                                obj.getString("user_id"),
-//                                getMillisDate(FormatDateFromSql(obj.getString("tgl_input"))),
-//                                obj.getString("user_edit"),
-//                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit")))
-//                        );
-//                        Data.setNama_pegawai(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
-//                        ListData.add(Data);
-//                    }
-//                    //Satu baris kosong di akhir
-//                    Data = new PenggajianModel(0,0,"",0,0,0,0,"","HIDE",0,"",0);
-//                    ListData.add(Data);
-//
-//                    Adapter = new PenggajianAdapterNew(PenggajianRekapNew.this, R.layout.list_penggajian_rekap_new, ListData);
-//                    Adapter.notifyDataSetChanged();
-//                    ListRekap.setAdapter(Adapter);
-//                    swipe.setRefreshing(false);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(PenggajianRekapNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//                    swipe.setRefreshing(false);
-//                }
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                ListData.clear();
-//                swipe.setRefreshing(false);
-//                Toast.makeText(PenggajianRekapNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+        swipe.setRefreshing(true);
+        String filter;
+        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
+        String url = route.URL_SELECT_PENGGAJIAN + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                PenggajianModel Data;
+                ListData.clear();
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        Data = new PenggajianModel(
+                                obj.getInt("id"),
+                                obj.getInt("id_pegawai"),
+                                obj.getInt("telat_satu"),
+                                obj.getInt("telat_dua"),
+                                obj.getInt("dokter"),
+                                obj.getInt("izin_stgh_hari"),
+                                obj.getInt("izin_cuti"),
+                                obj.getInt("izin_non_cuti"),
+                                obj.getString("nomor"),
+                                obj.getString("keterangan"),
+                                obj.getString("user_id"),
+                                obj.getString("user_edit"),
+                                obj.getDouble("gaji_pokok"),
+                                obj.getDouble("uang_ikatan"),
+                                obj.getDouble("uang_kehadiran"),
+                                obj.getDouble("premi_harian"),
+                                obj.getDouble("premi_perjam"),
+                                obj.getDouble("jam_lembur"),
+                                obj.getDouble("total_tunjangan"),
+                                obj.getDouble("total_potongan"),
+                                obj.getDouble("total_lembur"),
+                                obj.getDouble("total_kasbon"),
+                                obj.getDouble("total"),
+                                getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
+                                getMillisDate(FormatDateFromSql(obj.getString("tgl_input"))),
+                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit")))
+                        );
+                        Data.setNama_pegawai(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
+                        ListData.add(Data);
+                    }
+                    //Satu baris kosong di akhir
+                    Data = new PenggajianModel();
+                    Data.setUser_id("HIDE");
+                    ListData.add(Data);
+
+                    Adapter = new PenggajianAdapterNew(PenggajianRekapNew.this, R.layout.list_penggajian_rekap_new, ListData);
+                    Adapter.notifyDataSetChanged();
+                    ListRekap.setAdapter(Adapter);
+                    swipe.setRefreshing(false);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianRekapNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    swipe.setRefreshing(false);
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                ListData.clear();
+                swipe.setRefreshing(false);
+                Toast.makeText(PenggajianRekapNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
     @Override
@@ -288,7 +285,6 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
                 IdPegawai  = extra.getInt("PEGAWAI_ID");
                 tgl_dari   = extra.getLong("TGL_DARI");
                 tgl_Sampai = extra.getLong("TGL_SAMPAI");
-                status     = extra.getInt("STATUS");
             }
             LoadData();
         }

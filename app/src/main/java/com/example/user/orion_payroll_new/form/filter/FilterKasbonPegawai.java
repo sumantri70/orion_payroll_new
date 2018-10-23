@@ -18,8 +18,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Filter;
 import android.widget.Spinner;
-import android.widget.Switch;
-
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.form.lov.lov_pegawai;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
