@@ -18,9 +18,10 @@
         android:scrollbarStyle="insideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.333">
+        app:layout_constraintVertical_bias="1.0">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,15 +31,15 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
+                app:cardCornerRadius="0.5dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingTop="20dp"
                     android:paddingLeft="30dp"
+                    android:paddingTop="20dp"
                     android:paddingRight="30dp"
                     tools:layout_editor_absoluteX="24dp"
                     tools:layout_editor_absoluteY="249dp">
@@ -53,8 +54,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:background="@drawable/style_txt_default"
-                            android:hint="Nomor"
                             android:focusable="false"
+                            android:hint="Nomor"
                             android:inputType="text" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -83,8 +84,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
                             android:background="@drawable/style_txt_default"
-                            android:hint="Pegawai"
                             android:focusable="false"
+                            android:hint="Pegawai"
                             android:inputType="text" />
                     </android.support.design.widget.TextInputLayout>
 
@@ -92,257 +93,257 @@
             </android.support.v7.widget.CardView>
 
             <!--<android.support.v7.widget.CardView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_marginTop="14dp"-->
-                <!--android:paddingBottom="0dp"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:cardElevation="0dp"-->
-                <!--app:cardCornerRadius="0.5dp">-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_marginTop="14dp"-->
+            <!--android:paddingBottom="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:cardElevation="0dp"-->
+            <!--app:cardCornerRadius="0.5dp">-->
 
-                <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:paddingTop="10dp"-->
-                    <!--android:paddingLeft="35dp"-->
-                    <!--android:paddingRight="20dp"-->
-                    <!--android:paddingBottom="18dp"-->
-                    <!--tools:layout_editor_absoluteX="24dp"-->
-                    <!--tools:layout_editor_absoluteY="249dp">-->
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:paddingLeft="35dp"-->
+            <!--android:paddingRight="20dp"-->
+            <!--android:paddingBottom="18dp"-->
+            <!--tools:layout_editor_absoluteX="24dp"-->
+            <!--tools:layout_editor_absoluteY="249dp">-->
 
-                    <!--<android.support.constraint.ConstraintLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:paddingBottom="5dp">-->
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingBottom="5dp">-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView5"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="3dp"-->
-                            <!--android:layout_marginLeft="3dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text="DETAIL GAJI"-->
-                            <!--android:textSize="15dp"-->
-                            <!--android:textStyle="bold"-->
-                            <!--app:layout_constraintStart_toStartOf="parent"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView5"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="3dp"-->
+            <!--android:layout_marginLeft="3dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="DETAIL GAJI"-->
+            <!--android:textSize="15dp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                    <!--</android.support.constraint.ConstraintLayout>-->
+            <!--</android.support.constraint.ConstraintLayout>-->
 
-                    <!--<View-->
-                        <!--android:layout_width="fill_parent"-->
-                        <!--android:layout_height="1dp"-->
-                        <!--android:background="#f1f1f1"/>-->
+            <!--<View-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#f1f1f1"/>-->
 
-                    <!--<android.support.constraint.ConstraintLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text="Gaji Pokok"-->
-                            <!--app:layout_constraintStart_toStartOf="parent"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Gaji Pokok"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textVie"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="42dp"-->
-                            <!--android:layout_marginLeft="42dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text=":"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textVie"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="42dp"-->
+            <!--android:layout_marginLeft="42dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/lblGajiPokok"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="19dp"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:layout_marginEnd="8dp"-->
-                            <!--android:layout_marginRight="8dp"-->
-                            <!--android:text="0"-->
-                            <!--app:layout_constraintEnd_toEndOf="parent"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textVie"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
-                    <!--</android.support.constraint.ConstraintLayout>-->
+            <!--<TextView-->
+            <!--android:id="@+id/lblGajiPokok"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="19dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="0"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textVie"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
 
 
-                    <!--<android.support.constraint.ConstraintLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView6"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text="Uang Ikatan"-->
-                            <!--app:layout_constraintStart_toStartOf="parent"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView6"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Uang Ikatan"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView7"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="35dp"-->
-                            <!--android:layout_marginLeft="35dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text=":"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView6"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView7"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="35dp"-->
+            <!--android:layout_marginLeft="35dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView6"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/lblUangIkatan"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="19dp"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:layout_marginEnd="8dp"-->
-                            <!--android:layout_marginRight="8dp"-->
-                            <!--android:text="0"-->
-                            <!--app:layout_constraintEnd_toEndOf="parent"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView7"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
-                    <!--</android.support.constraint.ConstraintLayout>-->
+            <!--<TextView-->
+            <!--android:id="@+id/lblUangIkatan"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="19dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="0"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView7"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
 
-                    <!--<android.support.constraint.ConstraintLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView8"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text="Uang Kehadiran"-->
-                            <!--app:layout_constraintStart_toStartOf="parent"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView8"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Uang Kehadiran"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView9"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="10dp"-->
-                            <!--android:layout_marginLeft="10dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text=":"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView8"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView9"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="10dp"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView8"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/lblUangKehadiran"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:layout_marginEnd="8dp"-->
-                            <!--android:layout_marginRight="8dp"-->
-                            <!--android:text="0"-->
-                            <!--app:layout_constraintEnd_toEndOf="parent"-->
-                            <!--app:layout_constraintHorizontal_bias="0.048"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView9"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
-                    <!--</android.support.constraint.ConstraintLayout>-->
+            <!--<TextView-->
+            <!--android:id="@+id/lblUangKehadiran"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="0"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.048"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView9"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
 
-                    <!--<android.support.constraint.ConstraintLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView10"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text="Premi Harian"-->
-                            <!--app:layout_constraintStart_toStartOf="parent"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView10"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Premi Harian"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView11"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="27dp"-->
-                            <!--android:layout_marginLeft="27dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text=":"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView10"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView11"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="27dp"-->
+            <!--android:layout_marginLeft="27dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView10"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/lblPremiHarian"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:layout_marginEnd="8dp"-->
-                            <!--android:layout_marginRight="8dp"-->
-                            <!--android:text="0"-->
-                            <!--app:layout_constraintEnd_toEndOf="parent"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView11"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
-                    <!--</android.support.constraint.ConstraintLayout>-->
+            <!--<TextView-->
+            <!--android:id="@+id/lblPremiHarian"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="0"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView11"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
 
-                    <!--<android.support.constraint.ConstraintLayout-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content">-->
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView12"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text="Premi Perjam"-->
-                            <!--app:layout_constraintStart_toStartOf="parent"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView12"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Premi Perjam"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/textView13"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="23dp"-->
-                            <!--android:layout_marginLeft="23dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:text=":"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView12"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--<TextView-->
+            <!--android:id="@+id/textView13"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="23dp"-->
+            <!--android:layout_marginLeft="23dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView12"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
-                        <!--<TextView-->
-                            <!--android:id="@+id/lblPremiPerjam"-->
-                            <!--android:layout_width="0dp"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginStart="8dp"-->
-                            <!--android:layout_marginLeft="8dp"-->
-                            <!--android:layout_marginTop="8dp"-->
-                            <!--android:layout_marginEnd="8dp"-->
-                            <!--android:layout_marginRight="8dp"-->
-                            <!--android:text="0"-->
-                            <!--app:layout_constraintEnd_toEndOf="parent"-->
-                            <!--app:layout_constraintHorizontal_bias="0.067"-->
-                            <!--app:layout_constraintStart_toEndOf="@+id/textView13"-->
-                            <!--app:layout_constraintTop_toTopOf="parent" />-->
-                    <!--</android.support.constraint.ConstraintLayout>-->
-                <!--</LinearLayout>-->
+            <!--<TextView-->
+            <!--android:id="@+id/lblPremiPerjam"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="0"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.067"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView13"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+            <!--</LinearLayout>-->
             <!--</android.support.v7.widget.CardView>-->
 
 
@@ -350,8 +351,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
+                app:cardCornerRadius="0.5dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -380,7 +381,7 @@
                         <View
                             android:layout_width="fill_parent"
                             android:layout_height="1dp"
-                            android:background="#f1f1f1"/>
+                            android:background="#f1f1f1" />
 
                     </LinearLayout>
 
@@ -461,7 +462,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:orientation="vertical">>
+                                android:orientation="vertical">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -494,8 +495,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
+                app:cardCornerRadius="0.5dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -524,7 +525,7 @@
                         <View
                             android:layout_width="fill_parent"
                             android:layout_height="1dp"
-                            android:background="#f1f1f1"/>
+                            android:background="#f1f1f1" />
                     </LinearLayout>
 
 
@@ -577,7 +578,7 @@
                                         android:layout_marginBottom="6dp"
                                         android:background="@drawable/style_txt_default"
                                         android:hint="Non Cuti"
-                                        android:inputType="number"/>
+                                        android:inputType="number" />
                                 </android.support.design.widget.TextInputLayout>
 
                             </LinearLayout>
@@ -649,7 +650,7 @@
                                             android:layout_marginBottom="6dp"
                                             android:background="@drawable/style_txt_default"
                                             android:hint="Cuti"
-                                            android:inputType="number"/>
+                                            android:inputType="number" />
                                     </android.support.design.widget.TextInputLayout>
 
                                 </LinearLayout>
@@ -663,15 +664,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
+                app:cardCornerRadius="0.5dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingTop="20dp"
                     android:paddingLeft="30dp"
+                    android:paddingTop="20dp"
                     android:paddingRight="30dp"
                     tools:layout_editor_absoluteX="24dp"
                     tools:layout_editor_absoluteY="249dp">
@@ -679,6 +680,7 @@
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -696,8 +698,8 @@
                     <View
                         android:layout_width="fill_parent"
                         android:layout_height="1dp"
-                        android:background="#f1f1f1"
-                        android:layout_marginBottom="8dp"/>
+                        android:layout_marginBottom="8dp"
+                        android:background="#f1f1f1" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
@@ -710,7 +712,7 @@
                             android:layout_marginBottom="6dp"
                             android:background="@drawable/style_txt_default"
                             android:hint="Jam Lembur"
-                            android:inputType="number"/>
+                            android:inputType="number" />
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -722,290 +724,787 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:nestedScrollingEnabled="true"
-                android:scrollbars="vertical">
-            </ExpandableListView>
+                android:scrollbars="vertical"></ExpandableListView>
+
+            <!--<android.support.v7.widget.CardView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_marginTop="14dp"-->
+            <!--android:paddingBottom="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:cardElevation="0dp"-->
+            <!--app:cardCornerRadius="0.5dp">-->
+
+            <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:orientation="vertical"-->
+            <!--android:paddingLeft="24dp"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:paddingRight="25dp"-->
+            <!--android:paddingBottom="18dp"-->
+            <!--tools:layout_editor_absoluteX="24dp"-->
+            <!--tools:layout_editor_absoluteY="249dp">-->
+
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView66"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Gaji Pokok"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView77"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="47dp"-->
+            <!--android:layout_marginLeft="47dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView66"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblGajiPokok"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="19dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="10.000.000,00"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView77"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView88"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Total Tunjangan"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView99"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="15dp"-->
+            <!--android:layout_marginLeft="15dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView88"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblTotTunjangan"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="10.000.000,00"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.048"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView99"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView100"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Total Potongan"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView111"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="19dp"-->
+            <!--android:layout_marginLeft="19dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView100"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblTotPotongan"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="10.000.000,00"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView111"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView122"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Total Kasbon"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView133"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="32dp"-->
+            <!--android:layout_marginLeft="32dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView122"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblTotKasbon"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="10.000.000,00"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.067"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView133"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:paddingBottom="10dp">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView12222"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Total Lembur"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView13333"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="32dp"-->
+            <!--android:layout_marginLeft="32dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView12222"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblTotLembur"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="10.000.000,00"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.067"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView13333"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+            <!--<View-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#f1f1f1" />-->
+
+            <!--<android.support.constraint.ConstraintLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="10dp">-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView1222"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="Total"-->
+            <!--android:textColor="@color/colorblack"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/textView1333"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="82dp"-->
+            <!--android:layout_marginLeft="82dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text=":"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView1222"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+            <!--<TextView-->
+            <!--android:id="@+id/lblTotal"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:text="10.000.000,00"-->
+            <!--android:textColor="@color/colorblack"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.067"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/textView1333"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--</android.support.constraint.ConstraintLayout>-->
+
+            <!--<View-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="1dp"-->
+            <!--android:background="#f1f1f1" />-->
+            <!--</LinearLayout>-->
+            <!--</android.support.v7.widget.CardView>-->
 
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_marginTop="14dp"
-                android:paddingBottom="0dp"
                 android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
+                android:layout_marginTop="15dp"
+                app:cardCornerRadius="0.5dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="35dp"
-                    android:paddingRight="20dp"
-                    android:paddingBottom="18dp"
-                    tools:layout_editor_absoluteX="24dp"
-                    tools:layout_editor_absoluteY="249dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="match_parent"
+                        android:paddingTop="9dp"
+                        android:paddingLeft="25dp"
+                        android:paddingRight="20dp"
+                        android:paddingBottom="8dp">
 
-                        <TextView
-                            android:id="@+id/textView66"
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_marginStart="8dp"
                             android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Gaji Pokok"
+                            android:orientation="horizontal"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            tools:layout_editor_absoluteY="20dp">
 
-                        <TextView
-                            android:id="@+id/textView77"
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/textView66"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Gaji Pokok"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="3dp"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView666"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="3dp"
+                                    android:text="Total Tunjangan"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView6666"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="3dp"
+                                    android:text="Total Potongan"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView66666"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:paddingTop="3dp"
+                                    android:paddingBottom="3dp"
+                                    android:text="Total Kasbon"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/textView666666"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginTop="8dp"
+                                    android:text="Total Lembur"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout4"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="47dp"
-                            android:layout_marginLeft="47dp"
-                            android:layout_marginTop="8dp"
-                            android:text=":"
-                            app:layout_constraintStart_toEndOf="@+id/textView66"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/lblTotGajiPokok"
-                            android:layout_width="0dp"
-                            android:layout_height="19dp"
+                            android:layout_height="match_parent"
                             android:layout_marginStart="8dp"
                             android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal"
+                            app:layout_constraintStart_toEndOf="@+id/linearLayout"
+                            tools:layout_editor_absoluteY="16dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text=":" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text=":" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text=":" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text=":" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:text=":" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout5"
+                            android:layout_width="147dp"
+                            android:layout_height="match_parent"
                             android:layout_marginEnd="8dp"
                             android:layout_marginRight="8dp"
-                            android:text="0"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toStartOf="@+id/linearLayout6"
+                            tools:layout_editor_absoluteY="0dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/lblGajiPokok"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:gravity="right"
+                                        android:text="000000" />
+
+                                    <TextView
+                                        android:id="@+id/lblTotTunjangan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:gravity="right"
+                                        android:text="10.000.000,00" />
+
+                                    <TextView
+                                        android:id="@+id/lblTotPotongan"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:gravity="right"
+                                        android:text="10.000.000,00" />
+
+                                    <TextView
+                                        android:id="@+id/lblTotKasbon"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:gravity="right|end"
+                                        android:text="10.000.000,00" />
+
+                                    <TextView
+                                        android:id="@+id/lblTotLembur"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:gravity="right"
+                                        android:text="10.000.000,00" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginEnd="3dp"
+                            android:layout_marginRight="5dp"
+                            android:orientation="horizontal"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textView77"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            tools:layout_editor_absoluteY="0dp">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text="" />
+
+                                    <TextView
+                                        android:id="@+id/lblPilihTunjangan"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text="Pilih"
+                                        android:textAllCaps="false"
+                                        android:textColor="@color/colorPrimary" />
+
+                                    <TextView
+                                        android:id="@+id/lblPilihPotongan"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text="Pilih"
+                                        android:textColor="@color/colorPrimary" />
+
+                                    <TextView
+                                        android:id="@+id/lblPilihKasbon"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:paddingTop="3dp"
+                                        android:paddingBottom="3dp"
+                                        android:text="Pilih"
+                                        android:textColor="@color/colorPrimary" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginRight="8dp"
+                                        android:text="" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
                     </android.support.constraint.ConstraintLayout>
 
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/textView88"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Total Tunjangan"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textView99"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginLeft="15dp"
-                            android:layout_marginTop="8dp"
-                            android:text=":"
-                            app:layout_constraintStart_toEndOf="@+id/textView88"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/lblTotTunjangan"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.048"
-                            app:layout_constraintStart_toEndOf="@+id/textView99"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
-
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/textView100"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Total Potongan"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textView111"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="19dp"
-                            android:layout_marginLeft="19dp"
-                            android:layout_marginTop="8dp"
-                            android:text=":"
-                            app:layout_constraintStart_toEndOf="@+id/textView100"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/lblTotPotongan"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/textView111"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
-
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/textView122"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Total Kasbon"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textView133"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
-                            android:layout_marginLeft="32dp"
-                            android:layout_marginTop="8dp"
-                            android:text=":"
-                            app:layout_constraintStart_toEndOf="@+id/textView122"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/lblTotKasbon"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.067"
-                            app:layout_constraintStart_toEndOf="@+id/textView133"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
-
-                    <android.support.constraint.ConstraintLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingBottom="10dp">
+                        android:orientation="vertical"
+                        android:paddingLeft="33dp"
+                        android:paddingTop="10dp"
+                        android:paddingRight="25dp"
+                        android:paddingBottom="15dp">
 
-                        <TextView
-                            android:id="@+id/textView12222"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Total Lembur"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:background="#f1f1f1" />
 
-                        <TextView
-                            android:id="@+id/textView13333"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="32dp"
-                            android:layout_marginLeft="32dp"
-                            android:layout_marginTop="8dp"
-                            android:text=":"
-                            app:layout_constraintStart_toEndOf="@+id/textView12222"
-                            app:layout_constraintTop_toTopOf="parent" />
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:paddingLeft="6dp"
+                            android:paddingRight="20dp"
+                            android:paddingBottom="8dp">
 
-                        <TextView
-                            android:id="@+id/lblTotLembur"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.067"
-                            app:layout_constraintStart_toEndOf="@+id/textView13333"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
+                            <LinearLayout
+                                android:id="@+id/linearLayout3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="4dp"
+                                android:layout_marginLeft="4dp"
+                                android:orientation="horizontal"
+                                app:layout_constraintStart_toStartOf="parent"
+                                tools:layout_editor_absoluteY="1dp">
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="#f1f1f1"/>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
 
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp">
+                                    <TextView
+                                        android:id="@+id/textView1222"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginStart="0dp"
+                                        android:layout_marginLeft="0dp"
+                                        android:layout_marginTop="8dp"
+                                        android:text="Total"
+                                        android:textColor="@color/colorblack"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/textView1222"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:text="Total"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="75dp"
+                                android:layout_marginLeft="75dp"
+                                android:orientation="horizontal"
+                                app:layout_constraintStart_toEndOf="@+id/linearLayout3"
+                                tools:layout_editor_absoluteY="0dp">
 
-                        <TextView
-                            android:id="@+id/textView1333"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="82dp"
-                            android:layout_marginLeft="82dp"
-                            android:layout_marginTop="8dp"
-                            android:text=":"
-                            app:layout_constraintStart_toEndOf="@+id/textView1222"
-                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/lblTotal"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginLeft="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
-                            android:text="0"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.067"
-                            app:layout_constraintStart_toEndOf="@+id/textView1333"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </android.support.constraint.ConstraintLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
 
-                    <View
-                        android:layout_width="fill_parent"
-                        android:layout_height="1dp"
-                        android:background="#f1f1f1"/>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginStart="8dp"
+                                            android:layout_marginLeft="8dp"
+                                            android:layout_marginTop="8dp"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginRight="8dp"
+                                            android:text=":" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="147dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginEnd="40dp"
+                                android:layout_marginRight="40dp"
+                                android:orientation="horizontal"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                tools:layout_editor_absoluteY="0dp">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="vertical">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:id="@+id/lblTotal"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_marginStart="0dp"
+                                            android:layout_marginLeft="0dp"
+                                            android:layout_marginTop="8dp"
+                                            android:gravity="right"
+                                            android:text="100000"
+                                            android:textColor="@color/colorblack"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                        </android.support.constraint.ConstraintLayout>
+
+                        <View
+                            android:layout_width="fill_parent"
+                            android:layout_height="1dp"
+                            android:background="#f1f1f1" />
+                    </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
 
@@ -1013,15 +1512,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
-                app:cardElevation="0dp"
-                app:cardCornerRadius="0.5dp">
+                app:cardCornerRadius="0.5dp"
+                app:cardElevation="0dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:paddingTop="20dp"
                     android:paddingLeft="30dp"
+                    android:paddingTop="20dp"
                     android:paddingRight="30dp"
                     tools:layout_editor_absoluteX="24dp"
                     tools:layout_editor_absoluteY="249dp">
@@ -1057,12 +1556,12 @@
                 android:id="@+id/btnSimpan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/style_btn_default"
-                android:text="Simpan"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="20dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="3dp"
+                android:background="@drawable/style_btn_default"
+                android:text="Simpan"
                 android:textColor="@color/colorwhite" />
         </LinearLayout>
     </ScrollView>

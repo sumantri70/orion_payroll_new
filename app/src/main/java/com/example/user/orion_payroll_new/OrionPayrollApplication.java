@@ -90,6 +90,11 @@ public class OrionPayrollApplication extends Application {
                                 getMillisDate(obj.getString("tgl_mulai_kerja")),
                                 obj.getString("keterangan")
                         );
+
+                        Data.setUang_ikatan(obj.getDouble("uang_ikatan"));
+                        Data.setUang_kehadiran(obj.getDouble("uang_kehadiran"));
+                        Data.setPremi_harian(obj.getDouble("Premi_harian"));
+                        Data.setPremi_perjam(obj.getDouble("Premi_perjam"));
                         ListHashPegawaiGlobal.put(Integer.toString(Data.getId()), Data);
                     }
                 } catch (JSONException e) {

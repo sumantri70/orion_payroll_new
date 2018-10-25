@@ -22,6 +22,16 @@ public class TunjanganModel {
         this.jumlah = 0;
     }
 
+    public TunjanganModel(TunjanganModel Data) {
+        this.id = Data.getId();
+        this.kode = Data.getKode();
+        this.nama = Data.getNama();
+        this.keterangan = Data.getKeterangan();
+        this.status = Data.getStatus();
+        this.jumlah = Data.getJumlah();
+    }
+
+
     public int getId() {
         return id;
     }

@@ -7,6 +7,7 @@ public class PegawaiModel {
     private String nik, nama, alamat, telpon1, telpon2, email, status, keterangan;
     private Double gaji_pokok;
     private long tgl_lahir, tgl_mulai_kerja;
+    private Double uang_ikatan, uang_kehadiran, premi_harian, premi_perjam;
 
     public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email,
                         Double gaji_pokok, String status, long tgl_lahir, long tgl_mulai_kerja, String keterangan) {
@@ -35,6 +36,10 @@ public class PegawaiModel {
         this.status = "";
         this.tgl_lahir = 0;
         this.keterangan = "";
+        this.uang_ikatan = 0.0;
+        this.uang_kehadiran = 0.0;
+        this.premi_harian = 0.0;
+        this.premi_perjam = 0.0;
     }
 
 
@@ -50,6 +55,10 @@ public class PegawaiModel {
         this.status = data.getStatus();
         this.tgl_lahir = data.getTgl_lahir();
         this.keterangan = data.getKeterangan();
+        this.uang_ikatan = data.getUang_ikatan();
+        this.uang_kehadiran = data.getUang_kehadiran();
+        this.premi_harian = data.getPremi_harian();
+        this.premi_perjam = data.getPremi_perjam();
     }
 
     public void setId(int id) {
@@ -100,6 +109,22 @@ public class PegawaiModel {
         this.tgl_mulai_kerja = tgl_mulai_kerja;
     }
 
+    public void setUang_ikatan(Double uang_ikatan) {
+        this.uang_ikatan = uang_ikatan;
+    }
+
+    public void setUang_kehadiran(Double uang_kehadiran) {
+        this.uang_kehadiran = uang_kehadiran;
+    }
+
+    public void setPremi_harian(Double premi_harian) {
+        this.premi_harian = premi_harian;
+    }
+
+    public void setPremi_perjam(Double premi_perjam) {
+        this.premi_perjam = premi_perjam;
+    }
+
     public int getId() {
         return id;
     }
@@ -146,6 +171,22 @@ public class PegawaiModel {
 
     public long getTgl_mulai_kerja() {
         return tgl_mulai_kerja;
+    }
+
+    public Double getUang_ikatan() {
+        return uang_ikatan;
+    }
+
+    public Double getUang_kehadiran() {
+        return uang_kehadiran;
+    }
+
+    public Double getPremi_harian() {
+        return premi_harian;
+    }
+
+    public Double getPremi_perjam() {
+        return premi_perjam;
     }
 
     @Override

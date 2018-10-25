@@ -46,6 +46,21 @@ public class KasbonPegawaiModel {
         this.tgl_edit = 0;
     }
 
+    public KasbonPegawaiModel(KasbonPegawaiModel Data) {
+        this.id = Data.getId();
+        this.tanggal = Data.getTanggal();
+        this.nomor = Data.getNomor();
+        this.id_pegawai = Data.getId_pegawai();
+        this.jumlah = Data.getJumlah();
+        this.sisa = Data.getSisa();
+        this.cicilan = Data.getCicilan();
+        this.keterangan = Data.getKeterangan();
+        this.user_id = Data.getUser_id();
+        this.tgl_input = Data.getTgl_input();
+        this.user_edit = Data.getUser_edit();
+        this.tgl_edit = Data.getTgl_edit();
+    }
+
     public void setId(int id) {
         this.id = id;
     }

@@ -253,6 +253,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
                     }
                     //Satu baris kosong di akhir
                     Data = new PegawaiModel();
+                    Data.setStatus("HIDE");
                     ListPegawai.add(Data);
 
                     Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, ListPegawai);
