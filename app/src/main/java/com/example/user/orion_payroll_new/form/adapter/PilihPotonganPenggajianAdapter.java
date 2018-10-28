@@ -10,33 +10,29 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Filter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.user.orion_payroll_new.R;
-import com.example.user.orion_payroll_new.form.transaksi.PenggajianInputNew;
-import com.example.user.orion_payroll_new.form.transaksi.PilihTunjanganPenggajian;
-import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.form.transaksi.PilihPotonganPenggajian;
 import com.example.user.orion_payroll_new.models.PenggajianDetailModel;
 import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
-import static com.example.user.orion_payroll_new.utility.JEngine.Get_Kode_Master_Tunjangan;
-import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Tunjangan;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Kode_Master_Potongan;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Potongan;
 
-public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDetailModel> {
+public class PilihPotonganPenggajianAdapter extends ArrayAdapter<PenggajianDetailModel> {
     private ProgressDialog Loading;
     private Context ctx;
     private List<PenggajianDetailModel> objects;
 
-    public PilihTunjanganPenggajianAdapter(Context context, int resource, List<PenggajianDetailModel> object) {
+    public PilihPotonganPenggajianAdapter(Context context, int resource, List<PenggajianDetailModel> object) {
         super(context, resource, object);
         this.ctx = context;
         this.objects = object;
@@ -45,13 +41,13 @@ public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDeta
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final PenggajianDetailModel Data = getItem(position);
-        final PilihTunjanganPenggajianAdapter.ViewHolder holder;
+        final PilihPotonganPenggajianAdapter.ViewHolder holder;
         View v = convertView;
 
         if (v == null) {
-            holder = new PilihTunjanganPenggajianAdapter.ViewHolder();
+            holder = new PilihPotonganPenggajianAdapter.ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            v = inflater.inflate(R.layout.list_pilih_tunjangan_penggajian, null);
+            v = inflater.inflate(R.layout.list_pilih_potongan_penggajian, null);
 
 
             holder.Hkode      = (TextView) v.findViewById(R.id.lblItem1);
@@ -60,9 +56,9 @@ public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDeta
             holder.HbtnHapus  = (ImageButton)v.findViewById(R.id.btnAction);
             holder.Hjumlah.addTextChangedListener(new FormatNumber(holder.Hjumlah));
 
-            boolean Enabled = !((PilihTunjanganPenggajian)ctx).Mode.equals(DETAIL_MODE);
+            boolean Enabled = !((PilihPotonganPenggajian)ctx).Mode.equals(DETAIL_MODE);
 
-            if (((PilihTunjanganPenggajian)ctx).Mode.equals(DETAIL_MODE)){
+            if (((PilihPotonganPenggajian)ctx).Mode.equals(DETAIL_MODE)){
                 holder.HbtnHapus.setVisibility(View.INVISIBLE);
                 holder.HchbKasbon.setVisibility(View.INVISIBLE);
             }
@@ -70,11 +66,11 @@ public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDeta
             holder.Hjumlah.setEnabled(Enabled);
             v.setTag(holder);
         }else{
-            holder = (PilihTunjanganPenggajianAdapter.ViewHolder)v.getTag();
+            holder = (PilihPotonganPenggajianAdapter.ViewHolder)v.getTag();
         }
 
-        holder.Hkode.setText(Get_Kode_Master_Tunjangan(Data.getId_tjg_pot_kas()));
-        holder.Hnama.setText(Get_Nama_Master_Tunjangan(Data.getId_tjg_pot_kas()));
+        holder.Hkode.setText(Get_Kode_Master_Potongan(Data.getId_tjg_pot_kas()));
+        holder.Hnama.setText(Get_Nama_Master_Potongan(Data.getId_tjg_pot_kas()));
         holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
         holder.Hjumlah.setId(position);
 
@@ -100,18 +96,18 @@ public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDeta
         holder.HbtnHapus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            LostFocus();
-            ((PilihTunjanganPenggajian)ctx).ListTunjangan.remove(idx);
-            ((PilihTunjanganPenggajian)ctx).Adapter.notifyDataSetChanged();
+                LostFocus();
+                ((PilihPotonganPenggajian)ctx).ListPotongan.remove(idx);
+                ((PilihPotonganPenggajian)ctx).Adapter.notifyDataSetChanged();
             }
         });
         return v;
     }
 
     protected void LostFocus(){
-        ((PilihTunjanganPenggajian)ctx).txtTmp.setVisibility(View.VISIBLE);
-        ((PilihTunjanganPenggajian)ctx).txtTmp.requestFocus();
-        ((PilihTunjanganPenggajian)ctx).txtTmp.setVisibility(View.INVISIBLE);
+        ((PilihPotonganPenggajian)ctx).txtTmp.setVisibility(View.VISIBLE);
+        ((PilihPotonganPenggajian)ctx).txtTmp.requestFocus();
+        ((PilihPotonganPenggajian)ctx).txtTmp.setVisibility(View.INVISIBLE);
     }
 
     public int getCount() {

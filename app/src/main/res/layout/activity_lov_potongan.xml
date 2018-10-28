@@ -27,10 +27,10 @@
                 android:id="@+id/txtSearch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/style_txt_default"
                 android:foregroundGravity="fill"
                 android:gravity="fill"
@@ -38,7 +38,7 @@
                 android:padding="0dp"
                 android:queryBackground="@android:color/transparent"
                 android:queryHint="Cari disini..."
-                app:layout_constraintEnd_toStartOf="@+id/BtnSort"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
 

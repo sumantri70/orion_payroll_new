@@ -335,6 +335,7 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 LoadData();
+                OrionPayrollApplication.getInstance().GetHashPotongan();
             }else{
 
             }

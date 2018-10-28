@@ -27,10 +27,10 @@
                 android:id="@+id/txtSearch"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="3dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginStart="3dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
                 android:background="@drawable/style_txt_default"
                 android:foregroundGravity="fill"
                 android:gravity="fill"
@@ -38,7 +38,7 @@
                 android:padding="0dp"
                 android:queryBackground="@android:color/transparent"
                 android:queryHint="Cari disini..."
-                app:layout_constraintEnd_toStartOf="@+id/BtnSort"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
 
@@ -46,13 +46,11 @@
                 android:id="@+id/BtnSort"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="6dp"
-                android:layout_marginRight="6dp"
                 android:background="@drawable/style_btn_search"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:srcCompat="@drawable/ic_filter_list_black_24dp"
+                tools:layout_editor_absoluteX="373dp"
                 tools:layout_editor_absoluteY="0dp" />
         </android.support.constraint.ConstraintLayout>
     </android.support.v7.widget.CardView>

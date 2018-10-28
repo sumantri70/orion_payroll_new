@@ -173,6 +173,7 @@ public class PegawaiInput extends AppCompatActivity {
         this.txtTglMulaiBekerja.setEnabled(Enabled);
         this.txtKeterangan.setEnabled(Enabled);
         this.btnUpdateGaji.setEnabled(Enabled);
+        this.txtAlamat.setEnabled(Enabled);
 
         txtTmp.setVisibility(View.INVISIBLE);
         txtNik.setFilters(new InputFilter[]{new InputFilter.AllCaps()}); //untuk uppercase

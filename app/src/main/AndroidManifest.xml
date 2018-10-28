@@ -34,7 +34,9 @@
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
         <activity android:name=".form.transaksi.PenggajianInput" />
-        <activity android:name=".form.transaksi.PenggajianPilihTunjangan" />
+        <activity
+            android:name=".form.transaksi.PenggajianPilihTunjangan"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".form.lov.lov_tunjangan" />
         <activity android:name=".form.master.PotonganInput" />
         <activity android:name=".form.master.PotonganRekap" />
@@ -52,7 +54,12 @@
         <activity android:name=".form.transaksi.PenggajianInputNew" />
         <activity android:name=".form.transaksi.PenggajianRekapNew" />
         <activity android:name=".form.lov.lov_potongan" />
-        <activity android:name=".form.transaksi.PilihTunjanganPenggajian"></activity>
+        <activity
+            android:name=".form.transaksi.PilihTunjanganPenggajian"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".form.transaksi.PilihPotonganPenggajian"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

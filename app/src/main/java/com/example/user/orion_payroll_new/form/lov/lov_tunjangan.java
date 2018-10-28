@@ -61,6 +61,7 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
         this.btnSort    = (ImageButton) findViewById(R.id.BtnSort);
+        this.btnSort.setVisibility(View.INVISIBLE);
         this.txtSearch  = (SearchView) findViewById(R.id.txtSearch);
         this.swipe      = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         this.swipe.setColorSchemeColors(Color.DKGRAY, Color.GREEN, Color.BLUE, Color.CYAN);

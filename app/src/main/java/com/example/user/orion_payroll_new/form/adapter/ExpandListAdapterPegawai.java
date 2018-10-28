@@ -145,16 +145,16 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
 
         holder.Hjumlah.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus){
-                final EditText Caption = (EditText) v;
-                if (!Caption.getText().toString().equals("")) {
-                    DataChild.setJumlah(StrFmtToDouble(Caption.getText().toString()));
-                }else{
-                    DataChild.setJumlah(StrFmtToDouble("0"));
+                if (!hasFocus){
+                    final EditText Caption = (EditText) v;
+                    if (!Caption.getText().toString().equals("")) {
+                        DataChild.setJumlah(StrFmtToDouble(Caption.getText().toString()));
+                    }else{
+                        DataChild.setJumlah(StrFmtToDouble("0"));
+                    }
+                    holder.Hjumlah.setText( FungsiGeneral.FloatToStrFmt(DataChild.getJumlah()));
+                    holder.Hjumlah.setText(fmt.format(DataChild.getJumlah()));
                 }
-                holder.Hjumlah.setText( FungsiGeneral.FloatToStrFmt(DataChild.getJumlah()));
-                holder.Hjumlah.setText(fmt.format(DataChild.getJumlah()));
-            }
             }
         });
         final int idx = childPosition;

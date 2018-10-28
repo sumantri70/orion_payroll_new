@@ -18,6 +18,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Optional;
 
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
@@ -75,6 +76,13 @@ public class FungsiGeneral {
 
     public static String getTglFormat(long date){
         DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar calender = Calendar.getInstance();
+        calender.setTimeInMillis(date);
+        return formatter.format(calender.getTime());
+    }
+
+    public static String getTglFormatCustom(long date, String format){
+        DateFormat formatter = new SimpleDateFormat(format);
         Calendar calender = Calendar.getInstance();
         calender.setTimeInMillis(date);
         return formatter.format(calender.getTime());
@@ -244,6 +252,14 @@ public class FungsiGeneral {
             return n.floatValue();
         }catch(ParseException e){
             return 0;
+        }
+    }
+
+    public static int StrToIntDef(String value, int Def) {
+        try {
+            return Integer.parseInt(value);
+        } catch(NumberFormatException nfe) {
+            return Def;
         }
     }
 

@@ -219,7 +219,8 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
                                 obj.getDouble("total"),
                                 getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
                                 getMillisDate(FormatDateFromSql(obj.getString("tgl_input"))),
-                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit")))
+                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit"))),
+                                getMillisDate(FormatDateFromSql(obj.getString("periode")))
                         );
                         Data.setNama_pegawai(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
                         ListData.add(Data);

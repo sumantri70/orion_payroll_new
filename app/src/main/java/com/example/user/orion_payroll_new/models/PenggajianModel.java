@@ -4,9 +4,9 @@ public class PenggajianModel {
     private int id, id_pegawai, telat_satu, telat_dua, dokter, izin_stgh_hari, izin_cuti, izin_non_cuti;
     private String nomor, keterangan, user_id, user_edit, nama_pegawai;
     private Double gaji_pokok, uang_ikatan, uang_kehadiran, premi_harian, premi_perjam, jam_lembur, total_tunjangan, total_potongan, total_lembur, total_kasbon, total;
-    private long tanggal, tgl_input, tgl_edit;
+    private long tanggal, tgl_input, tgl_edit, periode;
 
-    public PenggajianModel(int id, int id_pegawai, int telat_satu, int telat_dua, int dokter, int izin_stgh_hari, int izin_cuti, int izin_non_cuti, String nomor, String keterangan, String user_id, String user_edit, Double gaji_pokok, Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam, Double jam_lembur, Double total_tunjangan, Double total_potongan, Double total_lembur, Double total_kasbon, Double total, long tanggal, long tgl_input, long tgl_edit) {
+    public PenggajianModel(int id, int id_pegawai, int telat_satu, int telat_dua, int dokter, int izin_stgh_hari, int izin_cuti, int izin_non_cuti, String nomor, String keterangan, String user_id, String user_edit, Double gaji_pokok, Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam, Double jam_lembur, Double total_tunjangan, Double total_potongan, Double total_lembur, Double total_kasbon, Double total, long tanggal, long tgl_input, long tgl_edit, long periode) {
         this.id = id;
         this.id_pegawai = id_pegawai;
         this.telat_satu = telat_satu;
@@ -34,6 +34,7 @@ public class PenggajianModel {
         this.tgl_input = tgl_input;
         this.tgl_edit = tgl_edit;
         this.nama_pegawai = "";
+        this.periode = periode;
     }
 
     public PenggajianModel() {
@@ -63,6 +64,7 @@ public class PenggajianModel {
         this.tanggal = 0;
         this.tgl_input = 0;
         this.tgl_edit = 0;
+        this.periode = 0;
     }
 
     public void setId(int id) {
@@ -173,6 +175,10 @@ public class PenggajianModel {
         this.nama_pegawai = nama_pegawai;
     }
 
+    public void setPeriode(long periode) {
+        this.periode = periode;
+    }
+
     public int getId() {
         return id;
     }
@@ -279,5 +285,9 @@ public class PenggajianModel {
 
     public String getNama_pegawai() {
         return nama_pegawai;
+    }
+
+    public long getPeriode() {
+        return periode;
     }
 }

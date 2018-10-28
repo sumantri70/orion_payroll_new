@@ -27,6 +27,10 @@ import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPegawai;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPenggajianNew;
+import com.example.user.orion_payroll_new.form.lov.lov_pegawai;
+import com.example.user.orion_payroll_new.form.master.PegawaiInput;
+import com.example.user.orion_payroll_new.form.master.TunjanganInput;
+import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
 import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.PenggajianDetailModel;
@@ -50,12 +54,18 @@ import java.util.Map;
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.EDIT_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
+import static com.example.user.orion_payroll_new.models.JCons.ID_PT_DOKTER;
+import static com.example.user.orion_payroll_new.models.JCons.ID_PT_IZIN_NON_CUTI;
+import static com.example.user.orion_payroll_new.models.JCons.ID_PT_IZIN_STGH_HARI;
+import static com.example.user.orion_payroll_new.models.JCons.ID_PT_TELAT_15;
+import static com.example.user.orion_payroll_new.models.JCons.ID_PT_TELAT_LBH_15;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_SAVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_UPDATE;
 import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV;
+import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV_PEGAWAI;
 import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV_POTONGAN;
 import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV_TUNJANGAN;
 import static com.example.user.orion_payroll_new.models.JCons.TIPE_DET_POTONGAN;
@@ -65,14 +75,22 @@ import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrToIntDef;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormatCustom;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNow;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowFormated;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Kode_Master_Tunjangan;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_PEGAWAI;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_PENGGAJIAN;
 import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_PEGAWAI;
 
 public class PenggajianInputNew extends AppCompatActivity {
     private TextInputEditText txtNomor, txtTanggal, txtPegawai, txtTelat1, txtTelat2, txtDokter, txtNonCuti,
-                              txtstghHari, txtCuti, txtLembur, txtKeterangan;
+                              txtstghHari, txtCuti, txtLembur, txtKeterangan, txtPeriode;
     private TextView lblGajiPokok, lblTotTunjangan, lblTotPotongan, lblTotKasbon, lblTotLembur, lblTotal, lblPilihTunjangan, lblPilihPotongan, lblPilikKAsbon;
     private Button btnSimpan;
 
@@ -92,8 +110,11 @@ public class PenggajianInputNew extends AppCompatActivity {
     private PegawaiModel DataPegawai;
     public HashMap<String, KasbonPegawaiModel> HashKasbon;
 
+    private static PenggajianInputNew mInstance;
+
     protected void CreateView(){
         txtNomor      = (TextInputEditText) findViewById(R.id.txtNomor);
+        txtPeriode    = (TextInputEditText) findViewById(R.id.txtPeriode);
         txtTanggal    = (TextInputEditText) findViewById(R.id.txtTanggal);
         txtPegawai    = (TextInputEditText) findViewById(R.id.txtPegawai);
         txtTelat1     = (TextInputEditText) findViewById(R.id.txtTelat1);
@@ -127,6 +148,7 @@ public class PenggajianInputNew extends AppCompatActivity {
         this.Mode = extra.getString("MODE");
         this.IdMst = extra.getInt("ID");
         Loading = new ProgressDialog(PenggajianInputNew.this);
+        DataPegawai = new PegawaiModel();
 
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Penggajian");
@@ -135,6 +157,7 @@ public class PenggajianInputNew extends AppCompatActivity {
             this.btnSimpan.setVisibility(View.INVISIBLE);
         }else{
             this.setTitle("Input Penggajian");
+            this.txtNomor.setVisibility(View.GONE);
         };
 
         ListDataHeader = new ArrayList<>();
@@ -178,6 +201,8 @@ public class PenggajianInputNew extends AppCompatActivity {
         lblTotal.setText("0");
         IdPegawai = 0;
 
+        txtTanggal.setText(serverNowFormated());
+        txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
     }
 
     protected void EventClass(){
@@ -197,12 +222,41 @@ public class PenggajianInputNew extends AppCompatActivity {
             }
         });
 
+        txtPeriode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                hideSoftKeyboard(PenggajianInputNew.this);
+                if (txtPeriode.getText().toString().equals("")){
+                    txtPeriode.setText(serverNowFormated());
+                }
+                Long tgl = FungsiGeneral.getMillisDate(txtTanggal.getText().toString());
+                int mYear = (Integer.parseInt(FungsiGeneral.getTahun(tgl)));
+                int mMonth = (Integer.parseInt(FungsiGeneral.getBulan(tgl)))-1;
+                int mDay = (Integer.parseInt(FungsiGeneral.getHari(tgl)));
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(PenggajianInputNew.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.set(year, monthOfYear, dayOfMonth);
+                                SimpleDateFormat format = new SimpleDateFormat("MMyy");
+                                format = new SimpleDateFormat("MMMM yyyy");
+                                txtPeriode.setText(format.format(calendar.getTime()));
+                            }
+                        }, mYear, mMonth, mDay);
+                datePickerDialog.show();
+                txtPeriode.setError(null);
+            }
+        });
+
         txtTanggal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 hideSoftKeyboard(PenggajianInputNew.this);
                 if (txtTanggal.getText().toString().equals("")){
-                    txtTanggal.setText(FungsiGeneral.serverNowFormated());
+                    txtTanggal.setText(serverNowFormated());
                 }
                 Long tgl = FungsiGeneral.getMillisDate(txtTanggal.getText().toString());
                 int mYear = (Integer.parseInt(FungsiGeneral.getTahun(tgl)));
@@ -226,6 +280,92 @@ public class PenggajianInputNew extends AppCompatActivity {
             }
         });
 
+        txtPegawai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IdPegawai = 0;
+                DataPegawai = new PegawaiModel();
+                txtPegawai.setText("");
+                txtPegawai.setError(null);
+                txtTelat1.setText("0");
+                txtTelat2.setText("0");
+                txtDokter.setText("0");
+                txtNonCuti.setText("0");
+                txtCuti.setText("0");
+                txtstghHari.setText("0");
+                txtLembur.setText("0");
+                lblGajiPokok.setText("0");
+                ArListTunjangan.clear();
+                ArListPotongan.clear();
+                ArListKasbon.clear();
+                HitungDetail();
+                HitungTotal();
+
+                Intent s = new Intent(PenggajianInputNew.this, lov_pegawai.class);
+                PenggajianInputNew.this.startActivityForResult(s, RESULT_LOV_PEGAWAI);
+            }
+        });
+
+
+        txtTelat1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    SetPotonganKhusus(ID_PT_TELAT_15);
+                }
+            }
+        });
+
+        txtTelat2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    SetPotonganKhusus(ID_PT_TELAT_LBH_15);
+                }
+            }
+        });
+
+        txtDokter.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    SetPotonganKhusus(ID_PT_DOKTER);
+                }
+            }
+        });
+
+        txtstghHari.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    SetPotonganKhusus(ID_PT_IZIN_STGH_HARI);
+                }
+            }
+        });
+
+        txtNonCuti.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus){
+                    SetPotonganKhusus(ID_PT_IZIN_NON_CUTI);
+                }
+            }
+        });
+
+        lblPilihTunjangan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LostFocus();
+                Intent s = new Intent(PenggajianInputNew.this, PilihTunjanganPenggajian.class);
+                s.putExtra("MODE","");
+                startActivityForResult(s, RESULT_LOV_TUNJANGAN);
+            }
+        });
+
+        lblPilihPotongan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LostFocus();
+                Intent s = new Intent(PenggajianInputNew.this, PilihPotonganPenggajian.class);
+                s.putExtra("MODE","");
+                startActivityForResult(s, RESULT_LOV_POTONGAN);
+            }
+        });
     }
 
     @Override
@@ -235,10 +375,15 @@ public class PenggajianInputNew extends AppCompatActivity {
         CreateView();
         InitClass();
         EventClass();
+        mInstance = this;
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
             LoadData();
             ListView.expandGroup(0);
         }
+    }
+
+    public static synchronized PenggajianInputNew getInstance() {
+        return mInstance;
     }
 
     @Override
@@ -486,6 +631,41 @@ public class PenggajianInputNew extends AppCompatActivity {
         OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
     }
 
+    protected void LoadTunjanganPegawai(){
+        String filter;
+        filter = "?id_pegawai="+DataPegawai.getId();
+        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                PenggajianDetailModel Data;
+                try {
+                    JSONArray jsonArrayDetail = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
+                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
+                        Data = new PenggajianDetailModel();
+                        Data.setId_tjg_pot_kas(objDetail.getInt("id_tunjangan"));
+                        Data.setJumlah(objDetail.getDouble("jumlah"));
+                        ArListTunjangan.add(Data);
+                    }
+                    HitungDetail();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Loading.dismiss();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error", "Error: " + error.getMessage());
+                Loading.dismiss();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+    }
+
 
     protected boolean IsValid(){
         if (this.txtPegawai.getText().toString().trim().equals("")) {
@@ -519,38 +699,139 @@ public class PenggajianInputNew extends AppCompatActivity {
         return true;
     }
 
+    protected boolean CekPotonganExist (int id){
+        for(int i=0; i < ArListPotongan.size(); i++){
+            if (ArListPotongan.get(i).getId_tjg_pot_kas() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected int GetIdxArListPotongan (int id){
+        for(int i=0; i < ArListPotongan.size(); i++){
+            if (ArListPotongan.get(i).getId_tjg_pot_kas() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    protected void SetPotonganKhusus (int Id){
+        int banyak   = 0;
+        Double jumlah = 0.0;
+        Boolean tambahkan = false;
+        if (DataPegawai != null) {
+            if (DataPegawai.getId() > 0) {
+                if (Id == ID_PT_TELAT_15) {
+                    banyak = StrToIntDef(txtTelat1.getText().toString(),0);
+                    if (banyak > 5) {
+                        jumlah = (banyak - 5) * (DataPegawai.getPremi_harian() * 0.25);
+                        tambahkan = true;
+                    }
+                } else if (Id == ID_PT_TELAT_LBH_15) {
+                    banyak    = StrToIntDef(txtTelat2.getText().toString(),0);
+                    jumlah    = (banyak) * (DataPegawai.getPremi_harian() * 0.25);
+                    tambahkan = banyak > 0;
+                } else if (Id == ID_PT_IZIN_STGH_HARI) {
+                    banyak   = StrToIntDef(txtstghHari.getText().toString(),0);
+                    jumlah    = (banyak) * (DataPegawai.getPremi_harian() * 0.5);
+                    tambahkan = banyak > 0;
+                } else if (Id == ID_PT_IZIN_NON_CUTI) {
+                    banyak    = StrToIntDef(txtNonCuti.getText().toString(),0);
+                    jumlah    = (banyak) * (DataPegawai.getPremi_harian());
+                    tambahkan = banyak > 0;
+                } else if (Id == ID_PT_DOKTER) {
+                    banyak = StrToIntDef(txtTelat1.getText().toString(),0);
+                    jumlah = 0.0;
+                    tambahkan = banyak > 0;
+                }
+            }
+        }
+
+        if (tambahkan){
+            if (CekPotonganExist(Id) == false){
+                PenggajianDetailModel Data = new PenggajianDetailModel();
+                Data.setId_tjg_pot_kas(Id);
+                Data.setJumlah(jumlah);
+                ArListPotongan.add(Data);
+            }else{
+                ArListPotongan.get(GetIdxArListPotongan(Id)).setJumlah(jumlah);
+            }
+        }else{
+            int idx = GetIdxArListPotongan(Id);
+            if (idx > -1){
+                ArListPotongan.remove(idx);
+            }
+        }
+
+        HitungDetail();
+        HitungTotal();
+    }
+
+    protected void HitungDetail(){
+        Double TotalTJ = 0.0;
+        for(int i=0; i < ArListTunjangan.size(); i++){
+            TotalTJ += ArListTunjangan.get(i).getJumlah();
+        }
+
+        Double TotalPT = 0.0;
+        for(int i=0; i < ArListPotongan.size(); i++){
+            TotalPT += ArListPotongan.get(i).getJumlah();
+        }
+
+        lblTotTunjangan.setText(fmt.format(TotalTJ));
+        lblTotPotongan.setText(fmt.format(TotalPT));
+    }
+
+    protected void HitungTotal(){
+        Double Total = 0.0;
+
+        for(int i=0; i < ArListTunjangan.size(); i++){
+            Total += ArListTunjangan.get(i).getJumlah();
+        }
+
+        for(int i=0; i < ArListPotongan.size(); i++){
+            Total -= ArListPotongan.get(i).getJumlah();
+        }
+
+        for(int i=0; i < ArListKasbon.size(); i++){
+            Total -= ArListKasbon.get(i).getJumlah();
+        }
+        Total += DataPegawai.getGaji_pokok();
+        lblTotal.setText(fmt.format(Total));
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             if (requestCode == RESULT_LOV_TUNJANGAN) {
-                Bundle extra = data.getExtras();
-                PenggajianDetailModel Data = new PenggajianDetailModel();
-                Data.setId_tjg_pot_kas(extra.getInt("id"));
-                Data.setTipe(TIPE_DET_TUNJANGAN);
-                Data.setCheck(false);
-
-                ArListTunjangan.add(Data);
-                ListAdapter.notifyDataSetChanged();
-
-                if (ArListTunjangan.size() > 0 ){
-                    ListView.expandGroup(0);
-                }
-                ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + ArListPotongan.size() +  ArListKasbon.size() + 450;
+                HitungDetail();
+                HitungTotal();
             }else if (requestCode == RESULT_LOV_POTONGAN) {
+                HitungDetail();
+                HitungTotal();
+            }else if (requestCode == RESULT_LOV_PEGAWAI) {
+                Loading.setMessage("Loading...");
+                Loading.setCancelable(false);
+                Loading.show();
+
                 Bundle extra = data.getExtras();
-                PenggajianDetailModel Data = new PenggajianDetailModel();
-                Data.setId_tjg_pot_kas(extra.getInt("id"));
-                Data.setTipe(TIPE_DET_POTONGAN);
-                Data.setCheck(false);
-
-                ArListPotongan.add(Data);
-                ListAdapter.notifyDataSetChanged();
-
-                if (ArListPotongan.size() > 0 ){
-                    ListView.expandGroup(0);
-                }
-                ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + ArListPotongan.size() +  ArListKasbon.size() + 450;
+                IdPegawai = extra.getInt("id");
+                txtPegawai.setText(Get_Nama_Master_Pegawai(IdPegawai));
+                DataPegawai = new PegawaiModel(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)));
+                lblGajiPokok.setText(fmt.format(DataPegawai.getGaji_pokok()));
+                LoadTunjanganPegawai();
+                HitungDetail();
+                HitungTotal();
             }
         }
+        Loading.dismiss();
+    }
+
+    private void LostFocus(){
+        txtTmp.setVisibility(View.VISIBLE);
+        txtTmp.requestFocus();
+        txtTmp.setVisibility(View.INVISIBLE);
     }
 }

@@ -38,10 +38,24 @@ public class JCons extends Application {
 
     public static int RESULT_LOV_TUNJANGAN = 4;
     public static int RESULT_LOV_POTONGAN  = 5;
+    public static int RESULT_LOV_PEGAWAI   = 6;
 
     //TIPE DETAIL PENGGAJIAN
     public static String TIPE_DET_TUNJANGAN = "T";
     public static String TIPE_DET_POTONGAN  = "P";
     public static String TIPE_DET_KASBON    = "K";
+
+
+    //-----ID MASTER TUNJANGAN-----\\
+    public static int ID_TJ_INSENTIF = 1;
+    public static int ID_TJ_LEMBUR   = 2;
+
+    //-----ID MASTER POTONGAN-----\\
+    public static int ID_PT_TELAT_15       = 1;
+    public static int ID_PT_TELAT_LBH_15   = 2;
+    public static int ID_PT_IZIN_STGH_HARI = 3;
+    public static int ID_PT_IZIN_NON_CUTI  = 4;
+    public static int ID_PT_DOKTER         = 5;
+
 
 }

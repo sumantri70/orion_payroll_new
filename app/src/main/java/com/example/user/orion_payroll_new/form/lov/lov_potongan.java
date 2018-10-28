@@ -51,6 +51,7 @@ public class lov_potongan extends AppCompatActivity implements SwipeRefreshLayou
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
         this.btnSort    = (ImageButton) findViewById(R.id.BtnSort);
+        this.btnSort.setVisibility(View.INVISIBLE);
         this.txtSearch  = (SearchView) findViewById(R.id.txtSearch);
         this.swipe      = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         this.swipe.setColorSchemeColors(Color.DKGRAY, Color.GREEN, Color.BLUE, Color.CYAN);

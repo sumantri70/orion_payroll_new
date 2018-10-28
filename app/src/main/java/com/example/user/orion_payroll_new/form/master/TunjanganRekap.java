@@ -296,6 +296,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 LoadData();
+                OrionPayrollApplication.getInstance().GetHashTunjangan();
             }else{
 
             }
