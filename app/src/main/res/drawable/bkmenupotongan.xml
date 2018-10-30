@@ -12,10 +12,17 @@
                 android:right="10dp"
                 android:bottom="12dp"/>
 
+            <!--<gradient-->
+                <!--android:startColor="#776fdd"-->
+                <!--android:centerColor="#938fe4"-->
+                <!--android:endColor="#b3b0ee"-->
+                <!--android:angle="45"/>-->
+
+
             <gradient
-                android:startColor="#776fdd"
-                android:centerColor="#938fe4"
-                android:endColor="#b3b0ee"
+                android:startColor="#728603"
+                android:centerColor="#abbe2d"
+                android:endColor="#e3e9d4"
                 android:angle="45"/>
         </shape>
     </item>

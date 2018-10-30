@@ -3,9 +3,9 @@ package com.example.user.orion_payroll_new.utility;
 public class route {
     //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
     //public static final String URL = "http://192.168.43.247/orion_payroll/";
-    //public static final String URL = "http://192.168.42.221/orion_payroll/";
-    //public static final String URL = "http://10.146.48.177/orion_payroll/";
-    public static final String URL = "http://10.146.99.70/orion_payroll/";
+    public static final String URL = "http://192.168.42.221/orion_payroll/";
+    //public static final String URL = "http://10.146.81.209/orion_payroll/";
+    //public static final String URL = "http://10.146.200.168/orion_payroll/";
     //public static final String URL = "http://192.168.1.8/orion_payroll/";
     //public static final String URL = "http://127.0.0.1/orion_payroll/";
 
@@ -55,6 +55,7 @@ public class route {
     public static final String URL_GET_KASBON      = URL + URL_KASBON + "get.php";
     public static final String URL_UPDATE_KASBON   = URL + URL_KASBON + "update.php";
     public static final String URL_DELETE_KASBON   = URL + URL_KASBON + "delete.php";
+    public static final String URL_SELECT_KASBON_4_PENGGAJIAN   = URL + URL_KASBON + "select_kasbon.php";
 
     //*-- KASBON PEGAWAI --*\\
     public static final String URL_PENGGAJIAN = "penggajian/";

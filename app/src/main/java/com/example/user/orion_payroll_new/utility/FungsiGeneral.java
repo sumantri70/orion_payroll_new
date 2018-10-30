@@ -143,10 +143,17 @@ public class FungsiGeneral {
     }
 
     public static long serverNowStartOfTheMonthLong(){
-        //DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calender = Calendar.getInstance();
         calender.set(Calendar.DAY_OF_MONTH, 1);
         return calender.getTimeInMillis();
+    }
+
+    public static String StartOfTheMonth(long date){
+        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calender = Calendar.getInstance();
+        calender.setTimeInMillis(date);
+        calender.set(Calendar.DAY_OF_MONTH, 1);
+        return formatter.format(calender.getTime());
     }
 
     public static String serverNowFormated4Ekspor(){

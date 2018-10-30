@@ -159,7 +159,6 @@ public class PotonganAdapter extends ArrayAdapter<PotonganModel> {
 
             String kode ;
             String nama ;
-            Log.d("filter", filterString);
             for (int i = 0; i < count; i++) {
                 kode = list.get(i).getKode();
                 nama = list.get(i).getNama();

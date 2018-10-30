@@ -1057,7 +1057,7 @@
                         android:layout_height="match_parent"
                         android:paddingTop="9dp"
                         android:paddingLeft="25dp"
-                        android:paddingRight="20dp"
+                        android:paddingRight="10dp"
                         android:paddingBottom="8dp">
 
                         <LinearLayout
@@ -1223,8 +1223,8 @@
                             android:id="@+id/linearLayout5"
                             android:layout_width="147dp"
                             android:layout_height="match_parent"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginRight="8dp"
+                            android:layout_marginEnd="1dp"
+                            android:layout_marginRight="0dp"
                             android:orientation="horizontal"
                             app:layout_constraintEnd_toStartOf="@+id/linearLayout6"
                             tools:layout_editor_absoluteY="0dp">
@@ -1248,7 +1248,7 @@
                                         android:layout_marginLeft="8dp"
                                         android:layout_marginTop="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginRight="8dp"
+                                        android:layout_marginRight="4dp"
                                         android:paddingTop="3dp"
                                         android:paddingBottom="3dp"
                                         android:gravity="right"
@@ -1262,7 +1262,7 @@
                                         android:layout_marginLeft="8dp"
                                         android:layout_marginTop="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginRight="8dp"
+                                        android:layout_marginRight="4dp"
                                         android:paddingTop="3dp"
                                         android:paddingBottom="3dp"
                                         android:gravity="right"
@@ -1276,7 +1276,7 @@
                                         android:layout_marginLeft="8dp"
                                         android:layout_marginTop="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginRight="8dp"
+                                        android:layout_marginRight="4dp"
                                         android:paddingTop="3dp"
                                         android:paddingBottom="3dp"
                                         android:gravity="right"
@@ -1290,7 +1290,7 @@
                                         android:layout_marginLeft="8dp"
                                         android:layout_marginTop="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginRight="8dp"
+                                        android:layout_marginRight="4dp"
                                         android:gravity="right|end"
                                         android:text="10.000.000,00" />
 
@@ -1302,7 +1302,7 @@
                                         android:layout_marginLeft="8dp"
                                         android:layout_marginTop="8dp"
                                         android:layout_marginEnd="8dp"
-                                        android:layout_marginRight="8dp"
+                                        android:layout_marginRight="4dp"
                                         android:paddingTop="3dp"
                                         android:paddingBottom="3dp"
                                         android:gravity="right"
@@ -1316,9 +1316,8 @@
                             android:id="@+id/linearLayout6"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginEnd="3dp"
-                            android:layout_marginRight="5dp"
                             android:orientation="horizontal"
+                            android:layout_marginRight="15dp"
                             app:layout_constraintEnd_toEndOf="parent"
                             tools:layout_editor_absoluteY="0dp">
 
@@ -1337,7 +1336,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginStart="8dp"
-                                        android:layout_marginLeft="8dp"
+                                        android:layout_marginLeft="0dp"
                                         android:layout_marginTop="8dp"
                                         android:layout_marginEnd="8dp"
                                         android:layout_marginRight="8dp"
@@ -1345,51 +1344,98 @@
                                         android:paddingBottom="3dp"
                                         android:text="" />
 
-                                    <TextView
-                                        android:id="@+id/lblPilihTunjangan"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginStart="8dp"
-                                        android:layout_marginLeft="8dp"
-                                        android:layout_marginTop="8dp"
-                                        android:layout_marginEnd="8dp"
-                                        android:layout_marginRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="3dp"
-                                        android:text="Pilih"
-                                        android:textAllCaps="false"
-                                        android:textColor="@color/colorPrimary"
-                                        android:textStyle="bold" />
 
-                                    <TextView
-                                        android:id="@+id/lblPilihPotongan"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                    <ImageButton
+                                        android:id="@+id/btnTunjangan"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
                                         android:layout_marginStart="8dp"
-                                        android:layout_marginLeft="8dp"
-                                        android:layout_marginTop="8dp"
-                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginLeft="1dp"
+                                        android:layout_marginTop="3dp"
+                                        android:layout_marginEnd="3dp"
                                         android:layout_marginRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="3dp"
-                                        android:text="Pilih"
-                                        android:textColor="@color/colorPrimary"
-                                        android:textStyle="bold" />
+                                        android:background="@drawable/style_btn_create"
+                                        android:foreground="?android:attr/selectableItemBackground"
+                                        android:src="@drawable/ic_create_black_24dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
 
-                                    <TextView
-                                        android:id="@+id/lblPilihKasbon"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
+                                    <ImageButton
+                                        android:id="@+id/btnPotongan"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
                                         android:layout_marginStart="8dp"
-                                        android:layout_marginLeft="8dp"
-                                        android:layout_marginTop="8dp"
-                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginLeft="1dp"
+                                        android:layout_marginTop="3dp"
+                                        android:layout_marginEnd="3dp"
                                         android:layout_marginRight="8dp"
-                                        android:paddingTop="3dp"
-                                        android:paddingBottom="3dp"
-                                        android:text="Pilih"
-                                        android:textColor="@color/colorPrimary"
-                                        android:textStyle="bold" />
+                                        android:background="@drawable/style_btn_create"
+                                        android:foreground="?android:attr/selectableItemBackground"
+                                        android:src="@drawable/ic_create_black_24dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+                                    <ImageButton
+                                        android:id="@+id/btnKasbon"
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginLeft="1dp"
+                                        android:layout_marginTop="3dp"
+                                        android:layout_marginEnd="3dp"
+                                        android:layout_marginRight="8dp"
+                                        android:background="@drawable/style_btn_create"
+                                        android:foreground="?android:attr/selectableItemBackground"
+                                        android:src="@drawable/ic_create_black_24dp"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                                    <!--<TextView-->
+                                    <!--android:id="@+id/lblPilihTunjangan"-->
+                                    <!--android:layout_width="wrap_content"-->
+                                    <!--android:layout_height="wrap_content"-->
+                                    <!--android:layout_marginStart="8dp"-->
+                                    <!--android:layout_marginLeft="8dp"-->
+                                    <!--android:layout_marginTop="8dp"-->
+                                    <!--android:layout_marginEnd="8dp"-->
+                                    <!--android:layout_marginRight="8dp"-->
+                                    <!--android:paddingTop="3dp"-->
+                                    <!--android:paddingBottom="3dp"-->
+                                    <!--android:text="Pilih"-->
+                                    <!--android:textAllCaps="false"-->
+                                    <!--android:textColor="@color/colorPrimary"-->
+                                    <!--android:textStyle="bold" />-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/lblPilihPotongan"-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_marginStart="8dp"-->
+                                        <!--android:layout_marginLeft="8dp"-->
+                                        <!--android:layout_marginTop="8dp"-->
+                                        <!--android:layout_marginEnd="8dp"-->
+                                        <!--android:layout_marginRight="8dp"-->
+                                        <!--android:paddingTop="3dp"-->
+                                        <!--android:paddingBottom="3dp"-->
+                                        <!--android:text="Pilih"-->
+                                        <!--android:textColor="@color/colorPrimary"-->
+                                        <!--android:textStyle="bold" />-->
+
+                                    <!--<TextView-->
+                                        <!--android:id="@+id/lblPilihKasbon"-->
+                                        <!--android:layout_width="wrap_content"-->
+                                        <!--android:layout_height="wrap_content"-->
+                                        <!--android:layout_marginStart="8dp"-->
+                                        <!--android:layout_marginLeft="8dp"-->
+                                        <!--android:layout_marginTop="8dp"-->
+                                        <!--android:layout_marginEnd="8dp"-->
+                                        <!--android:layout_marginRight="8dp"-->
+                                        <!--android:paddingTop="3dp"-->
+                                        <!--android:paddingBottom="3dp"-->
+                                        <!--android:text="Pilih"-->
+                                        <!--android:textColor="@color/colorPrimary"-->
+                                        <!--android:textStyle="bold" />-->
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -1491,8 +1537,8 @@
                             <LinearLayout
                                 android:layout_width="147dp"
                                 android:layout_height="match_parent"
-                                android:layout_marginEnd="40dp"
-                                android:layout_marginRight="40dp"
+                                android:layout_marginEnd="30dp"
+                                android:layout_marginRight="30dp"
                                 android:orientation="horizontal"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 tools:layout_editor_absoluteY="0dp">

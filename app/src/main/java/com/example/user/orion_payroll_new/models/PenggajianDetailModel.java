@@ -1,10 +1,12 @@
 package com.example.user.orion_payroll_new.models;
 
 public class PenggajianDetailModel {
-    int id, id_master, id_tjg_pot_kas;
-    String tipe;
-    Double jumlah;
+    int id, id_master, id_tjg_pot_kas, lama_cicilan;
+    String tipe, nomor;
+    Double jumlah, sisa, total;
     boolean check;
+    long tanggal;
+
 
     public PenggajianDetailModel(int id, int id_master, int id_tjg_pot_kas, String tipe, Double jumlah) {
         this.id = id;
@@ -13,6 +15,10 @@ public class PenggajianDetailModel {
         this.tipe = tipe;
         this.jumlah = jumlah;
         this.check = false;
+        this.nomor = "";
+        this.tanggal = 0;
+        this.lama_cicilan = 0;
+        this.total = 0.0;
     }
 
     public PenggajianDetailModel() {
@@ -22,6 +28,11 @@ public class PenggajianDetailModel {
         this.tipe = "";
         this.jumlah = 0.0;
         this.check = false;
+        this.sisa = 0.0;
+        this.nomor = "";
+        this.tanggal = 0;
+        this.lama_cicilan = 0;
+        this.total = 0.0;
     }
 
     public void setId(int id) {
@@ -48,6 +59,26 @@ public class PenggajianDetailModel {
         this.check = check;
     }
 
+    public void setSisa(Double sisa) {
+        this.sisa = sisa;
+    }
+
+    public void setNomor(String nomor) {
+        this.nomor = nomor;
+    }
+
+    public void setTanggal(long tanggal) {
+        this.tanggal = tanggal;
+    }
+
+    public void setLama_cicilan(int lama_cicilan) {
+        this.lama_cicilan = lama_cicilan;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
+
     public int getId() {
         return id;
     }
@@ -70,5 +101,25 @@ public class PenggajianDetailModel {
 
     public boolean isCheck() {
         return check;
+    }
+
+    public Double getSisa() {
+        return sisa;
+    }
+
+    public String getNomor() {
+        return nomor;
+    }
+
+    public long getTanggal() {
+        return tanggal;
+    }
+
+    public int getLama_cicilan() {
+        return lama_cicilan;
+    }
+
+    public Double getTotal() {
+        return total;
     }
 }

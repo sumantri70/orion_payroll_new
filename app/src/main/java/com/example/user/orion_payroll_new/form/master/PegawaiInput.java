@@ -504,7 +504,6 @@ public class PegawaiInput extends AppCompatActivity {
                         obj.put("premi_harian", String.valueOf(StrFmtToDouble(lblGPremiHarian.getText().toString())));
                         obj.put("premi_perjam", String.valueOf(StrFmtToDouble(lblGPremiPerjam.getText().toString())));
                         obj.put("tanggal", String.valueOf(FormatMySqlDate(FungsiGeneral.serverNowFormated())));
-
                         obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
                         obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
                     } catch (JSONException e) {
@@ -512,6 +511,7 @@ public class PegawaiInput extends AppCompatActivity {
                     }
                     ArParms.put(obj);
                 }
+                Log.d("jsonnnn coyyyy",ArParms.toString());
                 params.put("data", ArParms.toString());
                 return params;
             }

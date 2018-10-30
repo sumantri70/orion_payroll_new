@@ -43,6 +43,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_DELETE
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_DELETE;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_KASBON;
 import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_PENGGAJIAN;
 
@@ -177,10 +178,13 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
             String jumlah;
             String tanggal;
             for (int i = 0; i < count; i++) {
-                nomor = list.get(i).getNomor();
-                nama_pegawai = list.get(i).getNama_pegawai();
-                jumlah = Double.toString(list.get(i).getTotal());
-                tanggal = getTglFormat(list.get(i).getTanggal());
+                nomor        = list.get(i).getNomor();
+                nama_pegawai = "";
+                if (list.get(i).getId_pegawai() > 0){
+                    nama_pegawai = Get_Nama_Master_Pegawai(list.get(i).getId_pegawai());
+                }
+                jumlah       = Double.toString(list.get(i).getTotal());
+                tanggal      = getTglFormat(list.get(i).getTanggal());
                 if ((nomor.toLowerCase().contains(filterString)) || (nama_pegawai.toLowerCase().contains(filterString))
                         || (jumlah.toLowerCase().contains(filterString)) || (tanggal.toLowerCase().contains(filterString))) {
                     nlist.add(list.get(i));

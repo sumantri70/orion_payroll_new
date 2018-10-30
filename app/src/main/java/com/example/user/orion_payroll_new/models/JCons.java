@@ -39,6 +39,7 @@ public class JCons extends Application {
     public static int RESULT_LOV_TUNJANGAN = 4;
     public static int RESULT_LOV_POTONGAN  = 5;
     public static int RESULT_LOV_PEGAWAI   = 6;
+    public static int RESULT_LOV_KASBON    = 7;
 
     //TIPE DETAIL PENGGAJIAN
     public static String TIPE_DET_TUNJANGAN = "T";
@@ -56,6 +57,5 @@ public class JCons extends Application {
     public static int ID_PT_IZIN_STGH_HARI = 3;
     public static int ID_PT_IZIN_NON_CUTI  = 4;
     public static int ID_PT_DOKTER         = 5;
-
 
 }

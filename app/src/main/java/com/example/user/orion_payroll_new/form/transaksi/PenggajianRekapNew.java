@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -151,8 +152,8 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
                             case "Pegawai" :
                                 OrderBy = "nama_pegawai";
                                 break;
-                            case "Jumlah" :
-                                OrderBy = "jumlah";
+                            case "Total" :
+                                OrderBy = "total";
                                 break;
                             default:
                                 OrderBy  = "";
