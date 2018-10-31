@@ -77,6 +77,7 @@ import static com.example.user.orion_payroll_new.models.JCons.RESULT_LOV_TUNJANG
 import static com.example.user.orion_payroll_new.models.JCons.TDP_KASBON;
 import static com.example.user.orion_payroll_new.models.JCons.TDP_POTONGAN;
 import static com.example.user.orion_payroll_new.models.JCons.TDP_TUNJANGAN;
+import static com.example.user.orion_payroll_new.models.JCons.TIPE_DET_KASBON;
 import static com.example.user.orion_payroll_new.models.JCons.TIPE_DET_POTONGAN;
 import static com.example.user.orion_payroll_new.models.JCons.TIPE_DET_TUNJANGAN;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
@@ -451,7 +452,7 @@ public class PenggajianInputNew extends AppCompatActivity {
         mInstance = this;
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
             LoadData();
-            ListView.expandGroup(0);
+            //ListView.expandGroup(0);
         }
     }
 
@@ -472,92 +473,96 @@ public class PenggajianInputNew extends AppCompatActivity {
     }
 
     protected void LoadData(){
-//        Loading.setMessage("Loading...");
-//        Loading.setCancelable(false);
-//        Loading.show();
-//        String filter;
-//        filter = "?id="+IdMst;
-//        String url = route.URL_GET_PEGAWAI  + filter;
-//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("data");
-//                    JSONObject obj = jsonArray.getJSONObject(0);
-//                    txtNik.setText(obj.getString("nik"));
-//                    txtNama.setText(obj.getString("nama"));
-//                    txtAlamat.setText(obj.getString("alamat"));
-//                    txtTelpon1.setText(obj.getString("no_telpon_1"));
-//                    txtTelpon2.setText(obj.getString("no_telpon_2"));
-//                    txtEmail.setText(obj.getString("email"));
-//                    txtTglLahir.setText(FormatDateFromSql(obj.getString("tgl_lahir")));
-//                    txtTglMulaiBekerja.setText(FormatDateFromSql(obj.getString("tgl_mulai_kerja")));
-//                    lblGGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
-//                    txtKeterangan.setText(obj.getString("keterangan"));
-//                    lblGUangIkatan.setText(fmt.format(obj.getDouble("uang_ikatan")));
-//                    lblGUangKehadiran.setText(fmt.format(obj.getDouble("uang_kehadiran")));
-//                    lblGPremiHarian.setText(fmt.format(obj.getDouble("premi_harian")));
-//                    lblGPremiPerjam.setText(fmt.format(obj.getDouble("premi_perjam")));
-//                    GajiTerakhir = obj.getDouble("gaji_pokok");
-//                    LoadDetail();
-//                    Loading.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//                    Loading.dismiss();
-//                }
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("error", "Error: " + error.getMessage());
-//                Loading.dismiss();
-//            }
-//        });
-//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+        Loading.setMessage("Loading...");
+        Loading.setCancelable(false);
+        Loading.show();
+        String filter;
+        filter = "?id="+IdMst;
+        String url = route.URL_GET_PENGGAJIAN  + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
+                    txtNomor.setText(obj.getString("nomor"));
+                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
+                    txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
+                    txtTelat1.setText(obj.getString("telat_satu"));
+                    txtTelat2.setText(obj.getString("telat_dua"));
+                    txtDokter.setText(obj.getString("dokter"));
+                    txtstghHari.setText(obj.getString("izin_stgh_hari"));
+                    txtCuti.setText(obj.getString("izin_cuti"));
+                    txtNonCuti.setText(obj.getString("izin_non_cuti"));
+                    txtKeterangan.setText(obj.getString("keterangan"));
+                    txtLembur.setText(obj.getString("jam_lembur"));
+                    lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
+                    lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
+                    lblTotPotongan.setText(fmt.format(obj.getDouble("gaji_pokok")));
+                    lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
+                    lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
+                    lblTotal.setText(fmt.format(obj.getDouble("total")));
+                    LoadDetail();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Loading.dismiss();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("error", "Error: " + error.getMessage());
+                Loading.dismiss();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
-    //protected void LoadDetail(){
-//        String filter;
-//        filter = "?id_pegawai="+IdMst;
-//        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
-//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                TunjanganModel Data;
-//                try {
-//                    JSONArray jsonArrayDetail = response.getJSONArray("data");
-//                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
-//                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
-//                        Data = new TunjanganModel(
-//                                objDetail.getInt("id_tunjangan"),
-//                                objDetail.getString("kode"),
-//                                objDetail.getString("nama"),
-//                                "",
-//                                ""
-//                        );
-//                        Data.setJumlah(objDetail.getDouble("jumlah"));
-//                        ArListTunjangan.add(Data);
-//                    }
-//                    ListAdapter.notifyDataSetChanged();
-//                    ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + 150;
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//                    Loading.dismiss();
-//                }
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("error", "Error: " + error.getMessage());
-//                Loading.dismiss();
-//            }
-//        });
-//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-//    }
+    protected void LoadDetail(){
+        String filter;
+        filter = "?id_master="+IdMst;
+        String url = route.URL_GET_PENGGAJIAN_DETAIL + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                PenggajianDetailModel Data;
+                try {
+                    JSONArray jsonArrayDetail = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
+                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
+                        Data = new PenggajianDetailModel();
+                        Data.setTipe(objDetail.getString("tipe"));
+                        Data.setId_tjg_pot_kas(objDetail.getInt("id_tjg_pot_kas"));
+                        Data.setJumlah(objDetail.getDouble("jumlah"));
+
+                        if (objDetail.getString("tipe").equals(TIPE_DET_TUNJANGAN)){
+                            ArListTunjangan.add(Data);
+                        }else if (objDetail.getString("tipe").equals(TIPE_DET_POTONGAN)){
+                            ArListPotongan.add(Data);
+                        }else if (objDetail.getString("tipe").equals(TIPE_DET_KASBON)) {
+                            Data.setCheck(true);
+                            ArListKasbon.add(Data);
+                        }
+                    }
+                    Loading.dismiss();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Loading.dismiss();
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Loading.dismiss();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+    }
 
 //    protected void IsSaved(){
 //        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_PENGGAJIAN, new Response.Listener<String>() {
