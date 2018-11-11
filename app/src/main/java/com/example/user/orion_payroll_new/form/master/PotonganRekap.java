@@ -3,6 +3,8 @@ package com.example.user.orion_payroll_new.form.master;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -167,6 +170,7 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
         });
 
 
+
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,6 +209,7 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
             }
         });
     }
+
 
     public void LoadData(){
         swipe.setRefreshing(true);

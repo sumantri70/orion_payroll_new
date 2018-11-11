@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorwhite"
+    tools:context=".form.laporan.Laporan_penggajian">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/CdSearch"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="1dp"
+        android:animateLayoutChanges="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <SearchView
+                android:id="@+id/txtSearch"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/style_txt_default"
+                android:queryBackground="@android:color/transparent"
+                android:foregroundGravity="fill"
+                android:gravity="fill"
+                android:iconifiedByDefault="false"
+                android:padding="0dp"
+                android:queryHint="Cari disini..."
+                app:layout_constraintEnd_toStartOf="@+id/BtnFilter"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageButton
+                android:id="@+id/BtnFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/style_btn_search"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                app:layout_constraintEnd_toStartOf="@+id/BtnSort"
+                app:srcCompat="@drawable/ic_format_list_bulleted_black_24dp"
+                tools:layout_editor_absoluteY="0dp" />
+
+
+            <ImageButton
+                android:id="@+id/BtnSort"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:background="@drawable/style_btn_search"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_filter_list_black_24dp"
+                tools:layout_editor_absoluteY="0dp" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CdSearch"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ListView
+            android:id="@+id/ListRekap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="45dp"
+            tools:layout_editor_absoluteY="140dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -3,6 +3,7 @@ package com.example.user.orion_payroll_new.form.adapter;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.PopupMenu;
@@ -24,19 +25,31 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.form.print.PrintPenggajian;
 import com.example.user.orion_payroll_new.form.transaksi.PenggajianInputNew;
 import com.example.user.orion_payroll_new.form.transaksi.PenggajianRekapNew;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PenggajianModel;
-import com.example.user.orion_payroll_new.models.PenggajianModel;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.List;
+import com.itextpdf.text.ListItem;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.ZapfDingbatsList;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_DELETE;
@@ -44,18 +57,21 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_DELE
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
 import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
-import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_KASBON;
 import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_PENGGAJIAN;
 
 public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implements Filterable {
 
     private ProgressDialog Loading;
-    private Context ctx;
-    private List<PenggajianModel> objects;
-    private List<PenggajianModel> filteredData;
+    public Context ctx;
+    private java.util.List<PenggajianModel> objects;
+    private java.util.List<PenggajianModel> filteredData;
     private PenggajianAdapterNew.ItemFilter mFilter = new PenggajianAdapterNew.ItemFilter();
 
-    public PenggajianAdapterNew(Context context, int resource, List<PenggajianModel> object) {
+    private static final String TAG = "PdfCreatorActivity";
+    private File pdfFile;
+
+
+    public PenggajianAdapterNew(Context context, int resource, java.util.List<PenggajianModel> object) {
         super(context, resource, object);
         this.ctx = context;
         this.objects = object;
@@ -97,7 +113,7 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
             @Override
             public void onClick(View view) {
                 PopupMenu po = new PopupMenu(getContext(), btnAction);
-                po.getMenuInflater().inflate(R.menu.menu_action_transaksi, po.getMenu());
+                po.getMenuInflater().inflate(R.menu.menu_action_transaksi_penggajian, po.getMenu());
                 po.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
@@ -138,6 +154,16 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
                                     }
                                 };
                                 OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+                            } else if (item.getTitle().equals("Cetak")) {
+                                PrintPenggajian print = new PrintPenggajian(ctx);
+                                print.Execute(IdMSt);
+//                                try {
+//                                    createPdf();
+//                                } catch (FileNotFoundException e) {
+//                                    e.printStackTrace();
+//                                } catch (DocumentException e) {
+//                                    e.printStackTrace();
+//                                }
                             }
                         }
                         return false;
@@ -168,7 +194,7 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
 
             FilterResults results = new FilterResults();
 
-            final List<PenggajianModel> list = objects;
+            final java.util.List<PenggajianModel> list = objects;
 
             int count = list.size();
             final ArrayList<PenggajianModel> nlist = new ArrayList<PenggajianModel>(count);
@@ -202,6 +228,45 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
             notifyDataSetChanged();
         }
 
+    }
+
+    private void createPdf() throws FileNotFoundException, DocumentException {
+        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/documents");
+        if (!docsFolder.exists()) {
+            docsFolder.mkdir();
+            Log.i(TAG, "Created a new directory for PDF");
+        }
+
+        pdfFile = new File(docsFolder.getAbsolutePath(),"Penggajian.pdf");
+        OutputStream output = new FileOutputStream(pdfFile);
+        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+        PdfWriter.getInstance(document, output);
+        document.setPageSize(PageSize.A6);
+//        document.setMargins(36, 72, 108, 180);
+//        document.setMarginMirroring(true);
+//        document.setMarginMirroringTopBottom(true);
+        document.open();
+
+        document.add(new Paragraph("Nomor         : "));
+        document.add(new Paragraph("Tanggal       : "));
+        document.add(new Paragraph("Periode      : "));
+        document.add(new Paragraph("Nik/Nama   : "));
+
+        Chunk glue = new Chunk(new VerticalPositionMark());
+        Paragraph p = new Paragraph("Text to the left");
+        p.add(new Chunk(glue));
+        p.add("Text to the right");
+        document.add(p);
+
+
+
+        ZapfDingbatsList zapfDingbatsList1 = new ZapfDingbatsList(40, 15);
+        zapfDingbatsList1.add(new ListItem("Item 1"));
+        zapfDingbatsList1.add(new ListItem("Item 2"));
+        zapfDingbatsList1.add(new ListItem("Item 3"));
+
+        document.add(zapfDingbatsList1);
+        document.close();
     }
 
 }

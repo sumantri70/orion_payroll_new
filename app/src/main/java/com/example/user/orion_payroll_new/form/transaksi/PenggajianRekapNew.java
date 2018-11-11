@@ -3,6 +3,8 @@ package com.example.user.orion_payroll_new.form.transaksi;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -30,11 +32,21 @@ import com.example.user.orion_payroll_new.form.filter.FilterPenggajian;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PenggajianModel;
 import com.example.user.orion_payroll_new.utility.route;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,6 +79,9 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
     private Long tgl_dari, tgl_Sampai;
     private int IdPegawai;
 
+    private static final String TAG = "PdfCreatorActivity";
+    private File pdfFile;
+
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
         this.btnTambah  = (FloatingActionButton) findViewById(R.id.btnTambah);
@@ -95,13 +110,14 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int Id =  ListData.get(i).getId();
-                if (Id > 0) {
-                    Intent s = new Intent(PenggajianRekapNew.this, PenggajianInputNew.class);
-                    s.putExtra("MODE", JCons.DETAIL_MODE);
-                    s.putExtra("ID",Id);
-                    startActivity(s);
-                }
+                sendEmail();
+//                int Id =  ListData.get(i).getId();
+//                if (Id > 0) {
+//                    Intent s = new Intent(PenggajianRekapNew.this, PenggajianInputNew.class);
+//                    s.putExtra("MODE", JCons.DETAIL_MODE);
+//                    s.putExtra("ID",Id);
+//                    startActivity(s);
+//                }
             }
         });
 
@@ -253,6 +269,43 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
+    private void createPdf() throws FileNotFoundException, DocumentException {
+
+        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/documents");
+        if (!docsFolder.exists()) {
+            docsFolder.mkdir();
+            Log.i(TAG, "Created a new directory for PDF");
+        }
+
+        pdfFile = new File(docsFolder.getAbsolutePath(),"HelloWorld.pdf");
+        OutputStream output = new FileOutputStream(pdfFile);
+        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
+        PdfWriter.getInstance(document, output);
+//        document.setPageSize(PageSize.A10);
+//        document.setMargins(36, 72, 108, 180);
+//        document.setMarginMirroring(true);
+//        document.setMarginMirroringTopBottom(true);
+        document.open();
+        document.add(new Paragraph("anjayyyy"));
+        document.add(new Chunk("This is sentence 1. "));
+        document.add(new Phrase("This is sentence 1. "));
+        document.add(new Phrase("This is sentence 2. "));
+        document.add(new Phrase("This is sentence 3. "));
+        document.add(new Phrase("This is sentence 4. "));
+
+        Paragraph paragraph = new Paragraph();
+        for(int i=0; i<10; i++){
+            Chunk chunk = new Chunk(
+                    "This is a sentence which is long " + i + ". ");
+            paragraph.add(chunk);
+        }
+        document.add(paragraph);
+
+        document.close();
+        //previewPdf();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -289,6 +342,27 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
                 tgl_Sampai = extra.getLong("TGL_SAMPAI");
             }
             LoadData();
+        }
+    }
+
+    protected void sendEmail() {
+        Log.i("Send email", "");
+        String[] TO = {""};
+        String[] CC = {""};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+            finish();
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(PenggajianRekapNew.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
         }
     }
 }

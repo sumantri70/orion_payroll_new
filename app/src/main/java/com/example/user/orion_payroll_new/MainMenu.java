@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
+import com.example.user.orion_payroll_new.form.AbsenPegawai;
+import com.example.user.orion_payroll_new.form.laporan.Laporan_penggajian;
 import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
 import com.example.user.orion_payroll_new.form.master.PotonganRekap;
 import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
@@ -17,7 +19,8 @@ import com.example.user.orion_payroll_new.form.transaksi.PenggajianRekapNew;
 
 public class MainMenu extends AppCompatActivity {
     Toolbar toolbar;
-    private CardView BtnMenuPegawai, BtnMenuTunjangan, BtnMenuPenggajian, BtnMenuPotongan, BtnMenuKasbonPegawai;
+    private CardView BtnMenuPegawai, BtnMenuTunjangan, BtnMenuPenggajian, BtnMenuPotongan, BtnMenuKasbonPegawai, BtnMenuLaporanPenggajian,
+                     BtnMenuAbsenPegawai;
 
 
     protected void CreateView(){
@@ -26,6 +29,8 @@ public class MainMenu extends AppCompatActivity {
         BtnMenuPotongan      = findViewById(R.id.BtnMenuPotongan);
         BtnMenuPenggajian    = findViewById(R.id.BtnMenuPenggajian);
         BtnMenuKasbonPegawai = findViewById(R.id.BtnMenuKasbonPegawai);
+        BtnMenuLaporanPenggajian = findViewById(R.id.BtnMenuLaporanPenggajian);
+        BtnMenuAbsenPegawai = findViewById(R.id.BtnMenuAbsenPegawai);
     }
 
     protected void InitClass(){
@@ -80,6 +85,25 @@ public class MainMenu extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent s = new Intent(MainMenu.this, KasbonPegawaiRekap.class);
+                startActivity(s);
+
+//            Intent s = new Intent(MainMenu.this, androidpdfcreator.class);
+//            startActivity(s);
+            }
+        });
+
+        BtnMenuLaporanPenggajian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent s = new Intent(MainMenu.this, Laporan_penggajian.class);
+                startActivity(s);
+            }
+        });
+
+        BtnMenuAbsenPegawai.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent s = new Intent(MainMenu.this, AbsenPegawai.class);
                 startActivity(s);
             }
         });

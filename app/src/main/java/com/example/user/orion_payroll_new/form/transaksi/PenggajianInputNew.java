@@ -27,6 +27,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.form.AbsenPegawai;
+import com.example.user.orion_payroll_new.form.adapter.AbsenPegawaiAdapter;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPegawai;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPenggajianNew;
 import com.example.user.orion_payroll_new.form.adapter.KasbonPegawaiAdapter;
@@ -34,6 +36,7 @@ import com.example.user.orion_payroll_new.form.lov.lov_pegawai;
 import com.example.user.orion_payroll_new.form.master.PegawaiInput;
 import com.example.user.orion_payroll_new.form.master.TunjanganInput;
 import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
+import com.example.user.orion_payroll_new.models.AbsenPegawaiModel;
 import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.PenggajianDetailModel;
@@ -84,6 +87,7 @@ import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDatePeriode;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StartOfTheMonth;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrToIntDef;
@@ -122,6 +126,7 @@ public class PenggajianInputNew extends AppCompatActivity {
     public List<PenggajianDetailModel> ArListTunjangan;
     public List<PenggajianDetailModel> ArListPotongan;
     public List<PenggajianDetailModel> ArListKasbon;
+    public List<PenggajianDetailModel> ArListKasbonTmp;
     private TunjanganModel DtTunjangan;
 
     private PegawaiModel DataPegawai;
@@ -192,6 +197,7 @@ public class PenggajianInputNew extends AppCompatActivity {
         ArListTunjangan = new ArrayList<>();
         ArListPotongan  = new ArrayList<>();
         ArListKasbon    = new ArrayList<>();
+        ArListKasbonTmp = new ArrayList<>();
 
         ListHash.put(ListDataHeader.get(0), ArListTunjangan);
         ListHash.put(ListDataHeader.get(1), ArListPotongan);
@@ -482,40 +488,43 @@ public class PenggajianInputNew extends AppCompatActivity {
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    JSONObject obj = jsonArray.getJSONObject(0);
-                    //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
-                    txtNomor.setText(obj.getString("nomor"));
-                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
-                    txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
-                    txtTelat1.setText(obj.getString("telat_satu"));
-                    txtTelat2.setText(obj.getString("telat_dua"));
-                    txtDokter.setText(obj.getString("dokter"));
-                    txtstghHari.setText(obj.getString("izin_stgh_hari"));
-                    txtCuti.setText(obj.getString("izin_cuti"));
-                    txtNonCuti.setText(obj.getString("izin_non_cuti"));
-                    txtKeterangan.setText(obj.getString("keterangan"));
-                    txtLembur.setText(obj.getString("jam_lembur"));
-                    lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
-                    lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
-                    lblTotPotongan.setText(fmt.format(obj.getDouble("gaji_pokok")));
-                    lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
-                    lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
-                    lblTotal.setText(fmt.format(obj.getDouble("total")));
-                    LoadDetail();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    Loading.dismiss();
-                }
+            try {
+                JSONArray jsonArray = response.getJSONArray("data");
+                JSONObject obj = jsonArray.getJSONObject(0);
+                IdPegawai = obj.getInt("id_pegawai");
+                //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
+                txtNomor.setText(obj.getString("nomor"));
+                txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
+                txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
+                txtTelat1.setText(obj.getString("telat_satu"));
+                txtTelat2.setText(obj.getString("telat_dua"));
+                txtDokter.setText(obj.getString("dokter"));
+                txtstghHari.setText(obj.getString("izin_stgh_hari"));
+                txtCuti.setText(obj.getString("izin_cuti"));
+                txtNonCuti.setText(obj.getString("izin_non_cuti"));
+                txtKeterangan.setText(obj.getString("keterangan"));
+                txtLembur.setText(obj.getString("jam_lembur"));
+                lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
+                lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
+                lblTotPotongan.setText(fmt.format(obj.getDouble("gaji_pokok")));
+                lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
+                lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
+                lblTotal.setText(fmt.format(obj.getDouble("total")));
+
+                LoadKasbonPegawaiEdit(IdPegawai);
+                DataPegawai = new PegawaiModel(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                Loading.dismiss();
+            }
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error: " + error.getMessage());
-                Loading.dismiss();
+            Log.d("error", "Error: " + error.getMessage());
+            Loading.dismiss();
             }
         });
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
@@ -544,6 +553,15 @@ public class PenggajianInputNew extends AppCompatActivity {
                             ArListPotongan.add(Data);
                         }else if (objDetail.getString("tipe").equals(TIPE_DET_KASBON)) {
                             Data.setCheck(true);
+
+                            if (CekKasbonTmpExist(Data.getId_tjg_pot_kas())){
+                                int idx = GetIdxArListKasbonTmp(Data.getId_tjg_pot_kas());
+                                Data.setNomor(ArListKasbonTmp.get(idx).getNomor());
+                                Data.setTanggal(ArListKasbonTmp.get(idx).getTanggal());
+                                Data.setTotal(ArListKasbonTmp.get(idx).getTotal());
+                                Data.setSisa(ArListKasbonTmp.get(idx).getSisa() + Data.getJumlah());
+                                Data.setLama_cicilan(ArListKasbonTmp.get(idx).getLama_cicilan());
+                            }
                             ArListKasbon.add(Data);
                         }
                     }
@@ -634,7 +652,6 @@ public class PenggajianInputNew extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.d("testttttttt", response.toString());
                     JSONObject jObj = new JSONObject(response);
                     Toast.makeText(PenggajianInputNew.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
                     Intent intent = getIntent();
@@ -681,12 +698,11 @@ public class PenggajianInputNew extends AppCompatActivity {
                     JsonMaster.put("total_kasbon", String.valueOf(StrFmtToDouble(lblTotKasbon.getText().toString())));
                     JsonMaster.put("total", String.valueOf(StrFmtToDouble(lblTotal.getText().toString())));
                     JsonMaster.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
-                    JsonMaster.put("periode", String.valueOf(FormatMySqlDate(StartOfTheMonth(getSimpleDate(txtPeriode.getText().toString())))));
-                    JsonMaster.put("tgl_input", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
+                    //JsonMaster.put("periode", String.valueOf(FormatMySqlDate(txtPeriode.getText().toString())));
+                    //JsonMaster.put("periode", String.valueOf(FormatMySqlDate(StartOfTheMonth(getSimpleDate(txtPeriode.getText().toString())))));
+                    JsonMaster.put("periode", String.valueOf(FormatMySqlDatePeriode(txtPeriode.getText().toString())));
                 } catch (JSONException e) {
                     e.printStackTrace();
-
-
                 }
 
 
@@ -894,8 +910,47 @@ public class PenggajianInputNew extends AppCompatActivity {
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+            PenggajianDetailModel Data;
+            ArListKasbon.clear();
+            try {
+                JSONArray jsonArray = response.getJSONArray("data");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject obj = jsonArray.getJSONObject(i);
+                    Data = new PenggajianDetailModel();
+                    Data.setId_tjg_pot_kas(obj.getInt("id"));
+                    Data.setNomor(obj.getString("nomor"));
+                    Data.setTanggal(getMillisDate(FormatDateFromSql(obj.getString("tanggal"))));
+                    Data.setSisa(obj.getDouble("sisa"));
+                    Data.setLama_cicilan(obj.getInt("cicilan"));
+                    Data.setTotal(obj.getDouble("jumlah"));
+                    ArListKasbon.add(Data);
+                }
+                HitungDetail();
+                HitungTotal();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+            }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+    }
+
+    public void LoadKasbonPegawaiEdit(int id_pegawai){
+        String filter = "";
+        filter = "?status=0&id_pegawai="+Integer.toString(id_pegawai);
+        String url = route.URL_SELECT_KASBON_4_PENGGAJIAN + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
                 PenggajianDetailModel Data;
-                ArListKasbon.clear();
+                ArListKasbonTmp.clear();
                 try {
                     JSONArray jsonArray = response.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -907,10 +962,9 @@ public class PenggajianInputNew extends AppCompatActivity {
                         Data.setSisa(obj.getDouble("sisa"));
                         Data.setLama_cicilan(obj.getInt("cicilan"));
                         Data.setTotal(obj.getDouble("jumlah"));
-                        ArListKasbon.add(Data);
+                        ArListKasbonTmp.add(Data);
                     }
-                    HitungDetail();
-                    HitungTotal();
+                    LoadDetail();
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
@@ -1000,10 +1054,10 @@ public class PenggajianInputNew extends AppCompatActivity {
                     banyak    = StrToIntDef(txtNonCuti.getText().toString(),0);
                     jumlah    = (banyak) * (DataPegawai.getPremi_harian());
                     tambahkan = banyak > 0;
-                } else if (Id == ID_PT_DOKTER) {
-                    banyak = StrToIntDef(txtTelat1.getText().toString(),0);
-                    jumlah = 0.0;
-                    tambahkan = banyak > 0;
+//                } else if (Id == ID_PT_DOKTER) {
+//                    banyak = StrToIntDef(txtTelat1.getText().toString(),0);
+//                    jumlah = 0.0;
+//                    tambahkan = banyak > 0;
                 }
             }
         }
@@ -1049,7 +1103,7 @@ public class PenggajianInputNew extends AppCompatActivity {
     }
 
     protected void SetTunjanganKhusus (int Id){
-        int banyak   = 0;
+        int banyak    = 0;
         Double jumlah = 0.0;
         Boolean tambahkan = false;
         if (DataPegawai != null) {
@@ -1112,6 +1166,24 @@ public class PenggajianInputNew extends AppCompatActivity {
 
     }
 
+    protected boolean CekKasbonTmpExist (int id){
+        for(int i=0; i < ArListKasbonTmp.size(); i++){
+            if (ArListKasbonTmp.get(i).getId_tjg_pot_kas() == id){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected int GetIdxArListKasbonTmp (int id){
+        for(int i=0; i < ArListKasbonTmp.size(); i++){
+            if (ArListKasbonTmp.get(i).getId_tjg_pot_kas() == id){
+                return i;
+            }
+        }
+        return -1;
+    }
+
     protected void HitungDetail(){
         Double TotalTJ = 0.0;
         Double TotalLembur = 0.0;
@@ -1159,6 +1231,76 @@ public class PenggajianInputNew extends AppCompatActivity {
         lblTotal.setText(fmt.format(Total));
     }
 
+    public void LoadAbsensi(){
+        String filter;
+        filter = "?periode="+FormatMySqlDatePeriode(txtPeriode.getText().toString())+ "&id_pegawai="+Integer.toString(DataPegawai.getId());
+        String url = route.URL_GET_ABSEN_PEGAWAI_4_PENGGAJIAN + filter;
+        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                AbsenPegawaiModel Data;
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    Data = new AbsenPegawaiModel(0,
+                            obj.getInt("id_pegawai"),
+                            getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
+                            "",
+                            "",
+                            obj.getInt("telat_satu"),
+                            obj.getInt("telat_dua"),
+                            obj.getInt("dokter"),
+                            obj.getInt("izin_stgh_hari"),
+                            obj.getInt("izin_cuti"),
+                            obj.getInt("izin_non_cuti"),
+                            obj.getInt("masuk")
+                    );
+
+                    txtTelat1.setText(Integer.toString(Data.getTelat_satu()));
+                    txtTelat2.setText(Integer.toString(Data.getTelat_dua()));
+                    txtDokter.setText(Integer.toString(Data.getDokter()));
+                    txtNonCuti.setText(Integer.toString(Data.getIzin_non_cuti()));
+                    txtstghHari.setText(Integer.toString(Data.getIzin_stgh_hari()));
+                    txtCuti.setText(Integer.toString(Data.getIzin_cuti()));
+
+                    if (Data.getTelat_satu() > 0){
+                        SetPotonganKhusus(ID_PT_TELAT_15);
+                    }
+
+                    if (Data.getTelat_dua() > 0){
+                        SetPotonganKhusus(ID_PT_TELAT_LBH_15);
+                    }
+
+                    if (Data.getDokter() > 0){
+                        SetPotonganKhusus(ID_PT_DOKTER);
+                    }
+
+                    if (Data.getIzin_stgh_hari() > 0){
+                        SetPotonganKhusus(ID_PT_IZIN_STGH_HARI);
+                    }
+
+                    if (Data.getIzin_non_cuti() > 0){
+                        SetPotonganKhusus(ID_PT_IZIN_NON_CUTI);
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+            }
+        });
+        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+    }
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -1184,6 +1326,7 @@ public class PenggajianInputNew extends AppCompatActivity {
 
                 LoadTunjanganPegawai();
                 LoadKasbonPegawai();
+                LoadAbsensi();
                 HitungDetail();
                 HitungTotal();
             }
