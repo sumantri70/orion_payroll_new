@@ -77,7 +77,7 @@ public class AbsenPegawai extends AppCompatActivity implements SwipeRefreshLayou
 
     private void InitClass(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Laporan Penggajian");
+        setTitle("Absen Pegawai");
 
         Fstatus = TRUE_STRING;
         OrderBy = "tanggal";

@@ -2,10 +2,10 @@ package com.example.user.orion_payroll_new.utility;
 
 public class route {
     //public static final String URL = "http://nsumantry.000webhostapp.com/orion_payroll/";
-    public static final String URL = "http://192.168.43.247/orion_payroll/";
+    //public static final String URL = "http://192.168.43.247/orion_payroll/";
     //public static final String URL = "http://192.168.42.221/orion_payroll/";
     //public static final String URL = "http://192.168.1.7/orion_payroll/";
-    //public static final String URL = "http://10.146.89.28/orion_payroll/";
+    public static final String URL = "http://10.146.64.229/orion_payroll/";
     //public static final String URL = "http://10.146.200.168/orion_payroll/";
     //public static final String URL = "http://192.168.1.8/orion_payroll/";
     //public static final String URL = "http://127.0.0.1/orion_payroll/";

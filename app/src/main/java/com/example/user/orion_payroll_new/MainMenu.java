@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.View;
 
+import com.example.user.orion_payroll_new.email.MainActivity;
 import com.example.user.orion_payroll_new.form.AbsenPegawai;
 import com.example.user.orion_payroll_new.form.laporan.Laporan_penggajian;
 import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
@@ -103,7 +104,9 @@ public class MainMenu extends AppCompatActivity {
         BtnMenuAbsenPegawai.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent s = new Intent(MainMenu.this, AbsenPegawai.class);
+//                Intent s = new Intent(MainMenu.this, AbsenPegawai.class);
+//                startActivity(s);
+                Intent s = new Intent(MainMenu.this, MainActivity.class);
                 startActivity(s);
             }
         });

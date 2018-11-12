@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     defaultConfig {
-        applicationId "com.example.user.orion_payroll_new"
+        applicationId "com.example.user.myapplication"
         minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
@@ -15,6 +15,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
     }
 }
 
@@ -32,4 +36,9 @@ dependencies {
     implementation 'com.android.support:gridlayout-v7:27.1.1'
     implementation 'com.mcxiaoke.volley:library-aar:1.0.1'
     implementation 'com.itextpdf:itextg:5.5.10'
+    implementation 'com.google.apis:google-api-services-gmail:v1-rev20180904-1.26.0'
+    implementation 'hu.blackbelt.bundles.google-api-client:com.google.api-client:1.23.0_1'
+    implementation files('libs/mail.jar')
+    implementation files('libs/activation.jar')
+    implementation files('libs/additionnal.jar')
 }
