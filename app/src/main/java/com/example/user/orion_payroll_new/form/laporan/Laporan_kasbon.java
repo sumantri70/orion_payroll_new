@@ -3,18 +3,14 @@ package com.example.user.orion_payroll_new.form.laporan;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -25,9 +21,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
-import com.example.user.orion_payroll_new.form.adapter.LaporanPenggajianAdapter;
+import com.example.user.orion_payroll_new.form.adapter.LaporanKasbonAdapter;
 import com.example.user.orion_payroll_new.form.filter.FilterLaporanPenggajian;
-import com.example.user.orion_payroll_new.models.LaporanPenggajianModel;
+import com.example.user.orion_payroll_new.models.LaporanKasbonModel;
 import com.example.user.orion_payroll_new.utility.route;
 
 import org.json.JSONArray;
@@ -45,9 +41,8 @@ import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillis
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormatMySql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
-import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 
-public class Laporan_penggajian extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+public class Laporan_kasbon extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
     private SearchView txtSearch;
     private Dialog DialogFilter;
 
@@ -55,9 +50,9 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
 
     private SwipeRefreshLayout swipe;
 
-    private List<LaporanPenggajianModel> ListData;
+    private List<LaporanKasbonModel> ListData;
     private ListView ListRekap;
-    public static LaporanPenggajianAdapter Adapter;
+    public static LaporanKasbonAdapter Adapter;
     public static PegawaiTable Data;
 
     public static String Fstatus;
@@ -74,18 +69,18 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
         this.swipe      = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         this.swipe.setColorSchemeColors(Color.DKGRAY, Color.GREEN, Color.BLUE, Color.CYAN);
 
-        this.DialogFilter = new Dialog(Laporan_penggajian.this);
+        this.DialogFilter = new Dialog(Laporan_kasbon.this);
         this.DialogFilter.setContentView(R.layout.filter_aktivasi);
         this.DialogFilter.setTitle("Filter");
     }
 
     private void InitClass(){
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle("Laporan Penggajian");
+        setTitle("Laporan Kasbon");
 
         Fstatus = TRUE_STRING;
         OrderBy = "tanggal";
-        ListData = new ArrayList<LaporanPenggajianModel>();
+        ListData = new ArrayList<LaporanKasbonModel>();
         //Kodeing buat ngilangin garis
         //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
@@ -104,12 +99,12 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
         btnFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent s = new Intent(Laporan_penggajian.this, FilterLaporanPenggajian.class);
+                Intent s = new Intent(Laporan_kasbon.this, FilterLaporanPenggajian.class);
                 s.putExtra("TGL_DARI", tgl_dari);
                 s.putExtra("TGL_SAMPAI", tgl_Sampai);
                 s.putExtra("STATUS", status);
                 s.putExtra("PEGAWAI_ID", IdPegawai);
-                Laporan_penggajian.this.startActivityForResult(s, RESULT_LOV);
+                Laporan_kasbon.this.startActivityForResult(s, RESULT_LOV);
             }
         });
 
@@ -122,12 +117,12 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
                        }
                    }
         );
-        
+
         btnSort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                PopupMenu PmFilter = new PopupMenu(Laporan_penggajian.this, btnSort);
-                PmFilter.getMenuInflater().inflate(R.menu.sort_laporan_penggajian, PmFilter.getMenu());
+                PopupMenu PmFilter = new PopupMenu(Laporan_kasbon.this, btnSort);
+                PmFilter.getMenuInflater().inflate(R.menu.sort_laporan_kasbon, PmFilter.getMenu());
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()) {
@@ -171,7 +166,7 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Laporan_penggajian.this.Adapter.getFilter().filter(newText);
+                Laporan_kasbon.this.Adapter.getFilter().filter(newText);
                 return false;
             }
         });
@@ -182,35 +177,35 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
         String filter;
         Fstatus = "";
         filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_LAPORAN_PENGGAJIAN + filter;
+        String url = route.URL_SELECT_LAPORAN_KASBON + filter;
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                LaporanPenggajianModel Data;
+                LaporanKasbonModel Data;
                 ListData.clear();
                 try {
                     JSONArray jsonArray = response.getJSONArray("data");
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new LaporanPenggajianModel(
-                                getMillisDate(FormatDateFromSql(obj.getString("periode"))),
-                                obj.getDouble("gaji_pokok"),
-                                obj.getDouble("total_tunjangan"),
-                                obj.getDouble("total_potongan"),
-                                obj.getDouble("total_kasbon"),
-                                obj.getDouble("total_lembur"),
-                                obj.getDouble("total")
+                        Data = new LaporanKasbonModel(
+                                obj.getString("nomor"),
+                                getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
+                                obj.getInt("id_pegawai"),
+                                obj.getInt("jumlah"),
+                                obj.getInt("cicilan"),
+                                obj.getDouble("terbayar"),
+                                obj.getDouble("sisa")
                         );
                         ListData.add(Data);
                     }
 
-                    Adapter = new LaporanPenggajianAdapter(Laporan_penggajian.this, R.layout.list_laporan_penggajian, ListData);
+                    Adapter = new LaporanKasbonAdapter(Laporan_kasbon.this, R.layout.list_laporan_kasbon, ListData);
                     Adapter.notifyDataSetChanged();
                     ListRekap.setAdapter(Adapter);
                     swipe.setRefreshing(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Toast.makeText(Laporan_penggajian.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Laporan_kasbon.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
                     swipe.setRefreshing(false);
                 }
             }
@@ -220,7 +215,7 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
             public void onErrorResponse(VolleyError error) {
                 ListData.clear();
                 swipe.setRefreshing(false);
-                Toast.makeText(Laporan_penggajian.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                Toast.makeText(Laporan_kasbon.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
             }
         });
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
@@ -229,7 +224,7 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_laporan_penggajian);
+        setContentView(R.layout.activity_laporan_kasbon);
         CreateVew();
         InitClass();
         EventClass();

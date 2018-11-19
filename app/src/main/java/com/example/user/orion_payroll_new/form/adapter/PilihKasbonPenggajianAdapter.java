@@ -63,54 +63,56 @@ public class PilihKasbonPenggajianAdapter extends ArrayAdapter<PenggajianDetailM
                 holder.HchbKasbon.setVisibility(View.INVISIBLE);
             }
 
+            holder.Hkode.setText(Data.getNomor());
+            holder.Hnama.setText(getTglFormat(Data.getTanggal()));
+            holder.HlblSisa.setText(fmt.format(Data.getSisa()));
+            holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
+            holder.HchbKasbon.setChecked(Data.isCheck());
+            holder.Hjumlah.setId(position);
+            holder.HchbKasbon.setId(position);
+
+            holder.Hjumlah.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                public void onFocusChange(View v, boolean hasFocus) {
+                    final EditText Caption = (EditText) v;
+                    if (!hasFocus){
+                        //final EditText Caption = (EditText) v;
+                        if (!Caption.getText().toString().equals("")) {
+                            Data.setJumlah(StrFmtToDouble(Caption.getText().toString()));
+                        }else{
+                            Data.setJumlah(StrFmtToDouble("0"));
+                        }
+                        holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
+                    }
+                }
+            });
+
+            holder.HchbKasbon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
+                    Data.setCheck(isChecked);
+                    holder.HchbKasbon.setChecked(isChecked);
+
+                    if (isChecked){
+                        Double CicilanPerBln = Data.getTotal() / Data.getLama_cicilan();
+                        if ( (Data.getSisa() - CicilanPerBln) < 0 ){
+                            Data.setJumlah(Data.getSisa());
+                        }else{
+                            Data.setJumlah(CicilanPerBln);
+                        }
+                    }else{
+                        Data.setJumlah(0.0);
+                    }
+                    holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
+                }
+            });
+
             holder.Hjumlah.setEnabled(Enabled);
             v.setTag(holder);
         }else{
             holder = (PilihKasbonPenggajianAdapter.ViewHolder)v.getTag();
+            //v.setTag(holder);
         }
 
-        holder.Hkode.setText(Data.getNomor());
-        holder.Hnama.setText(getTglFormat(Data.getTanggal()));
-        holder.HlblSisa.setText(fmt.format(Data.getSisa()));
-        holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
-        holder.HchbKasbon.setChecked(Data.isCheck());
-        holder.Hjumlah.setId(position);
-        holder.HchbKasbon.setId(position);
-
-        holder.Hjumlah.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            public void onFocusChange(View v, boolean hasFocus) {
-                final EditText Caption = (EditText) v;
-                if (!hasFocus){
-                    //final EditText Caption = (EditText) v;
-                    if (!Caption.getText().toString().equals("")) {
-                        Data.setJumlah(StrFmtToDouble(Caption.getText().toString()));
-                    }else{
-                        Data.setJumlah(StrFmtToDouble("0"));
-                    }
-                    holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
-                }
-            }
-        });
-
-        holder.HchbKasbon.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener(){
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked){
-                Data.setCheck(isChecked);
-                holder.HchbKasbon.setChecked(isChecked);
-
-                if (isChecked){
-                    Double CicilanPerBln = Data.getTotal() / Data.getLama_cicilan();
-                    if ( (Data.getSisa() - CicilanPerBln) < 0 ){
-                        Data.setJumlah(Data.getSisa());
-                    }else{
-                        Data.setJumlah(CicilanPerBln);
-                    }
-                }else{
-                    Data.setJumlah(0.0);
-                }
-                holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
-            }
-        });
         return v;
     }
 

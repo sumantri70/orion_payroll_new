@@ -6,18 +6,77 @@
     android:layout_height="match_parent"
     tools:context=".form.transaksi.PenggajianRekapNew">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginLeft="6dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:foregroundGravity="clip_horizontal"
+                        android:gravity="center"
+                        android:text="Penggajian"
+                        android:textColor="@color/colorwhite"
+                        android:textSize="19dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnAction"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginRight="6dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/more_menu"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.056" />
+
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
+
     <android.support.v7.widget.CardView
         android:id="@+id/CdSearch"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="0dp"
         android:animateLayoutChanges="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -30,11 +89,11 @@
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
                 android:background="@drawable/style_txt_default"
-                android:queryBackground="@android:color/transparent"
                 android:foregroundGravity="fill"
                 android:gravity="fill"
                 android:iconifiedByDefault="false"
                 android:padding="0dp"
+                android:queryBackground="@android:color/transparent"
                 android:queryHint="Cari disini..."
                 app:layout_constraintEnd_toStartOf="@+id/BtnFilter"
                 app:layout_constraintStart_toStartOf="parent" />

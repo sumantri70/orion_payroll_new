@@ -4,7 +4,7 @@
 
     <!-- Include required permissions for Google Mobile Ads to run. -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -18,7 +18,6 @@
         android:roundIcon="@drawable/ic_public_black_24dp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -56,7 +55,9 @@
             android:name=".form.filter.FilterPenggajian"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".form.transaksi.PenggajianInputNew" />
-        <activity android:name=".form.transaksi.PenggajianRekapNew" />
+        <activity
+            android:name=".form.transaksi.PenggajianRekapNew"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".form.lov.lov_potongan" />
         <activity
             android:name=".form.transaksi.PilihTunjanganPenggajian"
@@ -72,8 +73,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".androidpdfcreator" />
         <activity android:name=".form.laporan.Laporan_penggajian" />
-        <activity android:name=".form.AbsenPegawai"></activity>
-        <activity android:name=".email.MainActivity"></activity>
+        <activity android:name=".form.AbsenPegawai" />
+        <activity android:name=".email.MainActivity" />
+        <activity android:name=".form.transaksi.PilihKirimEmail" />
+        <activity android:name=".form.laporan.Laporan_kasbon"></activity>
     </application>
 
 </manifest>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group>
+        <item
+            android:enabled="false"
+            android:title="@string/title_urutkan" />
+    </group>
+    <group>
+        <item
+            android:title="   Periode" />
+
+        <item
+            android:title="   Gaji Pokok" />
+
+        <item
+            android:title="   Total Tunjangan"/>
+
+        <item
+            android:title="   Total Potongan"/>
+
+        <item
+            android:title="   Total Kasbon"/>
+
+        <item
+            android:title="   Total Lembur"/>
+
+        <item
+            android:title="   Total"/>
+    </group>
+</menu>

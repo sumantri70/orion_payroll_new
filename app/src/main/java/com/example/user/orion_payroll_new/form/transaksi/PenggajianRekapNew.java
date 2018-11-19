@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -65,8 +66,10 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
 
     private RadioButton rbt1, rbt2, rbt3;
 
-    private ImageButton btnFilter, btnSort;
+    private ImageButton btnFilter, btnSort, btnAction;
     private FloatingActionButton btnTambah;
+
+    private PopupMenu PopUpAction;
 
     private SwipeRefreshLayout swipe;
 
@@ -90,9 +93,14 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         this.txtSearch  = (SearchView) findViewById(R.id.txtSearch);
         this.swipe      = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         this.swipe.setColorSchemeColors(Color.DKGRAY, Color.GREEN, Color.BLUE, Color.CYAN);
+        this.btnAction = (ImageButton) findViewById(R.id.btnAction);
+        PopUpAction = new PopupMenu(PenggajianRekapNew.this, btnAction);
+        PopUpAction.getMenu().add("Kirim Email");
     }
 
     private void InitClass(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Penggajian");
 
@@ -110,14 +118,14 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                sendEmail();
-//                int Id =  ListData.get(i).getId();
-//                if (Id > 0) {
-//                    Intent s = new Intent(PenggajianRekapNew.this, PenggajianInputNew.class);
-//                    s.putExtra("MODE", JCons.DETAIL_MODE);
-//                    s.putExtra("ID",Id);
-//                    startActivity(s);
-//                }
+                //sendEmail();
+                int Id =  ListData.get(i).getId();
+                if (Id > 0) {
+                    Intent s = new Intent(PenggajianRekapNew.this, PenggajianInputNew.class);
+                    s.putExtra("MODE", JCons.DETAIL_MODE);
+                    s.putExtra("ID",Id);
+                    startActivity(s);
+                }
             }
         });
 
@@ -191,6 +199,23 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
             @Override
             public boolean onQueryTextChange(String newText) {
                 PenggajianRekapNew.this.Adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
+        btnAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopUpAction.show();
+
+            }
+        });
+
+        PopUpAction.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Intent s = new Intent(PenggajianRekapNew.this, PilihKirimEmail.class);
+                startActivity(s);
                 return false;
             }
         });

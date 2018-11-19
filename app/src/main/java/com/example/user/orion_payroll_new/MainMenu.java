@@ -10,6 +10,7 @@ import android.view.View;
 
 import com.example.user.orion_payroll_new.email.MainActivity;
 import com.example.user.orion_payroll_new.form.AbsenPegawai;
+import com.example.user.orion_payroll_new.form.laporan.Laporan_kasbon;
 import com.example.user.orion_payroll_new.form.laporan.Laporan_penggajian;
 import com.example.user.orion_payroll_new.form.master.PegawaiRekap;
 import com.example.user.orion_payroll_new.form.master.PotonganRekap;
@@ -21,7 +22,7 @@ import com.example.user.orion_payroll_new.form.transaksi.PenggajianRekapNew;
 public class MainMenu extends AppCompatActivity {
     Toolbar toolbar;
     private CardView BtnMenuPegawai, BtnMenuTunjangan, BtnMenuPenggajian, BtnMenuPotongan, BtnMenuKasbonPegawai, BtnMenuLaporanPenggajian,
-                     BtnMenuAbsenPegawai;
+                     BtnMenuAbsenPegawai, BtnMenuLaporanKasbon;
 
 
     protected void CreateView(){
@@ -32,6 +33,7 @@ public class MainMenu extends AppCompatActivity {
         BtnMenuKasbonPegawai = findViewById(R.id.BtnMenuKasbonPegawai);
         BtnMenuLaporanPenggajian = findViewById(R.id.BtnMenuLaporanPenggajian);
         BtnMenuAbsenPegawai = findViewById(R.id.BtnMenuAbsenPegawai);
+        BtnMenuLaporanKasbon= findViewById(R.id.BtnMenuLaporanKasbon);
     }
 
     protected void InitClass(){
@@ -107,6 +109,14 @@ public class MainMenu extends AppCompatActivity {
 //                Intent s = new Intent(MainMenu.this, AbsenPegawai.class);
 //                startActivity(s);
                 Intent s = new Intent(MainMenu.this, MainActivity.class);
+                startActivity(s);
+            }
+        });
+
+        BtnMenuLaporanKasbon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent s = new Intent(MainMenu.this, Laporan_kasbon.class);
                 startActivity(s);
             }
         });

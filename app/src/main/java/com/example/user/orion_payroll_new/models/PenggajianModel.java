@@ -5,6 +5,7 @@ public class PenggajianModel {
     private String nomor, keterangan, user_id, user_edit, nama_pegawai;
     private Double gaji_pokok, uang_ikatan, uang_kehadiran, premi_harian, premi_perjam, jam_lembur, total_tunjangan, total_potongan, total_lembur, total_kasbon, total;
     private long tanggal, tgl_input, tgl_edit, periode;
+    private boolean pilih;
 
     public PenggajianModel(int id, int id_pegawai, int telat_satu, int telat_dua, int dokter, int izin_stgh_hari, int izin_cuti, int izin_non_cuti, String nomor, String keterangan, String user_id, String user_edit, Double gaji_pokok, Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam, Double jam_lembur, Double total_tunjangan, Double total_potongan, Double total_lembur, Double total_kasbon, Double total, long tanggal, long tgl_input, long tgl_edit, long periode) {
         this.id = id;
@@ -35,6 +36,7 @@ public class PenggajianModel {
         this.tgl_edit = tgl_edit;
         this.nama_pegawai = "";
         this.periode = periode;
+        this.pilih = false;
     }
 
     public PenggajianModel() {
@@ -65,6 +67,7 @@ public class PenggajianModel {
         this.tgl_input = 0;
         this.tgl_edit = 0;
         this.periode = 0;
+        this.pilih = false;
     }
 
     public void setId(int id) {
@@ -289,5 +292,13 @@ public class PenggajianModel {
 
     public long getPeriode() {
         return periode;
+    }
+
+    public void setPilih(boolean pilih) {
+        this.pilih = pilih;
+    }
+
+    public boolean isPilih() {
+        return pilih;
     }
 }
