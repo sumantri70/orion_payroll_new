@@ -65,10 +65,12 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 
     private ListView ListRekap;
     public static TunjanganAdapter Adapter;
-    private List<TunjanganModel> ListTunjangan;
+    private ArrayList<TunjanganModel> ListTunjangan;
 
     public static String Fstatus;
     public static String OrderBy;
+
+    private TunjanganTable DbMaster;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
@@ -99,6 +101,9 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         OrderBy = "kode";
         ListTunjangan = new ArrayList<TunjanganModel>();
         this.ListRekap.setDividerHeight(1);
+
+        DbMaster = new TunjanganTable(this);
+        DbMaster.SetRecords(ListTunjangan);
     }
 
     protected void EventClass(){
@@ -215,54 +220,63 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         });
     }
 
+//    public void LoadData(){
+//        swipe.setRefreshing(true);
+//        String filter;
+//        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+//        String url = route.URL_SELECT_TUNJANGAN + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                TunjanganModel Data;
+//                ListTunjangan.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new TunjanganModel(
+//                                obj.getInt("id"),
+//                                obj.getString("kode"),
+//                                obj.getString("nama"),
+//                                obj.getString("keterangan"),
+//                                obj.getString("status")
+//                        );
+//                        ListTunjangan.add(Data);
+//                    }
+//                    //Satu baris kosong di akhir
+//                    Data = new TunjanganModel(0,"","","","HIDE");
+//                    ListTunjangan.add(Data);
+//
+//                    Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, ListTunjangan);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(TunjanganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListTunjangan.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(TunjanganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//
+//    }
+
     public void LoadData(){
         swipe.setRefreshing(true);
-        String filter;
-        filter = "?status="+Fstatus+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_TUNJANGAN + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                TunjanganModel Data;
-                ListTunjangan.clear();
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new TunjanganModel(
-                                obj.getInt("id"),
-                                obj.getString("kode"),
-                                obj.getString("nama"),
-                                obj.getString("keterangan"),
-                                obj.getString("status")
-                        );
-                        ListTunjangan.add(Data);
-                    }
-                    //Satu baris kosong di akhir
-                    Data = new TunjanganModel(0,"","","","HIDE");
-                    ListTunjangan.add(Data);
-
-                    Adapter = new TunjanganAdapter(TunjanganRekap.this, R.layout.list_tunjangan_rekap, ListTunjangan);
-                    Adapter.notifyDataSetChanged();
-                    ListRekap.setAdapter(Adapter);
-                    swipe.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(TunjanganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    swipe.setRefreshing(false);
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ListTunjangan.clear();
-                swipe.setRefreshing(false);
-                Toast.makeText(TunjanganRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-
+        this.DbMaster.ReloadList(Fstatus, OrderBy);
+        Adapter = new TunjanganAdapter(this, R.layout.list_potongan_rekap, ListTunjangan);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
     }
 
     @Override

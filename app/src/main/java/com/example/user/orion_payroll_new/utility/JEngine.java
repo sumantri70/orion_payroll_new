@@ -11,6 +11,10 @@ public class JEngine {
         return OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(Id)).getNama();
     }
 
+    public static String Get_Email_Master_Pegawai(int Id){
+        return OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(Id)).getEmail();
+    }
+
     public static String Get_Kode_Master_Tunjangan(int Id){
         return OrionPayrollApplication.getInstance().ListHashTunjanganGlobal.get(Integer.toString(Id)).getKode();
     }

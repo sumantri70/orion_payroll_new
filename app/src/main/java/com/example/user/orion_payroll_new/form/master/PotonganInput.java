@@ -18,6 +18,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.PotonganTable;
 import com.example.user.orion_payroll_new.models.PotonganModel;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
 import com.example.user.orion_payroll_new.utility.route;
@@ -47,6 +48,7 @@ public class PotonganInput extends AppCompatActivity {
     private String Mode;
     private int IdMst;
     private ProgressDialog Loading;
+    private PotonganTable TData;
 
     protected void CreateView(){
         txtKode       = (TextInputEditText) findViewById(R.id.txtKode);
@@ -62,6 +64,7 @@ public class PotonganInput extends AppCompatActivity {
         this.IdMst = extra.getInt("ID");
         Loading = new ProgressDialog(PotonganInput.this);
 
+        TData = new PotonganTable(getApplicationContext());
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Potongan");
         }else if (Mode.equals(DETAIL_MODE)){
@@ -85,9 +88,23 @@ public class PotonganInput extends AppCompatActivity {
             public void onClick(View view) {
                 if (IsValid() == true){
                     if(Mode.equals(EDIT_MODE)){
-                        IsSavedEdit();
+                        if (IsSavedEdit()){
+                            Toast.makeText(PotonganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                            Intent intent = getIntent();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }else{
+                            Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                        }
                     }else{
-                        IsSaved();
+                        if (IsSaved()){
+                            Toast.makeText(PotonganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                            Intent intent = getIntent();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }else{
+                            Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                        };
                     }
                 }
             }
@@ -115,112 +132,112 @@ public class PotonganInput extends AppCompatActivity {
         return true;
     }
 
-    protected void LoadData(){
-        Loading.setMessage("Loading...");
-        Loading.setCancelable(false);
-        Loading.show();
-        String filter;
-        filter = "?id="+IdMst;
-        String url = route.URL_GET_POTONGAN + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                PotonganModel Data;
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    JSONObject obj = jsonArray.getJSONObject(0);
-                    txtKode.setText(obj.getString("kode"));
-                    txtNama.setText(obj.getString("nama"));
-                    txtKeterangan.setText(obj.getString("keterangan"));
-                    Loading.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    Loading.dismiss();
-                }
-            }
+//    protected void LoadData(){
+//        Loading.setMessage("Loading...");
+//        Loading.setCancelable(false);
+//        Loading.show();
+//        String filter;
+//        filter = "?id="+IdMst;
+//        String url = route.URL_GET_POTONGAN + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                PotonganModel Data;
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    JSONObject obj = jsonArray.getJSONObject(0);
+//                    txtKode.setText(obj.getString("kode"));
+//                    txtNama.setText(obj.getString("nama"));
+//                    txtKeterangan.setText(obj.getString("keterangan"));
+//                    Loading.dismiss();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("error", "Error: " + error.getMessage());
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error: " + error.getMessage());
-                Loading.dismiss();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-    }
+//    protected void IsSaved(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_POTONGAN, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//
+//                    Log.d("jsonnnnnnn",jObj.toString());
+//                    Toast.makeText(PotonganInput.this, jObj.toString(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(PotonganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("kode", String.valueOf(txtKode.getText().toString()));
+//                params.put("nama", String.valueOf(txtNama.getText().toString()));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                params.put("status", String.valueOf(TRUE_STRING));
+//                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
 
-    protected void IsSaved(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_POTONGAN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-
-                    Log.d("jsonnnnnnn",jObj.toString());
-                    Toast.makeText(PotonganInput.this, jObj.toString(), Toast.LENGTH_SHORT).show();
-                    Toast.makeText(PotonganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("kode", String.valueOf(txtKode.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("status", String.valueOf(TRUE_STRING));
-                return params;
-            }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-    }
-
-    protected void IsSavedEdit(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_POTONGAN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    Toast.makeText(PotonganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(Integer.toString(IdMst)));
-                params.put("kode", String.valueOf(txtKode.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("status", String.valueOf(TRUE_STRING));
-                return params;
-            }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-    }
+//    protected void IsSavedEdit(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_POTONGAN, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(PotonganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(PotonganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("id", String.valueOf(Integer.toString(IdMst)));
+//                params.put("kode", String.valueOf(txtKode.getText().toString()));
+//                params.put("nama", String.valueOf(txtNama.getText().toString()));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                params.put("status", String.valueOf(TRUE_STRING));
+//                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
 
     protected boolean IsValid(){
         if (this.txtKode.getText().toString().trim().equals("")) {
@@ -229,39 +246,55 @@ public class PotonganInput extends AppCompatActivity {
             return false;
         }
 
-//        if (TPegawai.KodeExist(this.txtNik.getText().toString().trim(),IdMst)) {
-//            txtNik.requestFocus();
-//            txtNik.setError("NIK sudah pernah digunakan");
-//            return false;
-//        }
+        if (TData.KodeExist(this.txtKode.getText().toString().trim(),IdMst)) {
+            txtKode.requestFocus();
+            txtKode.setError("Kode sudah pernah digunakan");
+            return false;
+        }
 
-        if (this.txtNama.getText().toString().equals("")) {
+        if (this.txtNama.getText().toString().trim().equals("")) {
             txtNama.requestFocus();
             txtNama.setError("Nama belum diisi");
             return false;
         }
         return true;
     }
+
+    protected boolean IsSaved(){
+        try {
+            PotonganModel Data = new PotonganModel(
+                    0,txtKode.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtKeterangan.getText().toString().trim(),
+                    TRUE_STRING);
+            TData.Insert(Data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean IsSavedEdit(){
+        try {
+            PotonganModel Data = new PotonganModel(
+                    IdMst,
+                    txtKode.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtKeterangan.getText().toString().trim(),
+                    TRUE_STRING);
+            TData.Update(Data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    protected void LoadData(){
+        PotonganModel Data = TData.GetData(IdMst);
+        txtKode.setText(Data.getKode());
+        txtNama.setText(Data.getNama());
+        txtKeterangan.setText(Data.getKeterangan());
+    }
 }
-
-
-//    protected boolean IsSaved(){
-//        PotonganModel Data = new PotonganModel(
-//                            0,txtKode.getText().toString().trim(),
-//                            txtNama.getText().toString().trim(),
-//                            txtKeterangan.getText().toString().trim(),
-//                            TRUE_STRING);
-//        TData.Insert(Data);
-//        return true;
-//    }
-
-//    protected boolean IsSavedEdit(){
-//        PotonganModel Data = new PotonganModel(
-//                this.IdMst,
-//                txtKode.getText().toString().trim(),
-//                txtNama.getText().toString().trim(),
-//                txtKeterangan.getText().toString().trim(),
-//                TRUE_STRING);
-//        TData.Update(Data);
-//        return true;
-//    }

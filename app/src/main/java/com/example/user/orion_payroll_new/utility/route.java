@@ -5,7 +5,7 @@ public class route {
     public static final String URL = "http://192.168.43.247/orion_payroll/";
     //public static final String URL = "http://192.168.42.221/orion_payroll/";
     //public static final String URL = "http://192.168.1.7/orion_payroll/";
-    //public static final String URL = "http://10.146.106.235/orion_payroll/";
+    //public static final String URL = "http://10.146.192.3/orion_payroll/";
     //public static final String URL = "http://10.146.89.235/orion_payroll/";
     //public static final String URL = "http://192.168.1.8/orion_payroll/";
     //public static final String URL = "http://127.0.0.1/orion_payroll/";
@@ -58,7 +58,7 @@ public class route {
     public static final String URL_DELETE_KASBON   = URL + URL_KASBON + "delete.php";
     public static final String URL_SELECT_KASBON_4_PENGGAJIAN   = URL + URL_KASBON + "select_kasbon.php";
 
-    //*-- KASBON PEGAWAI --*\\
+    //*-- PENGGAJIAN --*\\
     public static final String URL_PENGGAJIAN = "penggajian/";
     public static final String URL_INSERT_PENGGAJIAN   = URL + URL_PENGGAJIAN + "insert.php";
     public static final String URL_SELECT_PENGGAJIAN   = URL + URL_PENGGAJIAN + "select.php";
@@ -66,6 +66,8 @@ public class route {
     public static final String URL_UPDATE_PENGGAJIAN   = URL + URL_PENGGAJIAN + "update.php";
     public static final String URL_DELETE_PENGGAJIAN   = URL + URL_PENGGAJIAN + "delete.php";
     public static final String URL_GET_PENGGAJIAN_DETAIL = URL + URL_PENGGAJIAN + "get_detail.php";
+    public static final String URL_SELECT_PENGGAJIAN_KIRIM_EMAIL   = URL + URL_PENGGAJIAN + "select_kirim_email.php";
+
 
     //*-- LAPORAN PENGGAJIAN --*\\
     public static final String URL_LABSEN_PEGAWAI = "absen_pegawai/";

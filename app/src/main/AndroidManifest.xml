@@ -76,7 +76,11 @@
         <activity android:name=".form.AbsenPegawai" />
         <activity android:name=".email.MainActivity" />
         <activity android:name=".form.transaksi.PilihKirimEmail" />
-        <activity android:name=".form.laporan.Laporan_kasbon"></activity>
+        <activity android:name=".form.laporan.Laporan_kasbon" />
+        <activity
+            android:name=".MainMenuNew"
+            android:label="@string/title_activity_main_menu_new"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

@@ -166,6 +166,14 @@ public class FungsiGeneral {
         return calender.getTimeInMillis();
     }
 
+    public static long serverNowStartOfTheMonthLongNEw(){
+        Calendar calender = Calendar.getInstance();
+        calender.set(Calendar.DAY_OF_YEAR, 1);
+        return calender.getTimeInMillis();
+    }
+
+
+
     public static String StartOfTheMonth(long date){
         DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Calendar calender = Calendar.getInstance();
@@ -194,6 +202,22 @@ public class FungsiGeneral {
 
     public static long getMillisDate(String input) {
         SimpleDateFormat f = new SimpleDateFormat("dd-MM-yyyy");
+        Date d = null;
+        try {
+            d = f.parse(input);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long date = 0;
+        if (d != null) {
+            date = d.getTime();
+            return date;
+        }
+        return 0;
+    }
+
+    public static long getMillisDateFmt(String input, String format) {
+        SimpleDateFormat f = new SimpleDateFormat(format);
         Date d = null;
         try {
             d = f.parse(input);
@@ -306,6 +330,15 @@ public class FungsiGeneral {
 
     public static String DoubleToStr(Double Nilai){
         return fmt.format(Nilai);
+    }
+
+    public static double Round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
     }
 
 

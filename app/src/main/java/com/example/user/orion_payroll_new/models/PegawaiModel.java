@@ -10,7 +10,8 @@ public class PegawaiModel {
     private Double uang_ikatan, uang_kehadiran, premi_harian, premi_perjam;
 
     public PegawaiModel(int id, String NIK, String nama, String alamat, String telpon1, String telpon2, String email,
-                        Double gaji_pokok, String status, long tgl_lahir, long tgl_mulai_kerja, String keterangan) {
+                        Double gaji_pokok, String status, long tgl_lahir, long tgl_mulai_kerja, String keterangan,
+                        Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam) {
         this.id = id;
         this.nik = NIK;
         this.nama = nama;
@@ -21,7 +22,12 @@ public class PegawaiModel {
         this.gaji_pokok = gaji_pokok;
         this.status = status;
         this.tgl_lahir = tgl_lahir;
+        this.tgl_mulai_kerja = tgl_mulai_kerja;
         this.keterangan = keterangan;
+        this.uang_ikatan = uang_ikatan;
+        this.uang_kehadiran = uang_kehadiran;
+        this.premi_harian = premi_harian;
+        this.premi_perjam = premi_perjam;
     }
 
     public PegawaiModel(){

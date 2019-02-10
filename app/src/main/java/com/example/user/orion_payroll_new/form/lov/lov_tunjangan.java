@@ -25,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.TunjanganTable;
 import com.example.user.orion_payroll_new.form.adapter.TunjanganAdapter;
 import com.example.user.orion_payroll_new.form.adapter.lov_tunjangan_adapter;
 import com.example.user.orion_payroll_new.form.master.TunjanganInput;
@@ -53,10 +54,12 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
 
     private ListView ListRekap;
     public static lov_tunjangan_adapter Adapter;
-    private List<TunjanganModel> ListTunjangan;
+    private ArrayList<TunjanganModel> ListTunjangan;
 
     public static String Fstatus;
     public static String OrderBy;
+
+    private TunjanganTable DbMaster;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
@@ -73,6 +76,9 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
         OrderBy = "kode";
         ListTunjangan = new ArrayList<TunjanganModel>();
         this.ListRekap.setDividerHeight(1);
+
+        DbMaster = new TunjanganTable(this);
+        DbMaster.SetRecords(ListTunjangan);
     }
 
     protected void EventClass(){
@@ -141,49 +147,58 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
 
     public void LoadData(){
         swipe.setRefreshing(true);
-        String filter;
-        filter = "?status="+Fstatus+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_TUNJANGAN + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                TunjanganModel Data;
-                ListTunjangan.clear();
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new TunjanganModel(
-                                obj.getInt("id"),
-                                obj.getString("kode"),
-                                obj.getString("nama"),
-                                obj.getString("keterangan"),
-                                obj.getString("status")
-                        );
-                        ListTunjangan.add(Data);
-                    }
-                    Adapter = new lov_tunjangan_adapter(lov_tunjangan.this, R.layout.list_lov_tunjangan, ListTunjangan);
-                    Adapter.notifyDataSetChanged();
-                    ListRekap.setAdapter(Adapter);
-                    swipe.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(lov_tunjangan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    swipe.setRefreshing(false);
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ListTunjangan.clear();
-                swipe.setRefreshing(false);
-                Toast.makeText(lov_tunjangan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-
+        this.DbMaster.ReloadList(Fstatus, OrderBy);
+        Adapter = new lov_tunjangan_adapter(this, R.layout.list_lov_tunjangan, ListTunjangan);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
     }
+
+//    public void LoadData(){
+//        swipe.setRefreshing(true);
+//        String filter;
+//        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+//        String url = route.URL_SELECT_TUNJANGAN + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                TunjanganModel Data;
+//                ListTunjangan.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new TunjanganModel(
+//                                obj.getInt("id"),
+//                                obj.getString("kode"),
+//                                obj.getString("nama"),
+//                                obj.getString("keterangan"),
+//                                obj.getString("status")
+//                        );
+//                        ListTunjangan.add(Data);
+//                    }
+//                    Adapter = new lov_tunjangan_adapter(lov_tunjangan.this, R.layout.list_lov_tunjangan, ListTunjangan);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(lov_tunjangan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListTunjangan.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(lov_tunjangan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

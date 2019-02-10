@@ -23,8 +23,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.PotonganTable;
 import com.example.user.orion_payroll_new.form.master.PotonganInput;
 import com.example.user.orion_payroll_new.form.master.PotonganRekap;
+import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PotonganModel;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
@@ -37,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
@@ -97,31 +100,9 @@ public class PotonganAdapter extends ArrayAdapter<PotonganModel> {
                                 s.putExtra("ID",IdMSt);
                                 ((PotonganRekap)ctx).startActivityForResult(s, 1);
                             } else if (item.getTitle().equals("Aktivasi")){
-                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_AKTIVASI_POTONGAN, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject jObj = new JSONObject(response);
-                                            ((PotonganRekap)ctx).LoadData();
-                                            Toast.makeText(getContext(),MSG_SUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(getContext(),MSG_UNSUCCESS_ACTIVE, Toast.LENGTH_SHORT).show();
-                                    }
-                                }) {
-                                    @Override
-                                    protected Map<String, String> getParams() {
-                                        Map<String, String> params = new HashMap<String, String>();
-                                        params.put("id", String.valueOf(IdMSt));
-                                        return params;
-                                    }
-                                };
-                                OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+                                PotonganTable TData = new PotonganTable(ctx);
+                                TData.aktivasi(IdMSt, FALSE_STRING);
+                                ((PotonganRekap)ctx).LoadData();
                             }
                         }
                         return false;

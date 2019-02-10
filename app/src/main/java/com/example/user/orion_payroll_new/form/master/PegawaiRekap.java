@@ -31,6 +31,7 @@ import com.example.user.orion_payroll_new.Login;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
+import com.example.user.orion_payroll_new.database.master.PotonganTable;
 import com.example.user.orion_payroll_new.form.adapter.PegawaiAdapter;
 import com.example.user.orion_payroll_new.form.adapter.TunjanganAdapter;
 import com.example.user.orion_payroll_new.models.JCons;
@@ -63,13 +64,15 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 
     private SwipeRefreshLayout swipe;
 
-    private List<PegawaiModel> ListPegawai;
+    private ArrayList<PegawaiModel> ListPegawai;
     private ListView ListRekap;
     public static PegawaiAdapter Adapter;
     public static PegawaiTable Data;
 
     public static String Fstatus;
     public static String OrderBy;
+
+    private PegawaiTable DbMaster;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapPegawai);
@@ -91,9 +94,6 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void InitClass(){
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
-        //getSupportActionBar().setLogo(R.drawable.ic_group_black_24dp); buat munculin icon
-        //getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Pegawai");
 
@@ -103,6 +103,9 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         //Kodeing buat ngilangin garis
         //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
+
+        DbMaster = new PegawaiTable(this);
+        DbMaster.SetRecords(ListPegawai);
     }
 
     protected void EventClass(){
@@ -221,62 +224,72 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
+//    public void LoadData(){
+//        swipe.setRefreshing(true);
+//        String filter;
+//        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+//        String url = route.URL_SELECT_PEGAWAI + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                PegawaiModel Data;
+//                ListPegawai.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new PegawaiModel(
+//                                obj.getInt("id"),
+//                                obj.getString("nik"),
+//                                obj.getString("nama"),
+//                                obj.getString("alamat"),
+//                                obj.getString("no_telpon_1"),
+//                                obj.getString("no_telpon_2"),
+//                                obj.getString("email"),
+//                                obj.getDouble("gaji_pokok"),
+//                                obj.getString("status"),
+//                                getMillisDate(obj.getString("tgl_lahir")),
+//                                getMillisDate(obj.getString("tgl_mulai_kerja")),
+//                                obj.getString("keterangan")
+//                        );
+//                        ListPegawai.add(Data);
+//                    }
+//                    //Satu baris kosong di akhir
+//                    Data = new PegawaiModel();
+//                    Data.setStatus("HIDE");
+//                    ListPegawai.add(Data);
+//
+//                    Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, ListPegawai);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListPegawai.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
+
     public void LoadData(){
         swipe.setRefreshing(true);
-        String filter;
-        filter = "?status="+Fstatus+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_PEGAWAI + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                PegawaiModel Data;
-                ListPegawai.clear();
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new PegawaiModel(
-                                obj.getInt("id"),
-                                obj.getString("nik"),
-                                obj.getString("nama"),
-                                obj.getString("alamat"),
-                                obj.getString("no_telpon_1"),
-                                obj.getString("no_telpon_2"),
-                                obj.getString("email"),
-                                obj.getDouble("gaji_pokok"),
-                                obj.getString("status"),
-                                getMillisDate(obj.getString("tgl_lahir")),
-                                getMillisDate(obj.getString("tgl_mulai_kerja")),
-                                obj.getString("keterangan")
-                        );
-                        ListPegawai.add(Data);
-                    }
-                    //Satu baris kosong di akhir
-                    Data = new PegawaiModel();
-                    Data.setStatus("HIDE");
-                    ListPegawai.add(Data);
-
-                    Adapter = new PegawaiAdapter(PegawaiRekap.this, R.layout.list_pegawai_rekap, ListPegawai);
-                    Adapter.notifyDataSetChanged();
-                    ListRekap.setAdapter(Adapter);
-                    swipe.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    swipe.setRefreshing(false);
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ListPegawai.clear();
-                swipe.setRefreshing(false);
-                Toast.makeText(PegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+        this.DbMaster.ReloadList(Fstatus, OrderBy);
+        Adapter = new PegawaiAdapter(this, R.layout.list_pegawai_rekap, ListPegawai);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

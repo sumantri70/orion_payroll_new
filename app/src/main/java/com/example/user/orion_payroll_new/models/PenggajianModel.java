@@ -6,6 +6,7 @@ public class PenggajianModel {
     private Double gaji_pokok, uang_ikatan, uang_kehadiran, premi_harian, premi_perjam, jam_lembur, total_tunjangan, total_potongan, total_lembur, total_kasbon, total;
     private long tanggal, tgl_input, tgl_edit, periode;
     private boolean pilih;
+    private String tanggalprint;
 
     public PenggajianModel(int id, int id_pegawai, int telat_satu, int telat_dua, int dokter, int izin_stgh_hari, int izin_cuti, int izin_non_cuti, String nomor, String keterangan, String user_id, String user_edit, Double gaji_pokok, Double uang_ikatan, Double uang_kehadiran, Double premi_harian, Double premi_perjam, Double jam_lembur, Double total_tunjangan, Double total_potongan, Double total_lembur, Double total_kasbon, Double total, long tanggal, long tgl_input, long tgl_edit, long periode) {
         this.id = id;
@@ -69,6 +70,39 @@ public class PenggajianModel {
         this.periode = 0;
         this.pilih = false;
     }
+
+    public PenggajianModel(PenggajianModel Data) {
+        this.id = Data.getId();
+        this.id_pegawai = Data.getId_pegawai();
+        this.telat_satu = Data.getTelat_satu();
+        this.telat_dua = Data.getTelat_dua();
+        this.dokter = Data.getDokter();
+        this.izin_stgh_hari = Data.getIzin_stgh_hari();
+        this.izin_cuti = Data.getIzin_cuti();
+        this.izin_non_cuti = Data.getIzin_non_cuti();
+        this.nomor = Data.getNomor();
+        this.keterangan = Data.getKeterangan();
+        this.user_id = Data.getUser_id();
+        this.user_edit = Data.getUser_edit();
+        this.gaji_pokok = Data.getGaji_pokok();
+        this.uang_ikatan = Data.getUang_ikatan();
+        this.uang_kehadiran = Data.getUang_kehadiran();
+        this.premi_harian = Data.getPremi_harian();
+        this.premi_perjam = Data.getPremi_perjam();
+        this.jam_lembur = Data.getJam_lembur();
+        this.total_tunjangan = Data.getTotal_tunjangan();
+        this.total_potongan = Data.getTotal_potongan();
+        this.total_lembur = Data.getTotal_lembur();
+        this.total_kasbon = Data.getTotal_kasbon();
+        this.total = Data.getTotal();
+        this.tanggal = Data.getTanggal();
+        this.tgl_input = Data.getTgl_input();
+        this.tgl_edit = Data.getTgl_edit();
+        this.nama_pegawai = getNama_pegawai();
+        this.periode = Data.getPeriode();
+        this.pilih = Data.isPilih();
+    }
+
 
     public void setId(int id) {
         this.id = id;
@@ -300,5 +334,14 @@ public class PenggajianModel {
 
     public boolean isPilih() {
         return pilih;
+    }
+
+
+    public String getTanggalprint() {
+        return tanggalprint;
+    }
+
+    public void setTanggalprint(String tanggalprint) {
+        this.tanggalprint = tanggalprint;
     }
 }

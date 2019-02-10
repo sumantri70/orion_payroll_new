@@ -9,24 +9,23 @@
     </group>
     <group>
         <item
-            android:title="   Periode" />
+            android:title="   Pegawai" />
+        <item
+            android:title="   Tanggal" />
 
         <item
-            android:title="   Gaji Pokok" />
+            android:title="   Nomor" />
 
         <item
-            android:title="   Total Tunjangan"/>
+            android:title="   Jumlah"/>
 
         <item
-            android:title="   Total Potongan"/>
+            android:title="   Lama Cicilan"/>
 
         <item
-            android:title="   Total Kasbon"/>
+            android:title="   Terbayar"/>
 
         <item
-            android:title="   Total Lembur"/>
-
-        <item
-            android:title="   Total"/>
+            android:title="   Sisa"/>
     </group>
 </menu>

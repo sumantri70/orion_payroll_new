@@ -13,6 +13,14 @@ public class PotonganModel {
         this.status = status;
     }
 
+    public PotonganModel() {
+        this.id = 0;
+        this.kode = "";
+        this.nama = "";
+        this.keterangan = "";
+        this.status = "";
+    }
+
     public int getId() {
         return id;
     }

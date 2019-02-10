@@ -29,9 +29,12 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.ModelsHelper.PenggajianDetailModel;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.DetailTunjanganPegawaiTable;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
+import com.example.user.orion_payroll_new.database.master.TunjanganTable;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAadapterPenggajian;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPegawai;
+import com.example.user.orion_payroll_new.models.DetailTunjanganPegawaiModel;
 import com.example.user.orion_payroll_new.models.JCons;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.TunjanganModel;
@@ -66,12 +69,16 @@ import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.DoubleToStr;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDateFromSql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.Round;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.RoundTwoDecimal;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormatMySql;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Kode_Master_Tunjangan;
+import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Tunjangan;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_PEGAWAI;
 import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_PEGAWAI;
 import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_TUNJANGAN;
@@ -99,6 +106,9 @@ public class PegawaiInput extends AppCompatActivity {
     private HashMap<String, List<TunjanganModel>> ListHash;
     public List<TunjanganModel> ArListTunjangan;
     private Double GajiTerakhir;
+
+    private PegawaiTable TData;
+    private DetailTunjanganPegawaiTable TDetTunjangan;
 
     protected void CreateView(){
         txtNik             = (TextInputEditText) findViewById(R.id.txtNik);
@@ -144,6 +154,9 @@ public class PegawaiInput extends AppCompatActivity {
         this.IdMst = extra.getInt("ID");
         Loading = new ProgressDialog(PegawaiInput.this);
 
+        TData = new PegawaiTable(PegawaiInput.this);
+        TDetTunjangan = new DetailTunjanganPegawaiTable(PegawaiInput.this);
+
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Pegawai");
         }else if (Mode.equals(DETAIL_MODE)){
@@ -151,7 +164,7 @@ public class PegawaiInput extends AppCompatActivity {
             this.btnSimpan.setVisibility(View.INVISIBLE);
         }else{
             this.setTitle("Input Pegawai");
-        };
+        }
 
         ListDataHeader = new ArrayList<>();
         ListHash = new HashMap<>();
@@ -199,16 +212,30 @@ public class PegawaiInput extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                txtTmp.setVisibility(View.VISIBLE);
-                txtTmp.requestFocus();
-                txtTmp.setVisibility(View.INVISIBLE);
-                if (IsValid() == true){
-                    if(Mode.equals(EDIT_MODE)){
-                        IsSavedEdit();
+            txtTmp.setVisibility(View.VISIBLE);
+            txtTmp.requestFocus();
+            txtTmp.setVisibility(View.INVISIBLE);
+            if (IsValid() == true){
+                if(Mode.equals(EDIT_MODE)){
+                    if (IsSavedEdit()){
+                        Toast.makeText(PegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                        Intent intent = getIntent();
+                        setResult(RESULT_OK, intent);
+                        finish();
                     }else{
-                        IsSaved();
+                        Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                    }
+                }else{
+                    if (IsSaved()){
+                        Toast.makeText(PegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                        Intent intent = getIntent();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }else{
+                        Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
                     }
                 }
+            }
             }
         });
 
@@ -216,8 +243,6 @@ public class PegawaiInput extends AppCompatActivity {
         txtTglLahir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //DialogFragment newFragment = new DatePickerDialogFragment();
-                //newFragment.show(getFragmentManager(), "datePicker");
                 hideSoftKeyboard(PegawaiInput.this);
                 if (txtTglLahir.getText().toString().equals("")){
                     txtTglLahir.setText(FungsiGeneral.serverNowFormated());
@@ -326,10 +351,10 @@ public class PegawaiInput extends AppCompatActivity {
             protected void HitungDetailGaji(){
                 Double GajiPokok, UangIkatan, UangKehadiran, PremiHarian, PremiPerjam;
                 GajiPokok     = StrFmtToDouble(txtGGajiPokok.getText().toString());
-                UangIkatan    = GajiPokok * 0.2;
+                UangIkatan    = Round(GajiPokok * 0.2,0);
                 UangKehadiran = GajiPokok - UangIkatan;
-                PremiHarian   = UangKehadiran / 21;
-                PremiPerjam   = PremiHarian / 8;
+                PremiHarian   = Round(UangKehadiran / 21,0);
+                PremiPerjam   = Round(PremiHarian / 8,0);
 
                 txtGUangIkatan.setText(fmt.format(UangIkatan));
                 txtGUangKehadiran.setText(fmt.format(UangKehadiran));
@@ -370,52 +395,90 @@ public class PegawaiInput extends AppCompatActivity {
         return true;
     }
 
-    protected void LoadData(){
-        Loading.setMessage("Loading...");
-        Loading.setCancelable(false);
-        Loading.show();
-        String filter;
-        filter = "?id="+IdMst;
-        String url = route.URL_GET_PEGAWAI  + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    JSONObject obj = jsonArray.getJSONObject(0);
-                    txtNik.setText(obj.getString("nik"));
-                    txtNama.setText(obj.getString("nama"));
-                    txtAlamat.setText(obj.getString("alamat"));
-                    txtTelpon1.setText(obj.getString("no_telpon_1"));
-                    txtTelpon2.setText(obj.getString("no_telpon_2"));
-                    txtEmail.setText(obj.getString("email"));
-                    txtTglLahir.setText(FormatDateFromSql(obj.getString("tgl_lahir")));
-                    txtTglMulaiBekerja.setText(FormatDateFromSql(obj.getString("tgl_mulai_kerja")));
-                    lblGGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
-                    txtKeterangan.setText(obj.getString("keterangan"));
-                    lblGUangIkatan.setText(fmt.format(obj.getDouble("uang_ikatan")));
-                    lblGUangKehadiran.setText(fmt.format(obj.getDouble("uang_kehadiran")));
-                    lblGPremiHarian.setText(fmt.format(obj.getDouble("premi_harian")));
-                    lblGPremiPerjam.setText(fmt.format(obj.getDouble("premi_perjam")));
-                    GajiTerakhir = obj.getDouble("gaji_pokok");
-                    LoadDetail();
-                    Loading.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    Loading.dismiss();
-                }
-            }
+//    protected void LoadData(){
+//        Loading.setMessage("Loading...");
+//        Loading.setCancelable(false);
+//        Loading.show();
+//        String filter;
+//        filter = "?id="+IdMst;
+//        String url = route.URL_GET_PEGAWAI  + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    JSONObject obj = jsonArray.getJSONObject(0);
+//                    txtNik.setText(obj.getString("nik"));
+//                    txtNama.setText(obj.getString("nama"));
+//                    txtAlamat.setText(obj.getString("alamat"));
+//                    txtTelpon1.setText(obj.getString("no_telpon_1"));
+//                    txtTelpon2.setText(obj.getString("no_telpon_2"));
+//                    txtEmail.setText(obj.getString("email"));
+//                    txtTglLahir.setText(FormatDateFromSql(obj.getString("tgl_lahir")));
+//                    txtTglMulaiBekerja.setText(FormatDateFromSql(obj.getString("tgl_mulai_kerja")));
+//                    lblGGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
+//                    txtKeterangan.setText(obj.getString("keterangan"));
+//                    lblGUangIkatan.setText(fmt.format(obj.getDouble("uang_ikatan")));
+//                    lblGUangKehadiran.setText(fmt.format(obj.getDouble("uang_kehadiran")));
+//                    lblGPremiHarian.setText(fmt.format(obj.getDouble("premi_harian")));
+//                    lblGPremiPerjam.setText(fmt.format(obj.getDouble("premi_perjam")));
+//                    GajiTerakhir = obj.getDouble("gaji_pokok");
+//                    LoadDetail();
+//                    Loading.dismiss();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("error", "Error: " + error.getMessage());
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error: " + error.getMessage());
-                Loading.dismiss();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+    protected void LoadData(){
+        PegawaiModel Data = TData.GetData(IdMst);
+        txtNik.setText(Data.getNik());
+        txtNama.setText(Data.getNama());
+        txtAlamat.setText(Data.getAlamat());
+        txtTelpon1.setText(Data.getTelpon1());
+        txtTelpon2.setText(Data.getTelpon2());
+        txtEmail.setText(Data.getEmail());
+        txtTglLahir.setText(getTglFormat(Data.getTgl_lahir()));
+        txtTglMulaiBekerja.setText(getTglFormat(Data.getTgl_mulai_kerja()));
+        txtKeterangan.setText(Data.getKeterangan());
+        lblGGajiPokok.setText(fmt.format(Data.getGaji_pokok()));
+        lblGUangIkatan.setText(fmt.format(Data.getUang_ikatan()));
+        lblGUangKehadiran.setText(fmt.format(Data.getUang_kehadiran()));
+        lblGPremiHarian.setText(fmt.format(Data.getPremi_harian()));
+        lblGPremiPerjam.setText(fmt.format(Data.getPremi_perjam()));
+        GajiTerakhir = Data.getGaji_pokok();
+
+        List<DetailTunjanganPegawaiModel> DataTunjangan = new ArrayList<DetailTunjanganPegawaiModel>();
+        DataTunjangan = TDetTunjangan.GetListData(IdMst);
+
+        TunjanganModel DataDetail;
+        for (int i = 0; i < DataTunjangan.size(); i++) {
+            DataDetail = new TunjanganModel(
+                    DataTunjangan.get(i).getId_tunjangan(),
+                    Get_Kode_Master_Tunjangan(DataTunjangan.get(i).getId_tunjangan()),
+                    Get_Nama_Master_Tunjangan(DataTunjangan.get(i).getId_tunjangan()),
+                    "",
+                    ""
+            );
+            DataDetail.setJumlah(DataTunjangan.get(i).getJumlah());
+            ArListTunjangan.add(DataDetail);
+        }
+        ListAdapter.notifyDataSetChanged();
+        ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + 150;
     }
+
 
     protected void LoadDetail(){
         String filter;
@@ -458,147 +521,204 @@ public class PegawaiInput extends AppCompatActivity {
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
     }
 
-    protected void IsSaved(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_PEGAWAI, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    Toast.makeText(PegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                JSONArray ArParms = new JSONArray();
-                for(int i=0; i < ArListTunjangan.size() ;i++){
-                    JSONObject obj= new JSONObject();
-                    try {
-                        obj.put("nik", String.valueOf(txtNik.getText().toString()));
-                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
-                        obj.put("alamat", String.valueOf(txtAlamat.getText().toString()));
-                        obj.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
-                        obj.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
-                        obj.put("email", String.valueOf(txtEmail.getText().toString()));
-                        obj.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
-                        obj.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
-                        obj.put("gaji_pokok", String.valueOf(StrFmtToDouble(lblGGajiPokok.getText().toString())));
-                        obj.put("status", String.valueOf(TRUE_STRING));
-                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                        obj.put("uang_ikatan", String.valueOf(StrFmtToDouble(lblGUangIkatan.getText().toString())));
-                        obj.put("uang_kehadiran", String.valueOf(StrFmtToDouble(lblGUangKehadiran.getText().toString())));
-                        obj.put("premi_harian", String.valueOf(StrFmtToDouble(lblGPremiHarian.getText().toString())));
-                        obj.put("premi_perjam", String.valueOf(StrFmtToDouble(lblGPremiPerjam.getText().toString())));
-                        obj.put("tanggal", String.valueOf(FormatMySqlDate(FungsiGeneral.serverNowFormated())));
-                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
-                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ArParms.put(obj);
-                }
-                Log.d("jsonnnn coyyyy",ArParms.toString());
-                params.put("data", ArParms.toString());
-                return params;
-            }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-    }
-
-    protected void IsSavedEdit(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_PEGAWAI, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    Toast.makeText(PegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
+//    protected void IsSaved(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_PEGAWAI, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(PegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//
+//            @Override
+//            protected Map<String, String> getParams() {
 //                Map<String, String> params = new HashMap<String, String>();
-//                params.put("id", String.valueOf(Integer.toString(IdMst)));
-//                params.put("nik", String.valueOf(txtNik.getText().toString()));
-//                params.put("nama", String.valueOf(txtNama.getText().toString()));
-//                params.put("alamat", String.valueOf(txtAlamat.getText().toString()));
-//                params.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
-//                params.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
-//                params.put("email", String.valueOf(txtEmail.getText().toString()));
-//                params.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
-//                params.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
-//                params.put("gaji_pokok", String.valueOf(StrFmtToDouble(txtGajiPokok.getText().toString())));
-//                params.put("status", String.valueOf(TRUE_STRING));
-//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                JSONArray ArParms = new JSONArray();
+//                for(int i=0; i < ArListTunjangan.size() ;i++){
+//                    JSONObject obj= new JSONObject();
+//                    try {
+//                        obj.put("nik", String.valueOf(txtNik.getText().toString()));
+//                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
+//                        obj.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+//                        obj.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+//                        obj.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+//                        obj.put("email", String.valueOf(txtEmail.getText().toString()));
+//                        obj.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+//                        obj.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+//                        obj.put("gaji_pokok", String.valueOf(StrFmtToDouble(lblGGajiPokok.getText().toString())));
+//                        obj.put("status", String.valueOf(TRUE_STRING));
+//                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                        obj.put("uang_ikatan", String.valueOf(StrFmtToDouble(lblGUangIkatan.getText().toString())));
+//                        obj.put("uang_kehadiran", String.valueOf(StrFmtToDouble(lblGUangKehadiran.getText().toString())));
+//                        obj.put("premi_harian", String.valueOf(StrFmtToDouble(lblGPremiHarian.getText().toString())));
+//                        obj.put("premi_perjam", String.valueOf(StrFmtToDouble(lblGPremiPerjam.getText().toString())));
+//                        obj.put("tanggal", String.valueOf(FormatMySqlDate(FungsiGeneral.serverNowFormated())));
+//                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
+//                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    ArParms.put(obj);
+//                }
+//                Log.d("jsonnnn coyyyy",ArParms.toString());
+//                params.put("data", ArParms.toString());
 //                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
 
-                Map<String, String> params = new HashMap<String, String>();
-                JSONArray ArParms = new JSONArray();
-                for(int i=0; i < ArListTunjangan.size() ;i++){
-                    JSONObject obj= new JSONObject();
-                    try {
-                        obj.put("id", String.valueOf(Integer.toString(IdMst)));
-                        obj.put("nik", String.valueOf(txtNik.getText().toString()));
-                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
-                        obj.put("alamat", String.valueOf(txtAlamat.getText().toString()));
-                        obj.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
-                        obj.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
-                        obj.put("email", String.valueOf(txtEmail.getText().toString()));
-                        obj.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
-                        obj.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
-                        obj.put("gaji_pokok", String.valueOf(StrFmtToDouble(lblGGajiPokok.getText().toString())));
-                        obj.put("status", String.valueOf(TRUE_STRING));
-                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                        obj.put("uang_ikatan", String.valueOf(StrFmtToDouble(lblGUangIkatan.getText().toString())));
-                        obj.put("uang_kehadiran", String.valueOf(StrFmtToDouble(lblGUangKehadiran.getText().toString())));
-                        obj.put("premi_harian", String.valueOf(StrFmtToDouble(lblGPremiHarian.getText().toString())));
-                        obj.put("premi_perjam", String.valueOf(StrFmtToDouble(lblGPremiPerjam.getText().toString())));
-                        obj.put("tanggal", String.valueOf(FormatMySqlDate(FungsiGeneral.serverNowFormated())));
+    protected boolean IsSaved(){
+        try {
+            PegawaiModel Data = new PegawaiModel(0,
+                    txtNik.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtAlamat.getText().toString().trim(),
+                    txtTelpon1.getText().toString().trim(),
+                    txtTelpon2.getText().toString().trim(),
+                    txtEmail.getText().toString().trim(),
+                    StrFmtToDouble(lblGGajiPokok.getText().toString()),
+                    TRUE_STRING,
+                    FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString()),
+                    FungsiGeneral.getSimpleDate(txtTglMulaiBekerja.getText().toString()),
+                    txtKeterangan.getText().toString().trim(),
+                    StrFmtToDouble(lblGUangIkatan.getText().toString()),
+                    StrFmtToDouble(lblGUangKehadiran.getText().toString()),
+                    StrFmtToDouble(lblGPremiHarian.getText().toString()),
+                    StrFmtToDouble(lblGPremiPerjam.getText().toString()));
+            Long IdPegawai = TData.Insert(Data);
 
-                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
-                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
-
-                        if (GajiTerakhir != StrFmtToDouble(lblGGajiPokok.getText().toString())){
-                            obj.put("save_histori", String.valueOf(TRUE_STRING));
-                        }else{
-                            obj.put("save_histori", String.valueOf(FALSE_STRING));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ArParms.put(obj);
-                }
-                params.put("data", ArParms.toString());
-                return params;
+            for(int i=0; i < ArListTunjangan.size() ;i++) {
+                DetailTunjanganPegawaiModel Detail = new DetailTunjanganPegawaiModel(
+                    0, IdPegawai.intValue(),
+                    ArListTunjangan.get(i).getId(),
+                    ArListTunjangan.get(i).getJumlah()
+                );
+                TDetTunjangan.Insert(Detail);
             }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
+
+    protected boolean IsSavedEdit(){
+        try {
+            PegawaiModel Data = new PegawaiModel(IdMst,
+                    txtNik.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtAlamat.getText().toString().trim(),
+                    txtTelpon1.getText().toString().trim(),
+                    txtTelpon2.getText().toString().trim(),
+                    txtEmail.getText().toString().trim(),
+                    StrFmtToDouble(lblGGajiPokok.getText().toString()),
+                    TRUE_STRING,
+                    FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString()),
+                    FungsiGeneral.getSimpleDate(txtTglMulaiBekerja.getText().toString()),
+                    txtKeterangan.getText().toString().trim(),
+                    StrFmtToDouble(lblGUangIkatan.getText().toString()),
+                    StrFmtToDouble(lblGUangKehadiran.getText().toString()),
+                    StrFmtToDouble(lblGPremiHarian.getText().toString()),
+                    StrFmtToDouble(lblGPremiPerjam.getText().toString()));
+            TData.Update(Data);
+
+            TDetTunjangan.delete(IdMst);
+
+            for(int i=0; i < ArListTunjangan.size() ;i++) {
+                DetailTunjanganPegawaiModel Detail = new DetailTunjanganPegawaiModel(
+                        0, IdMst,
+                        ArListTunjangan.get(i).getId(),
+                        ArListTunjangan.get(i).getJumlah()
+                );
+                TDetTunjangan.Insert(Detail);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+//    protected void IsSavedEdit(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_PEGAWAI, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(PegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                JSONArray ArParms = new JSONArray();
+//                for(int i=0; i < ArListTunjangan.size() ;i++){
+//                    JSONObject obj= new JSONObject();
+//                    try {
+//                        obj.put("id", String.valueOf(Integer.toString(IdMst)));
+//                        obj.put("nik", String.valueOf(txtNik.getText().toString()));
+//                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
+//                        obj.put("alamat", String.valueOf(txtAlamat.getText().toString()));
+//                        obj.put("no_telpon_1", String.valueOf(txtTelpon1.getText().toString()));
+//                        obj.put("no_telpon_2", String.valueOf(txtTelpon2.getText().toString()));
+//                        obj.put("email", String.valueOf(txtEmail.getText().toString()));
+//                        obj.put("tgl_lahir", String.valueOf(FormatMySqlDate(txtTglLahir.getText().toString())));
+//                        obj.put("tgl_mulai_kerja", String.valueOf(FormatMySqlDate(txtTglMulaiBekerja.getText().toString())));
+//                        obj.put("gaji_pokok", String.valueOf(StrFmtToDouble(lblGGajiPokok.getText().toString())));
+//                        obj.put("status", String.valueOf(TRUE_STRING));
+//                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                        obj.put("uang_ikatan", String.valueOf(StrFmtToDouble(lblGUangIkatan.getText().toString())));
+//                        obj.put("uang_kehadiran", String.valueOf(StrFmtToDouble(lblGUangKehadiran.getText().toString())));
+//                        obj.put("premi_harian", String.valueOf(StrFmtToDouble(lblGPremiHarian.getText().toString())));
+//                        obj.put("premi_perjam", String.valueOf(StrFmtToDouble(lblGPremiPerjam.getText().toString())));
+//                        obj.put("tanggal", String.valueOf(FormatMySqlDate(FungsiGeneral.serverNowFormated())));
+//
+//                        obj.put("id_tunjangan", String.valueOf(ArListTunjangan.get(i).getId()));
+//                        obj.put("jumlah", String.valueOf(ArListTunjangan.get(i).getJumlah()));
+//
+//                        if (GajiTerakhir != StrFmtToDouble(lblGGajiPokok.getText().toString())){
+//                            obj.put("save_histori", String.valueOf(TRUE_STRING));
+//                        }else{
+//                            obj.put("save_histori", String.valueOf(FALSE_STRING));
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                    ArParms.put(obj);
+//                }
+//                params.put("data", ArParms.toString());
+//                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
 
 
     protected boolean IsValid(){
@@ -719,21 +839,6 @@ public class PegawaiInput extends AppCompatActivity {
 //        this.txtTglLahir.setText(FungsiGeneral.getTglFormat(Data.getTgl_lahir()));
 //    }
 
-//    protected boolean IsSaved(){
-//        PegawaiModel Data = new PegawaiModel(0,txtNik.getText().toString().trim(),
-//                                             txtNama.getText().toString().trim(),
-//                                             txtAlamat.getText().toString().trim(),
-//                                             txtTelpon1.getText().toString().trim(),
-//                                             txtTelpon2.getText().toString().trim(),
-//                                             txtEmail.getText().toString().trim(),
-//                                             StrFmtToDouble(txtGajiPokok.getText().toString()),
-//                                             TRUE_STRING,
-//                                             FungsiGeneral.getSimpleDate(txtTglLahir.getText().toString())
-//                                             );
-//        TPegawai.Insert(Data);
-//        PegawaiInput.this.onBackPressed();
-//        return true;
-//    }
 
 //    protected boolean IsSavedEdit(){
 //        PegawaiModel Data = new PegawaiModel(IdMst,txtNik.getText().toString().trim(),

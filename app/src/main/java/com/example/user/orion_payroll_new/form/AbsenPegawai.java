@@ -123,21 +123,36 @@ public class AbsenPegawai extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onClick(View view) {
                 PopupMenu PmFilter = new PopupMenu(AbsenPegawai.this, btnSort);
-                PmFilter.getMenuInflater().inflate(R.menu.sort_kabon_pegawai, PmFilter.getMenu());
+                PmFilter.getMenuInflater().inflate(R.menu.sort_absen, PmFilter.getMenu());
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()){
-                            case "Nomor" :
-                                OrderBy = "nomor";
+                            case "Pegawai" :
+                                OrderBy = "pegawai";
                                 break;
-                            case "Tanggal" :
+                            case "Periode" :
                                 OrderBy = "tanggal";
                                 break;
-                            case "Pegawai" :
-                                OrderBy = "nama_pegawai";
+                            case "Masuk" :
+                                OrderBy = "masuk";
                                 break;
-                            case "Jumlah" :
-                                OrderBy = "jumlah";
+                            case "Kurang 15" :
+                                OrderBy = "telat_satu";
+                                break;
+                            case "Lebih 15" :
+                                OrderBy = "telat_dua";
+                                break;
+                            case "Setengah Hari" :
+                                OrderBy = "izin_stgh_hari";
+                                break;
+                            case "Dokter" :
+                                OrderBy = "dokter";
+                                break;
+                            case "Non Cuti" :
+                                OrderBy = "izin_non_cuti";
+                                break;
+                            case "Cuti" :
+                                OrderBy = "izin_cuti";
                                 break;
                             default:
                                 OrderBy  = "";

@@ -21,8 +21,10 @@ import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
+import com.example.user.orion_payroll_new.database.master.PotonganTable;
 import com.example.user.orion_payroll_new.database.master.TunjanganTable;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.models.PotonganModel;
 import com.example.user.orion_payroll_new.models.TunjanganModel;
 import com.example.user.orion_payroll_new.utility.FormatNumber;
 import com.example.user.orion_payroll_new.utility.FungsiGeneral;
@@ -59,6 +61,7 @@ public class TunjanganInput extends AppCompatActivity {
     private String Mode;
     private int IdMst;
     private ProgressDialog Loading;
+    private TunjanganTable TData;
 
     protected void CreateView(){
         txtKode       = (TextInputEditText) findViewById(R.id.txtKode);
@@ -74,6 +77,7 @@ public class TunjanganInput extends AppCompatActivity {
         this.IdMst = extra.getInt("ID");
         Loading = new ProgressDialog(TunjanganInput.this);
 
+        TData = new TunjanganTable(getApplicationContext());
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Tunjangan");
         }else if (Mode.equals(DETAIL_MODE)){
@@ -95,13 +99,27 @@ public class TunjanganInput extends AppCompatActivity {
         btnSimpan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            if (IsValid() == true){
-                if(Mode.equals(EDIT_MODE)){
-                    IsSavedEdit();
-                }else{
-                    IsSaved();
+                if (IsValid() == true){
+                    if(Mode.equals(EDIT_MODE)){
+                        if (IsSavedEdit()){
+                            Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                            Intent intent = getIntent();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }else{
+                            Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+                        }
+                    }else{
+                        if (IsSaved()){
+                            Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                            Intent intent = getIntent();
+                            setResult(RESULT_OK, intent);
+                            finish();
+                        }else{
+                            Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+                        };
+                    }
                 }
-            }
             }
         });
     }
@@ -127,129 +145,129 @@ public class TunjanganInput extends AppCompatActivity {
         return true;
     }
 
-    protected void LoadData(){
-        Loading.setMessage("Loading...");
-        Loading.setCancelable(false);
-        Loading.show();
-        String filter;
-        filter = "?id="+IdMst;
-        String url = route.URL_GET_TUNJANGAN + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                TunjanganModel Data;
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    JSONObject obj = jsonArray.getJSONObject(0);
-                    txtKode.setText(obj.getString("kode"));
-                    txtNama.setText(obj.getString("nama"));
-                    txtKeterangan.setText(obj.getString("keterangan"));
-                    Loading.dismiss();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    Loading.dismiss();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error: " + error.getMessage());
-                Loading.dismiss();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-    }
-
-    protected void IsSaved(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_TUNJANGAN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("kode", String.valueOf(txtKode.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("status", String.valueOf(TRUE_STRING));
-                return params;
-
-
-//                Map<String, String> params = new HashMap<String, String>();
-//                JSONArray ArTunjangan = new JSONArray();
-//                for(int i=0; i < 2;i++){
-//                    JSONObject obj= new JSONObject();
-//                    try {
-//                        obj.put("kode", String.valueOf(txtKode.getText().toString()));
-//                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
-//                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-//                        obj.put("status", String.valueOf(TRUE_STRING));
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                    ArTunjangan.put(obj);
+//    protected void LoadData(){
+//        Loading.setMessage("Loading...");
+//        Loading.setCancelable(false);
+//        Loading.show();
+//        String filter;
+//        filter = "?id="+IdMst;
+//        String url = route.URL_GET_TUNJANGAN + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                TunjanganModel Data;
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    JSONObject obj = jsonArray.getJSONObject(0);
+//                    txtKode.setText(obj.getString("kode"));
+//                    txtNama.setText(obj.getString("nama"));
+//                    txtKeterangan.setText(obj.getString("keterangan"));
+//                    Loading.dismiss();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
 //                }
+//            }
 //
-//                //Log.d("tahhhhhhhhhhhhhh",ArTunjangan.toString());
-//                params.put("data", ArTunjangan.toString());
-//                return params;
-            }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-    }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("error", "Error: " + error.getMessage());
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
 
-    protected void IsSavedEdit(){
-        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_TUNJANGAN, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jObj = new JSONObject(response);
-                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                    Intent intent = getIntent();
-                    setResult(RESULT_OK, intent);
-                    finish();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-            }
-        }) {
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("id", String.valueOf(Integer.toString(IdMst)));
-                params.put("kode", String.valueOf(txtKode.getText().toString()));
-                params.put("nama", String.valueOf(txtNama.getText().toString()));
-                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-                params.put("status", String.valueOf(TRUE_STRING));
-                return params;
-            }
-        };
-        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-    }
+//    protected void IsSaved(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_TUNJANGAN, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("kode", String.valueOf(txtKode.getText().toString()));
+//                params.put("nama", String.valueOf(txtNama.getText().toString()));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                params.put("status", String.valueOf(TRUE_STRING));
+//                return params;
+//
+//
+////                Map<String, String> params = new HashMap<String, String>();
+////                JSONArray ArTunjangan = new JSONArray();
+////                for(int i=0; i < 2;i++){
+////                    JSONObject obj= new JSONObject();
+////                    try {
+////                        obj.put("kode", String.valueOf(txtKode.getText().toString()));
+////                        obj.put("nama", String.valueOf(txtNama.getText().toString()));
+////                        obj.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+////                        obj.put("status", String.valueOf(TRUE_STRING));
+////                    } catch (JSONException e) {
+////                        e.printStackTrace();
+////                    }
+////                    ArTunjangan.put(obj);
+////                }
+////
+////                //Log.d("tahhhhhhhhhhhhhh",ArTunjangan.toString());
+////                params.put("data", ArTunjangan.toString());
+////                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
+
+//    protected void IsSavedEdit(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_TUNJANGAN, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(TunjanganInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(TunjanganInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("id", String.valueOf(Integer.toString(IdMst)));
+//                params.put("kode", String.valueOf(txtKode.getText().toString()));
+//                params.put("nama", String.valueOf(txtNama.getText().toString()));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                params.put("status", String.valueOf(TRUE_STRING));
+//                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
 
     protected boolean IsValid(){
         if (this.txtKode.getText().toString().trim().equals("")) {
@@ -258,39 +276,55 @@ public class TunjanganInput extends AppCompatActivity {
             return false;
         }
 
-//        if (TPegawai.KodeExist(this.txtNik.getText().toString().trim(),IdMst)) {
-//            txtNik.requestFocus();
-//            txtNik.setError("NIK sudah pernah digunakan");
-//            return false;
-//        }
+        if (TData.KodeExist(this.txtKode.getText().toString().trim(),IdMst)) {
+            txtKode.requestFocus();
+            txtKode.setError("Kode sudah pernah digunakan");
+            return false;
+        }
 
-        if (this.txtNama.getText().toString().equals("")) {
+        if (this.txtNama.getText().toString().trim().equals("")) {
             txtNama.requestFocus();
             txtNama.setError("Nama belum diisi");
             return false;
         }
         return true;
     }
+
+    protected boolean IsSaved(){
+        try {
+            TunjanganModel Data = new TunjanganModel(
+                    0,txtKode.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtKeterangan.getText().toString().trim(),
+                    TRUE_STRING);
+            TData.Insert(Data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean IsSavedEdit(){
+        try {
+            TunjanganModel Data = new TunjanganModel(
+                    IdMst,
+                    txtKode.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtKeterangan.getText().toString().trim(),
+                    TRUE_STRING);
+            TData.Update(Data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    protected void LoadData(){
+        TunjanganModel Data = TData.GetData(IdMst);
+        txtKode.setText(Data.getKode());
+        txtNama.setText(Data.getNama());
+        txtKeterangan.setText(Data.getKeterangan());
+    }
 }
-
-
-//    protected boolean IsSaved(){
-//        TunjanganModel Data = new TunjanganModel(
-//                            0,txtKode.getText().toString().trim(),
-//                            txtNama.getText().toString().trim(),
-//                            txtKeterangan.getText().toString().trim(),
-//                            TRUE_STRING);
-//        TData.Insert(Data);
-//        return true;
-//    }
-
-//    protected boolean IsSavedEdit(){
-//        TunjanganModel Data = new TunjanganModel(
-//                this.IdMst,
-//                txtKode.getText().toString().trim(),
-//                txtNama.getText().toString().trim(),
-//                txtKeterangan.getText().toString().trim(),
-//                TRUE_STRING);
-//        TData.Update(Data);
-//        return true;
-//    }

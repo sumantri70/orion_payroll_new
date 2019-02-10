@@ -108,7 +108,7 @@ import static com.example.user.orion_payroll_new.utility.route.URL_UPDATE_PEGAWA
 
 public class PenggajianInputNew extends AppCompatActivity {
     private TextInputEditText txtNomor, txtTanggal, txtPegawai, txtTelat1, txtTelat2, txtDokter, txtNonCuti,
-                              txtstghHari, txtCuti, txtLembur, txtKeterangan, txtPeriode;
+            txtstghHari, txtCuti, txtLembur, txtKeterangan, txtPeriode;
     private TextView lblGajiPokok, lblTotTunjangan, lblTotPotongan, lblTotKasbon, lblTotLembur, lblTotal, lblPilihTunjangan, lblPilihPotongan, lblPilikKasbon;
     private Button btnSimpan;
 
@@ -258,7 +258,7 @@ public class PenggajianInputNew extends AppCompatActivity {
                 if (txtPeriode.getText().toString().equals("")){
                     txtPeriode.setText(serverNowFormated());
                 }
-                Long tgl = FungsiGeneral.getMillisDate(txtTanggal.getText().toString());
+                Long tgl = FungsiGeneral.getMillisDateFmt(txtPeriode.getText().toString(), "MMMM yyyy");
                 int mYear = (Integer.parseInt(FungsiGeneral.getTahun(tgl)));
                 int mMonth = (Integer.parseInt(FungsiGeneral.getBulan(tgl)))-1;
                 int mDay = (Integer.parseInt(FungsiGeneral.getHari(tgl)));
@@ -488,43 +488,43 @@ public class PenggajianInputNew extends AppCompatActivity {
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-            try {
-                JSONArray jsonArray = response.getJSONArray("data");
-                JSONObject obj = jsonArray.getJSONObject(0);
-                IdPegawai = obj.getInt("id_pegawai");
-                //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
-                txtNomor.setText(obj.getString("nomor"));
-                txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
-                txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
-                txtTelat1.setText(obj.getString("telat_satu"));
-                txtTelat2.setText(obj.getString("telat_dua"));
-                txtDokter.setText(obj.getString("dokter"));
-                txtstghHari.setText(obj.getString("izin_stgh_hari"));
-                txtCuti.setText(obj.getString("izin_cuti"));
-                txtNonCuti.setText(obj.getString("izin_non_cuti"));
-                txtKeterangan.setText(obj.getString("keterangan"));
-                txtLembur.setText(obj.getString("jam_lembur"));
-                lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
-                lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
-                lblTotPotongan.setText(fmt.format(obj.getDouble("gaji_pokok")));
-                lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
-                lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
-                lblTotal.setText(fmt.format(obj.getDouble("total")));
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    JSONObject obj = jsonArray.getJSONObject(0);
+                    IdPegawai = obj.getInt("id_pegawai");
+                    //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
+                    txtNomor.setText(obj.getString("nomor"));
+                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
+                    txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
+                    txtTelat1.setText(obj.getString("telat_satu"));
+                    txtTelat2.setText(obj.getString("telat_dua"));
+                    txtDokter.setText(obj.getString("dokter"));
+                    txtstghHari.setText(obj.getString("izin_stgh_hari"));
+                    txtCuti.setText(obj.getString("izin_cuti"));
+                    txtNonCuti.setText(obj.getString("izin_non_cuti"));
+                    txtKeterangan.setText(obj.getString("keterangan"));
+                    txtLembur.setText(obj.getString("jam_lembur"));
+                    lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
+                    lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
+                    lblTotPotongan.setText(fmt.format(obj.getDouble("total_potongan")));
+                    lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
+                    lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
+                    lblTotal.setText(fmt.format(obj.getDouble("total")));
 
-                LoadKasbonPegawaiEdit(IdPegawai);
-                DataPegawai = new PegawaiModel(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                Loading.dismiss();
-            }
+                    LoadKasbonPegawaiEdit(IdPegawai);
+                    DataPegawai = new PegawaiModel(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+                    Loading.dismiss();
+                }
             }
 
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-            Log.d("error", "Error: " + error.getMessage());
-            Loading.dismiss();
+                Log.d("error", "Error: " + error.getMessage());
+                Loading.dismiss();
             }
         });
         OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
@@ -698,9 +698,7 @@ public class PenggajianInputNew extends AppCompatActivity {
                     JsonMaster.put("total_kasbon", String.valueOf(StrFmtToDouble(lblTotKasbon.getText().toString())));
                     JsonMaster.put("total", String.valueOf(StrFmtToDouble(lblTotal.getText().toString())));
                     JsonMaster.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
-                    //JsonMaster.put("periode", String.valueOf(FormatMySqlDate(txtPeriode.getText().toString())));
-                    //JsonMaster.put("periode", String.valueOf(FormatMySqlDate(StartOfTheMonth(getSimpleDate(txtPeriode.getText().toString())))));
-                    JsonMaster.put("periode", String.valueOf(FormatMySqlDatePeriode(txtPeriode.getText().toString())));
+                    JsonMaster.put("periode", String.valueOf(FormatMySqlDatePeriode(txtPeriode.getText().toString()))); //sementara tutu dulu
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -760,7 +758,7 @@ public class PenggajianInputNew extends AppCompatActivity {
 
 
 
-//    String message;
+    //    String message;
 //    JSONObject json = new JSONObject();
 //
 //
@@ -910,27 +908,27 @@ public class PenggajianInputNew extends AppCompatActivity {
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-            PenggajianDetailModel Data;
-            ArListKasbon.clear();
-            try {
-                JSONArray jsonArray = response.getJSONArray("data");
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject obj = jsonArray.getJSONObject(i);
-                    Data = new PenggajianDetailModel();
-                    Data.setId_tjg_pot_kas(obj.getInt("id"));
-                    Data.setNomor(obj.getString("nomor"));
-                    Data.setTanggal(getMillisDate(FormatDateFromSql(obj.getString("tanggal"))));
-                    Data.setSisa(obj.getDouble("sisa"));
-                    Data.setLama_cicilan(obj.getInt("cicilan"));
-                    Data.setTotal(obj.getDouble("jumlah"));
-                    ArListKasbon.add(Data);
+                PenggajianDetailModel Data;
+                ArListKasbon.clear();
+                try {
+                    JSONArray jsonArray = response.getJSONArray("data");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        Data = new PenggajianDetailModel();
+                        Data.setId_tjg_pot_kas(obj.getInt("id"));
+                        Data.setNomor(obj.getString("nomor"));
+                        Data.setTanggal(getMillisDate(FormatDateFromSql(obj.getString("tanggal"))));
+                        Data.setSisa(obj.getDouble("sisa"));
+                        Data.setLama_cicilan(obj.getInt("cicilan"));
+                        Data.setTotal(obj.getDouble("jumlah"));
+                        ArListKasbon.add(Data);
+                    }
+                    HitungDetail();
+                    HitungTotal();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
                 }
-                HitungDetail();
-                HitungTotal();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
             }
 
         }, new Response.ErrorListener() {
@@ -1233,7 +1231,8 @@ public class PenggajianInputNew extends AppCompatActivity {
 
     public void LoadAbsensi(){
         String filter;
-        filter = "?periode="+FormatMySqlDatePeriode(txtPeriode.getText().toString())+ "&id_pegawai="+Integer.toString(DataPegawai.getId());
+        //filter = "?periode="+FormatMySqlDatePeriode(txtPeriode.getText().toString())+ "&id_pegawai="+Integer.toString(DataPegawai.getId());
+        filter = "?periode="+FormatMySqlDate(txtTanggal.getText().toString())+ "&id_pegawai="+Integer.toString(DataPegawai.getId());
         String url = route.URL_GET_ABSEN_PEGAWAI_4_PENGGAJIAN + filter;
         JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -1326,7 +1325,7 @@ public class PenggajianInputNew extends AppCompatActivity {
 
                 LoadTunjanganPegawai();
                 LoadKasbonPegawai();
-                LoadAbsensi();
+//                LoadAbsensi();
                 HitungDetail();
                 HitungTotal();
             }

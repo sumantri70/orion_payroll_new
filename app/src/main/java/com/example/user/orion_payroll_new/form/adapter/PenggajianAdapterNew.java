@@ -56,6 +56,7 @@ import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_DELETE
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_DELETE;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormatCustom;
 import static com.example.user.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 import static com.example.user.orion_payroll_new.utility.route.URL_DELETE_PENGGAJIAN;
 
@@ -95,7 +96,7 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
 
         final int IdMSt = Data.getId();
         lblNomor.setText(Data.getNomor());
-        lblTanggal.setText(getTglFormat(Data.getTanggal()));
+        lblTanggal.setText(getTglFormatCustom(Data.getPeriode(),"MMMM YYYY"));
         if (Data.getId_pegawai() > 0) {
             lblPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(Data.getId_pegawai())).getNama());
         }
@@ -210,7 +211,7 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
                     nama_pegawai = Get_Nama_Master_Pegawai(list.get(i).getId_pegawai());
                 }
                 jumlah       = Double.toString(list.get(i).getTotal());
-                tanggal      = getTglFormat(list.get(i).getTanggal());
+                tanggal      = getTglFormatCustom(list.get(i).getTanggal(),"MMMM YYYY");
                 if ((nomor.toLowerCase().contains(filterString)) || (nama_pegawai.toLowerCase().contains(filterString))
                         || (jumlah.toLowerCase().contains(filterString)) || (tanggal.toLowerCase().contains(filterString))) {
                     nlist.add(list.get(i));

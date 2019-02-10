@@ -7,7 +7,6 @@ public class PenggajianDetailModel {
     boolean check;
     long tanggal;
 
-
     public PenggajianDetailModel(int id, int id_master, int id_tjg_pot_kas, String tipe, Double jumlah) {
         this.id = id;
         this.id_master = id_master;

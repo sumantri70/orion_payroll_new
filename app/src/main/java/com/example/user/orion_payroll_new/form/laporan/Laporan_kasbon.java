@@ -126,27 +126,26 @@ public class Laporan_kasbon extends AppCompatActivity implements SwipeRefreshLay
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()) {
-                            case "Periode":
-                                OrderBy = "periode";
+                            case "Pegawai":
+                                OrderBy = "pegawai";
                                 break;
-                            case "Gaji Pokok":
-                                OrderBy = "gaji_pokok";
+                            case "Tanggal":
+                                OrderBy = "tanggal";
                                 break;
-                            case "Total Tunjangan":
-                                OrderBy = "total_tunjangan";
+                            case "Nomor":
+                                OrderBy = "nomor";
                                 break;
-                            case "Total Potongan":
-                                OrderBy = "total_potongan";
+                            case "Jumlah":
+                                OrderBy = "jumlah";
                                 break;
-                            case "Total Kasbon":
-                                OrderBy = "total_kasbon";
+                            case "Lama Cicilan":
+                                OrderBy = "cicilan";
                                 break;
-                            case "Total Lembur":
-                                OrderBy = "total_lembur";
+                            case "Terbayar":
+                                OrderBy = "terbayar";
                                 break;
-                            case "Total":
-                                OrderBy = "total";
-                                break;
+                            case "Sisa":
+                                OrderBy = "sisa";
                             default:
                                 OrderBy = "";
                         }

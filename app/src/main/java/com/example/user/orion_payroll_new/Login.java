@@ -56,6 +56,7 @@ public class Login extends AppCompatActivity {
         Layouts = (ConstraintLayout)findViewById(R.id.Layouts);
         txtUserId = (EditText) findViewById(R.id.txtUserId);
         BtnLogin = (Button) findViewById(R.id.BtnLogin);
+        txtUserId.setVisibility(View.GONE);
 
         /* animasi
         animationDrawable = (AnimationDrawable) Layouts.getBackground();

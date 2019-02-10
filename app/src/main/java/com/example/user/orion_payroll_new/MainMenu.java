@@ -22,7 +22,7 @@ import com.example.user.orion_payroll_new.form.transaksi.PenggajianRekapNew;
 public class MainMenu extends AppCompatActivity {
     Toolbar toolbar;
     private CardView BtnMenuPegawai, BtnMenuTunjangan, BtnMenuPenggajian, BtnMenuPotongan, BtnMenuKasbonPegawai, BtnMenuLaporanPenggajian,
-                     BtnMenuAbsenPegawai, BtnMenuLaporanKasbon;
+            BtnMenuAbsenPegawai, BtnMenuLaporanKasbon;
 
 
     protected void CreateView(){
@@ -103,15 +103,15 @@ public class MainMenu extends AppCompatActivity {
             }
         });
 
-        BtnMenuAbsenPegawai.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent s = new Intent(MainMenu.this, AbsenPegawai.class);
+//        BtnMenuAbsenPegawai.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Intent s = new Intent(MainMenu.this, AbsenPegawai.class);
+////                startActivity(s);
+//                Intent s = new Intent(MainMenu.this, MainActivity.class);
 //                startActivity(s);
-                Intent s = new Intent(MainMenu.this, MainActivity.class);
-                startActivity(s);
-            }
-        });
+//            }
+//        });
 
         BtnMenuLaporanKasbon.setOnClickListener(new View.OnClickListener() {
             @Override

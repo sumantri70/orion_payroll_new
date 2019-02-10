@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.example.user.orion_payroll_new.database.DBConection;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
+import com.example.user.orion_payroll_new.models.PegawaiModel;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -18,27 +19,22 @@ import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FmtSqlStr
 public class PegawaiTable {
     private SQLiteDatabase db;
     private ArrayList<PegawaiModel> records;
-    private String Fstatus = "";
-    private String OrderBY = "";
     private String SQL = "";
 
-    public PegawaiTable(Context context, String Status, String OrderBY) {
+    public PegawaiTable(Context context) {
         this.db = new DBConection(context).getWritableDatabase();
         this.records = new ArrayList<PegawaiModel>();
-        this.Fstatus = Status;
-        this.OrderBY = OrderBY;
-        this.ReloadList(Fstatus, OrderBY);
     }
 
     public void ReloadList(String status, String  OrderBy){
         String filter = "";
         if (status != ""){
             filter = " AND status = '" + status + "'";
-        };
+        }
 
-        if (OrderBy != ""){
-            OrderBy = " ORDER BY "+ OrderBy;};
-
+        if (OrderBy != "") {
+            OrderBy = " order by "+OrderBy+" ASC";
+        }
 
         if (filter.length() > 0) {
             filter = " where " + filter.substring(4,filter.length());
@@ -62,15 +58,46 @@ public class PegawaiTable {
                         cr.getString(cr.getColumnIndexOrThrow("status")),
                         cr.getLong(cr.getColumnIndexOrThrow("tgl_lahir")),
                         cr.getLong(cr.getColumnIndexOrThrow("tgl_mulai_kerja")),
-                        cr.getString(cr.getColumnIndexOrThrow("keterangan"))
-
-                );
+                        cr.getString(cr.getColumnIndexOrThrow("keterangan")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("uang_ikatan")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("uang_kehadiran")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("premi_harian")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("premi_perjam")));
                 this.records.add(Data);
             }while (cr.moveToNext());
         }
-        Data = new PegawaiModel(0,"","","","","","",0.0,"HIDE", 0,0,"");
+        Data = new PegawaiModel(0,"","","","","","",0.0,"HIDE", 0,0,"",0.0,0.0,0.0,0.0);
         this.records.add(Data);
     }
+
+    public PegawaiModel GetData(int Id){
+        Cursor cr = this.db.rawQuery("SELECT _id, nik, nama, alamat, telpon1, telpon2, email, gaji_pokok, status, tgl_lahir, tgl_mulai_kerja, keterangan, uang_ikatan, uang_kehadiran, premi_harian, premi_perjam "+
+                                     "FROM master_pegawai WHERE _id = "+Integer.toString(Id) , null);
+        PegawaiModel Data = new PegawaiModel();
+        if (cr != null && cr.moveToFirst()) {
+            Data = new PegawaiModel(
+                    cr.getInt(cr.getColumnIndexOrThrow("_id")),
+                    cr.getString(cr.getColumnIndexOrThrow("nik")),
+                    cr.getString(cr.getColumnIndexOrThrow("nama")),
+                    cr.getString(cr.getColumnIndexOrThrow("alamat")),
+                    cr.getString(cr.getColumnIndexOrThrow("telpon1")),
+                    cr.getString(cr.getColumnIndexOrThrow("telpon2")),
+                    cr.getString(cr.getColumnIndexOrThrow("email")),
+                    cr.getDouble(cr.getColumnIndexOrThrow("gaji_pokok")),
+                    cr.getString(cr.getColumnIndexOrThrow("status")),
+                    cr.getLong(cr.getColumnIndexOrThrow("tgl_lahir")),
+                    cr.getLong(cr.getColumnIndexOrThrow("tgl_mulai_kerja")),
+                    cr.getString(cr.getColumnIndexOrThrow("keterangan")),
+                    cr.getDouble(cr.getColumnIndexOrThrow("uang_ikatan")),
+                    cr.getDouble(cr.getColumnIndexOrThrow("uang_kehadiran")),
+                    cr.getDouble(cr.getColumnIndexOrThrow("premi_harian")),
+                    cr.getDouble(cr.getColumnIndexOrThrow("premi_perjam"))
+            );
+        }
+        cr.close();
+        return Data;
+    }
+
 
     private ContentValues SetValue (PegawaiModel Data ){
         ContentValues cv = new ContentValues();
@@ -83,33 +110,35 @@ public class PegawaiTable {
         cv.put("gaji_pokok", Data.getGaji_pokok());
         cv.put("status", Data.getStatus());
         cv.put("tgl_lahir", Data.getTgl_lahir());
+        cv.put("tgl_mulai_kerja", Data.getTgl_mulai_kerja());
+        cv.put("keterangan", Data.getKeterangan());
+        cv.put("uang_ikatan", Data.getUang_ikatan());
+        cv.put("uang_kehadiran", Data.getUang_kehadiran());
+        cv.put("premi_harian", Data.getPremi_harian());
+        cv.put("premi_perjam", Data.getPremi_perjam());
         return cv;
     }
 
-    public void Insert(PegawaiModel Data){
+    public Long Insert(PegawaiModel Data){
         ContentValues cv;
         cv = SetValue(Data);
-        this.db.insert("master_pegawai",null,cv);
-        this.ReloadList(Fstatus, OrderBY);
+        return this.db.insert("master_pegawai",null,cv);
     }
 
     public void Update(PegawaiModel Data){
         ContentValues cv;
         cv = SetValue(Data);
         this.db.update("master_pegawai",cv,"_id = "+Data.getId(),null);
-        this.ReloadList(Fstatus, OrderBY);
     }
 
     public void delete(long ID){
         this.db.delete("master_pegawai", "_id = " + ID, null);
-        this.ReloadList(Fstatus, OrderBY);
     }
 
     public void aktivasi(long ID, String status){
         ContentValues cv = new ContentValues();
         cv.put("status", status);
         this.db.update("master_pegawai", cv,"_id = "+ID,null);
-        this.ReloadList(Fstatus, OrderBY);
     }
 
     public boolean KodeExist(String kode, int Id){
@@ -126,10 +155,6 @@ public class PegawaiTable {
 
     public ArrayList<PegawaiModel> GetRecords(){
         return records;
-    }
-
-    public void setStatus(String Fstatus) {
-        this.Fstatus = Fstatus;
     }
 
     public void SetRecords(ArrayList<PegawaiModel> records) {

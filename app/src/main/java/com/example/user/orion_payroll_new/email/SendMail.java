@@ -4,15 +4,25 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Properties;
 
+import javax.activation.DataHandler;
+import javax.activation.FileDataSource;
+import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
 
 public class SendMail extends AsyncTask<Void,Void,Void> {
 
@@ -24,17 +34,19 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
     private String email;
     private String subject;
     private String message;
+    private String File;
 
     //Progressdialog to show while sending email
     private ProgressDialog progressDialog;
 
     //Class Constructor
-    public SendMail(Context context, String email, String subject, String message){
+    public SendMail(Context context, String email, String subject, String message, String File){
         //Initializing variables
         this.context = context;
         this.email = email;
         this.subject = subject;
         this.message = message;
+        this.File = File;
     }
 
     @Override
@@ -87,6 +99,44 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
             mm.setSubject(subject);
             //Adding message
             mm.setText(message);
+
+            mm.setFileName(File);
+
+
+
+
+            // Create the message part
+            BodyPart messageBodyPart = new MimeBodyPart();
+            // Create a multipar message
+            Multipart multipart = new MimeMultipart();
+
+            // Set text message part
+            multipart.addBodyPart(messageBodyPart);
+
+            // Set text message part
+            multipart.addBodyPart(messageBodyPart);
+
+            // Part two is attachment
+//            messageBodyPart = new MimeBodyPart();
+//            String filename = "/home/manisha/file.txt";
+//            DataSource source = new FileDataSource(filename);
+//            messageBodyPart.setDataHandler(new DataHandler(source));
+//            messageBodyPart.setFileName(filename);
+//            multipart.addBodyPart(messageBodyPart);
+
+            // Part two is attachment
+            messageBodyPart = new MimeBodyPart();
+            java.io.File file = new File(File);
+            if(file.exists()) {
+                DataSource source = new FileDataSource(File);
+                mm.setDataHandler(new DataHandler(source));
+                mm.setFileName(File);
+                Transport.send(mm);
+            }else{
+
+            }
+
+
 
             //Sending email
             Transport.send(mm);

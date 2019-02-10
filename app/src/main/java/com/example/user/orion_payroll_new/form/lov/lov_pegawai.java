@@ -36,6 +36,7 @@ import java.util.List;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getMillisDate;
+import static com.example.user.orion_payroll_new.utility.route.URL_SELECT_PEGAWAI;
 
 public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
@@ -136,56 +137,55 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
     }
 
     public void LoadData(){
-        swipe.setRefreshing(true);
-        String filter;
-        filter = "?status="+Fstatus+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_PEGAWAI + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                PegawaiModel Data;
-                ListData.clear();
-                try {
-                    Log.w("pegawaiiiiiiiiiiii", response.toString());
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new PegawaiModel(
-                                obj.getInt("id"),
-                                obj.getString("nik"),
-                                obj.getString("nama"),
-                                obj.getString("alamat"),
-                                obj.getString("no_telpon_1"),
-                                obj.getString("no_telpon_2"),
-                                obj.getString("email"),
-                                obj.getDouble("gaji_pokok"),
-                                obj.getString("status"),
-                                getMillisDate(obj.getString("tgl_lahir")),
-                                getMillisDate(obj.getString("tgl_mulai_kerja")),
-                                obj.getString("keterangan")
-                        );
-                        ListData.add(Data);
-                    }
-                    Adapter = new lov_pegawai_adapter(lov_pegawai.this, R.layout.list_lov_pegawai, ListData);
-                    Adapter.notifyDataSetChanged();
-                    ListRekap.setAdapter(Adapter);
-                    swipe.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(lov_pegawai.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    swipe.setRefreshing(false);
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ListData.clear();
-                swipe.setRefreshing(false);
-                Toast.makeText(lov_pegawai.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//        swipe.setRefreshing(true);
+//        String filter;
+//        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+//        String url = URL_SELECT_PEGAWAI + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                PegawaiModel Data;
+//                ListData.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new PegawaiModel(
+//                                obj.getInt("id"),
+//                                obj.getString("nik"),
+//                                obj.getString("nama"),
+//                                obj.getString("alamat"),
+//                                obj.getString("no_telpon_1"),
+//                                obj.getString("no_telpon_2"),
+//                                obj.getString("email"),
+//                                obj.getDouble("gaji_pokok"),
+//                                obj.getString("status"),
+//                                getMillisDate(obj.getString("tgl_lahir")),
+//                                getMillisDate(obj.getString("tgl_mulai_kerja")),
+//                                obj.getString("keterangan")
+//                        );
+//                        ListData.add(Data);
+//                    }
+//                    Adapter = new lov_pegawai_adapter(lov_pegawai.this, R.layout.list_lov_pegawai, ListData);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(lov_pegawai.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListData.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(lov_pegawai.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 
     }
 
