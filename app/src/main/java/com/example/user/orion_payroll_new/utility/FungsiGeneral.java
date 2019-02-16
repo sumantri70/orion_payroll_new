@@ -21,6 +21,7 @@ import java.util.Date;
 import java.util.Optional;
 
 import static com.example.user.orion_payroll_new.models.JCons.FALSE_STRING;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_CONECT;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FormatNumber.fmt;
@@ -166,7 +167,21 @@ public class FungsiGeneral {
         return calender.getTimeInMillis();
     }
 
-    public static long serverNowStartOfTheMonthLongNEw(){
+    public static long StartOfTheMonthLong(Long date){
+        Calendar calender = Calendar.getInstance();
+        calender.setTimeInMillis(date);
+        calender.set(Calendar.DAY_OF_MONTH, 1);
+        return calender.getTimeInMillis();
+    }
+
+    public static long EndOfTheMonthLong(Long date){
+        Calendar calender = Calendar.getInstance();
+        calender.setTimeInMillis(date);
+        calender.set(Calendar.DAY_OF_MONTH, calender.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calender.getTimeInMillis();
+    }
+
+    public static long serverNowStartOfTheMonthLongNew(){
         Calendar calender = Calendar.getInstance();
         calender.set(Calendar.DAY_OF_YEAR, 1);
         return calender.getTimeInMillis();
@@ -341,5 +356,81 @@ public class FungsiGeneral {
         return (double) tmp / factor;
     }
 
+    public static String NumberToRomawi(int  number){
+        String Hasil = "";
+        switch (number) {
+            case 1 :
+                Hasil = "I";
+                break;
+            case 2 :
+                Hasil = "II";
+                break;
+            case 3 :
+                Hasil = "III";
+                break;
+            case 4 :
+                Hasil = "VI";
+                break;
+            case 5 :
+                Hasil = "V";
+                break;
+            case 6 :
+                Hasil = "VI";
+                break;
+            case 7 :
+                Hasil = "VII";
+                break;
+            case 8 :
+                Hasil = "VIII";
+                break;
+            case 9 :
+                Hasil = "IX";
+                break;
+            case 10 :
+                Hasil = "X";
+                break;
+            case 11 :
+                Hasil = "XI";
+                break;
+            case 12 :
+                Hasil = "XII";
+                break;
+            case 13 :
+                Hasil = "XIII";
+                break;
+            case 14 :
+                Hasil = "XIV";
+                break;
+            case 15 :
+                Hasil = "XV";
+                break;
+            case 16 :
+                Hasil = "XVI";
+                break;
+            case 17 :
+                Hasil = "XVII";
+                break;
+            case 18 :
+                Hasil = "XVIII";
+                break;
+            case 19 :
+                Hasil = "XIV";
+                break;
+            case 20 :
+                Hasil = "XX";
+                break;
+            default:
+                Hasil = "";
+        }
+        return Hasil    ;
+    }
+
+    public static String padRight(String s, int n) {
+        return String.format("%-" + n + "s", s);
+    }
+
+    public static String padLeft(String s, int n, char karakter) {
+        return String.format("%" + n + "s", s).replace(' ', karakter);
+    }
 
 }

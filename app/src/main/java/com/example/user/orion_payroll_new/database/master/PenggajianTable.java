@@ -166,8 +166,6 @@ public class PenggajianTable {
     public void delete(long ID) {
         this.db.delete("penggajian_master", "_id = " + ID, null);
     }
-    
-    
 
     public ArrayList<PenggajianModel> GetRecords() {
         return records;

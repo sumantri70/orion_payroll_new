@@ -112,7 +112,7 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int Id =  ListPegawai.get(i).getId();
+                int Id =  Adapter.getItem(i).getId();
                 if (Id > 0) {
                         Intent s = new Intent(PegawaiRekap.this, PegawaiInput.class);
                         s.putExtra("MODE", JCons.DETAIL_MODE);

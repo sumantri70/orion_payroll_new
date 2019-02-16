@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.DetailTunjanganPegawaiTable;
 import com.example.user.orion_payroll_new.form.AbsenPegawai;
 import com.example.user.orion_payroll_new.form.adapter.AbsenPegawaiAdapter;
 import com.example.user.orion_payroll_new.form.adapter.ExpandListAdapterPegawai;
@@ -37,6 +38,7 @@ import com.example.user.orion_payroll_new.form.master.PegawaiInput;
 import com.example.user.orion_payroll_new.form.master.TunjanganInput;
 import com.example.user.orion_payroll_new.form.master.TunjanganRekap;
 import com.example.user.orion_payroll_new.models.AbsenPegawaiModel;
+import com.example.user.orion_payroll_new.models.DetailTunjanganPegawaiModel;
 import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.PenggajianDetailModel;
@@ -861,44 +863,63 @@ public class PenggajianInputNew extends AppCompatActivity {
         OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
     }
 
+//    protected void LoadTunjanganPegawai(){
+//        String filter;
+//        filter = "?id_pegawai="+DataPegawai.getId();
+//        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                PenggajianDetailModel Data;
+//                try {
+//                    JSONArray jsonArrayDetail = response.getJSONArray("data");
+//                    DtTunjangan = new TunjanganModel();
+//                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
+//                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
+//                        Data = new PenggajianDetailModel();
+//                        Data.setId_tjg_pot_kas(objDetail.getInt("id_tunjangan"));
+//                        Data.setJumlah(objDetail.getDouble("jumlah"));
+//                        ArListTunjangan.add(Data);
+//
+//                        if (Data.getId_tjg_pot_kas() == ID_TJ_INSENTIF){
+//                            DtTunjangan.setId(Data.getId_tjg_pot_kas());
+//                            DtTunjangan.setJumlah(Data.getJumlah());
+//                        }
+//                    }
+//                    HitungDetail();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
+
     protected void LoadTunjanganPegawai(){
-        String filter;
-        filter = "?id_pegawai="+DataPegawai.getId();
-        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                PenggajianDetailModel Data;
-                try {
-                    JSONArray jsonArrayDetail = response.getJSONArray("data");
-                    DtTunjangan = new TunjanganModel();
-                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
-                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
-                        Data = new PenggajianDetailModel();
-                        Data.setId_tjg_pot_kas(objDetail.getInt("id_tunjangan"));
-                        Data.setJumlah(objDetail.getDouble("jumlah"));
-                        ArListTunjangan.add(Data);
+        DetailTunjanganPegawaiTable DtTjDet = new DetailTunjanganPegawaiTable(getApplicationContext());
+        List<DetailTunjanganPegawaiModel> ListData =  DtTjDet.GetListData(DataPegawai.getId());
+        DtTunjangan = new TunjanganModel();
+        PenggajianDetailModel Data;
+        for (int i = 0; i < ListData.size(); i++) {
+            Data = new PenggajianDetailModel();
+            Data.setId_tjg_pot_kas(ListData.get(i).getId_tunjangan());
+            Data.setJumlah(ListData.get(i).getJumlah());
+            ArListTunjangan.add(Data);
 
-                        if (Data.getId_tjg_pot_kas() == ID_TJ_INSENTIF){
-                            DtTunjangan.setId(Data.getId_tjg_pot_kas());
-                            DtTunjangan.setJumlah(Data.getJumlah());
-                        }
-                    }
-                    HitungDetail();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    Loading.dismiss();
-                }
+            if (Data.getId_tjg_pot_kas() == ID_TJ_INSENTIF){
+                DtTunjangan.setId(Data.getId_tjg_pot_kas());
+                DtTunjangan.setJumlah(Data.getJumlah());
             }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Loading.dismiss();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+        }
+        HitungDetail();
     }
 
     public void LoadKasbonPegawai(){

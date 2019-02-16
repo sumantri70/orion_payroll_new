@@ -110,7 +110,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int Id =  ListTunjangan.get(i).getId();
+                int Id =  Adapter.getItem(i).getId();
                 if (Id > 0) {
                     Intent s = new Intent(TunjanganRekap.this, TunjanganInput.class);
                     s.putExtra("MODE", JCons.DETAIL_MODE);

@@ -104,7 +104,16 @@ public class PilihPotonganPenggajian extends AppCompatActivity {
             return true;
         };
         return false;
+    }
 
+    @Override
+    public void onBackPressed() {
+        LostFocus();
+        if (IsValid()){
+            Intent intent = getIntent();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override

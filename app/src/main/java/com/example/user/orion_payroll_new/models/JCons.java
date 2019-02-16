@@ -13,7 +13,9 @@ public class JCons extends Application {
     public static String MSG_UNSUCCESS_DELETE  = "Data gagal dihapus";
     public static String MSG_SUCCESS_ACTIVE    = "Data berhasil diaktif / non aktifkan";
     public static String MSG_UNSUCCESS_ACTIVE  = "Data gagal diaktif / non aktifkan";
-    public static String MSG_SAVE_CONFIRMATION = "Apakah data sudah benar ?";
+
+    public static String MSG_SAVE_CONFIRMATION = "Apakah data sudah benar?";
+    public static String MSG_DELETE_CONFIRMATION = "Yakin akan menghapus transaksi?";
 
     public static String MSG_POSITIVE = "Ya";
     public static String MSG_NEGATIVE = "Tidak";

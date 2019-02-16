@@ -47,6 +47,7 @@ import java.util.Map;
 
 import static com.example.user.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.example.user.orion_payroll_new.models.JCons.EDIT_MODE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_DELETE_CONFIRMATION;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_NEGATIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_POSITIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
@@ -62,6 +63,7 @@ import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatDat
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FormatMySqlDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getBulan;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
@@ -99,7 +101,7 @@ public class KasbonPegawaiInput extends AppCompatActivity {
         this.Mode = extra.getString("MODE");
         this.IdMst = extra.getInt("ID");
         Loading = new ProgressDialog(KasbonPegawaiInput.this);
-
+        TData = new KasbonPegawaiTable(getApplicationContext());
         if (Mode.equals(EDIT_MODE)){
             this.setTitle("Edit Kasbon Pegawai");
         }else if (Mode.equals(DETAIL_MODE)){
@@ -132,7 +134,7 @@ public class KasbonPegawaiInput extends AppCompatActivity {
                     AlertDialog.Builder bld = new AlertDialog.Builder(KasbonPegawaiInput.this);
                     bld.setTitle("Konfirmasi");
                     bld.setCancelable(true);
-                    bld.setMessage(MSG_SAVE_CONFIRMATION);
+                    bld.setMessage(MSG_DELETE_CONFIRMATION);
 
                     bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
                         @Override
@@ -332,8 +334,8 @@ public class KasbonPegawaiInput extends AppCompatActivity {
     protected boolean IsSaved(){
         try {
             KasbonPegawaiModel Data = new KasbonPegawaiModel(
-                    0,FungsiGeneral.getSimpleDate(txtTanggal.getText().toString()),
-                    txtNomor.getText().toString().trim(),
+                    0,getSimpleDate(txtTanggal.getText().toString()),
+                    TData.getNextNumber(getSimpleDate(txtTanggal.getText().toString())),
                     IdPegawai,
                     StrFmtToDouble(txtJumlah.getText().toString()),
                     StrFmtToDouble(txtJumlah.getText().toString()),
@@ -394,7 +396,7 @@ public class KasbonPegawaiInput extends AppCompatActivity {
         try {
             KasbonPegawaiModel DataNew = new KasbonPegawaiModel(DataOld);
 
-            DataNew.setTanggal(FungsiGeneral.getSimpleDate(txtTanggal.getText().toString()));
+            DataNew.setTanggal(getSimpleDate(txtTanggal.getText().toString()));
             DataNew.setNomor(txtNomor.getText().toString().trim());
             DataNew.setId_pegawai(IdPegawai);
             DataNew.setJumlah(StrFmtToDouble(txtJumlah.getText().toString()));

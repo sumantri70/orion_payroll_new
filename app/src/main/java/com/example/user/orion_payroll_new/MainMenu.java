@@ -1,6 +1,8 @@
 package com.example.user.orion_payroll_new;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -127,6 +129,25 @@ public class MainMenu extends AppCompatActivity {
         //MenuInflater inflater = getMenuInflater();
         //inflater.inflate(R.menu.menumenu, menu);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        AlertDialog dialog = new AlertDialog.Builder(MainMenu.this).create();
+        dialog.setMessage("Yakin akan keluar ?");
+        dialog.setCancelable(true);
+        dialog.setButton(DialogInterface.BUTTON_POSITIVE, "Ya", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int buttonId) {
+                finish();
+                System.exit(0);
+            }
+        });
+        dialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Tidak", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int buttonId) {
+
+            }
+        });
+        dialog.show();
     }
 
 }

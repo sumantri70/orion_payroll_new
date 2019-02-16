@@ -12,6 +12,7 @@ import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FmtSqlStr;
@@ -117,6 +118,36 @@ public class PegawaiTable {
         cv.put("premi_harian", Data.getPremi_harian());
         cv.put("premi_perjam", Data.getPremi_perjam());
         return cv;
+    }
+
+    public HashMap<String, PegawaiModel> GetHash() {
+        HashMap<String, PegawaiModel> HashData = new HashMap<>();
+        Cursor cr = this.db.rawQuery("SELECT * FROM master_pegawai ", null);
+        PegawaiModel Data;
+        if (cr != null && cr.moveToFirst()) {
+            do {
+                Data = new PegawaiModel(
+                        cr.getInt(cr.getColumnIndexOrThrow("_id")),
+                        cr.getString(cr.getColumnIndexOrThrow("nik")),
+                        cr.getString(cr.getColumnIndexOrThrow("nama")),
+                        cr.getString(cr.getColumnIndexOrThrow("alamat")),
+                        cr.getString(cr.getColumnIndexOrThrow("telpon1")),
+                        cr.getString(cr.getColumnIndexOrThrow("telpon2")),
+                        cr.getString(cr.getColumnIndexOrThrow("email")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("gaji_pokok")),
+                        cr.getString(cr.getColumnIndexOrThrow("status")),
+                        cr.getLong(cr.getColumnIndexOrThrow("tgl_lahir")),
+                        cr.getLong(cr.getColumnIndexOrThrow("tgl_mulai_kerja")),
+                        cr.getString(cr.getColumnIndexOrThrow("keterangan")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("uang_ikatan")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("uang_kehadiran")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("premi_harian")),
+                        cr.getDouble(cr.getColumnIndexOrThrow("premi_perjam"))
+                );
+                HashData.put(Integer.toString(Data.getId()), Data);
+            } while (cr.moveToNext());
+        }
+        return HashData;
     }
 
     public Long Insert(PegawaiModel Data){

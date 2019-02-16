@@ -33,6 +33,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.example.user.orion_payroll_new.models.JCons.ID_TJ_INSENTIF;
+import static com.example.user.orion_payroll_new.models.JCons.ID_TJ_LEMBUR;
 import static com.example.user.orion_payroll_new.models.JCons.TRUE_STRING;
 import static com.example.user.orion_payroll_new.utility.FungsiGeneral.FmtSqlStr;
 import static com.example.user.orion_payroll_new.utility.route.URL_INSERT_TUNJANGAN;
@@ -72,11 +74,15 @@ public class TunjanganTable {
     public void ReloadList(String status, String OrderBY) {
         String filter = "";
         if (status != "") {
-            filter += " where status = '" + status + "'";
+            filter += " AND status = '" + status + "'";
         }
 
         if (OrderBY != "") {
             filter += " order by "+OrderBY+" ASC";
+        }
+
+        if (filter.length() > 0) {
+            filter = " where " + filter.substring(4, filter.length());
         }
 
         this.records.clear();

@@ -11,6 +11,14 @@ import com.example.user.orion_payroll_new.models.KasbonPegawaiModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.EndOfTheMonthLong;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.NumberToRomawi;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StartOfTheMonthLong;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.StrToIntDef;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getBulan;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.getTahun;
+import static com.example.user.orion_payroll_new.utility.FungsiGeneral.padLeft;
+
 public class KasbonPegawaiTable {
 
     private SQLiteDatabase db;
@@ -38,14 +46,16 @@ public class KasbonPegawaiTable {
         return cv;
     }
 
-    public void ReloadList(String OrderBY) {
+    public void ReloadList(Long tgl_dari, Long tgl_Sampai, String OrderBY) {
         String filter = "";
+        filter += " AND tanggal BETWEEN "+Long.toString(tgl_dari)+" AND "+Long.toString(tgl_Sampai);
+
+        if (filter.length() > 0) {
+            filter = " WHERE " + filter.substring(4,filter.length());
+        }
 
         if (OrderBY != "") {
             filter += " order by "+OrderBY+" ASC";
-        }
-        if (filter.length() > 0) {
-            filter = " where " + filter.substring(4,filter.length());
         }
 
         this.records.clear();
@@ -106,6 +116,29 @@ public class KasbonPegawaiTable {
         }
         cr.close();
         return Data;
+    }
+
+    public String getNextNumber(Long Tanggal){
+        String sql;
+        Long tgl_awal = StartOfTheMonthLong(Tanggal);
+        Long tgl_akhir = EndOfTheMonthLong(Tanggal);
+        sql = "SELECT MAX(CAST(SUBSTR(nomor,4,4) AS INTEGER)) AS nomor FROM kasbon_pegawai WHERE tanggal BETWEEN " + tgl_awal + " AND " + tgl_akhir;
+        Cursor cr = this.db.rawQuery(sql, null);
+
+        String LastNumber ="";
+        if (cr != null && cr.moveToFirst()) {
+            LastNumber = cr.getString(cr.getColumnIndexOrThrow("nomor"));
+            if (LastNumber == null){
+                LastNumber = "1";
+            }else{
+                LastNumber = String.valueOf(StrToIntDef(LastNumber,0)+1);
+            }
+        }
+        cr.close();
+        String Hasil = padLeft(LastNumber,4,'0');
+
+        Hasil = "KS/"+Hasil+"/"+NumberToRomawi(StrToIntDef(getBulan(Tanggal),0))+"/"+getTahun(Tanggal);
+        return Hasil;
     }
 
     public void delete(long ID) {

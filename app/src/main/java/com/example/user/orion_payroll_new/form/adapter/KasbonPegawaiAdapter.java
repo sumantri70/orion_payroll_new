@@ -2,9 +2,11 @@ package com.example.user.orion_payroll_new.form.adapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.KasbonPegawaiTable;
 import com.example.user.orion_payroll_new.form.master.PegawaiInput;
 import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiInput;
 import com.example.user.orion_payroll_new.form.transaksi.KasbonPegawaiRekap;
@@ -40,6 +43,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.example.user.orion_payroll_new.models.JCons.MSG_NEGATIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_POSITIVE;
+import static com.example.user.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_ACTIVE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_SUCCESS_DELETE;
 import static com.example.user.orion_payroll_new.models.JCons.MSG_UNSUCCESS_ACTIVE;
@@ -117,31 +123,61 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
                                 s.putExtra("ID",IdMSt);
                                 ((KasbonPegawaiRekap)ctx).startActivityForResult(s, 1);
                             } else if (item.getTitle().equals("Hapus")){
-                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_DELETE_KASBON, new Response.Listener<String>() {
-                                    @Override
-                                    public void onResponse(String response) {
-                                        try {
-                                            JSONObject jObj = new JSONObject(response);
+                                try {
+                                    AlertDialog.Builder bld = new AlertDialog.Builder(ctx);
+                                    bld.setTitle("Konfirmasi");
+                                    bld.setCancelable(true);
+                                    bld.setMessage(MSG_SAVE_CONFIRMATION);
+
+                                    bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            KasbonPegawaiTable TData = new KasbonPegawaiTable(ctx);
+                                            TData.delete(IdMSt);
                                             ((KasbonPegawaiRekap)ctx).LoadData();
                                             Toast.makeText(getContext(),MSG_SUCCESS_DELETE, Toast.LENGTH_SHORT).show();
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
                                         }
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-                                        Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
-                                    }
-                                }) {
-                                    @Override
-                                    protected Map<String, String> getParams() {
-                                        Map<String, String> params = new HashMap<String, String>();
-                                        params.put("id", String.valueOf(IdMSt));
-                                        return params;
-                                    }
-                                };
-                                OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+                                    });
+
+                                    bld.setNegativeButton(MSG_NEGATIVE, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    });
+
+                                    AlertDialog dialog = bld.create();
+                                    dialog.show();
+                                }
+                                catch(Exception e) {
+                                    Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+                                }
+
+//                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_DELETE_KASBON, new Response.Listener<String>() {
+//                                    @Override
+//                                    public void onResponse(String response) {
+//                                        try {
+//                                            JSONObject jObj = new JSONObject(response);
+//                                            ((KasbonPegawaiRekap)ctx).LoadData();
+//                                            Toast.makeText(getContext(),MSG_SUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+//                                        } catch (JSONException e) {
+//                                            e.printStackTrace();
+//                                        }
+//                                    }
+//                                }, new Response.ErrorListener() {
+//                                    @Override
+//                                    public void onErrorResponse(VolleyError error) {
+//                                        Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
+//                                    }
+//                                }) {
+//                                    @Override
+//                                    protected Map<String, String> getParams() {
+//                                        Map<String, String> params = new HashMap<String, String>();
+//                                        params.put("id", String.valueOf(IdMSt));
+//                                        return params;
+//                                    }
+//                                };
+//                                OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
                             }
                         }
                         return false;

@@ -480,46 +480,46 @@ public class PegawaiInput extends AppCompatActivity {
     }
 
 
-    protected void LoadDetail(){
-        String filter;
-        filter = "?id_pegawai="+IdMst;
-        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                TunjanganModel Data;
-                try {
-                    JSONArray jsonArrayDetail = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
-                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
-                        Data = new TunjanganModel(
-                                objDetail.getInt("id_tunjangan"),
-                                objDetail.getString("kode"),
-                                objDetail.getString("nama"),
-                                "",
-                                ""
-                        );
-                        Data.setJumlah(objDetail.getDouble("jumlah"));
-                        ArListTunjangan.add(Data);
-                    }
-                    ListAdapter.notifyDataSetChanged();
-                    ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + 150;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    Loading.dismiss();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.d("error", "Error: " + error.getMessage());
-                Loading.dismiss();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-    }
+//    protected void LoadDetail(){
+//        String filter;
+//        filter = "?id_pegawai="+IdMst;
+//        String url = route.URL_DET_TUNJANGAN_PEGAWAI_GET_PEGAWAI + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                TunjanganModel Data;
+//                try {
+//                    JSONArray jsonArrayDetail = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArrayDetail.length(); i++) {
+//                        JSONObject objDetail = jsonArrayDetail.getJSONObject(i);
+//                        Data = new TunjanganModel(
+//                                objDetail.getInt("id_tunjangan"),
+//                                objDetail.getString("kode"),
+//                                objDetail.getString("nama"),
+//                                "",
+//                                ""
+//                        );
+//                        Data.setJumlah(objDetail.getDouble("jumlah"));
+//                        ArListTunjangan.add(Data);
+//                    }
+//                    ListAdapter.notifyDataSetChanged();
+//                    ListView.getLayoutParams().height = 200 * ArListTunjangan.size() + 150;
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("error", "Error: " + error.getMessage());
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
 
 //    protected void IsSaved(){
 //        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_PEGAWAI, new Response.Listener<String>() {
@@ -728,11 +728,11 @@ public class PegawaiInput extends AppCompatActivity {
             return false;
         }
 
-//        if (TPegawai.KodeExist(this.txtNik.getText().toString().trim(),IdMst)) {
-//            txtNik.requestFocus();
-//            txtNik.setError("NIK sudah pernah digunakan");
-//            return false;
-//        }
+        if (TData.KodeExist(this.txtNik.getText().toString().trim(),IdMst)) {
+            txtNik.requestFocus();
+            txtNik.setError("NIK sudah pernah digunakan");
+            return false;
+        }
 
         if (this.txtNama.getText().toString().equals("")) {
             txtNama.requestFocus();
@@ -769,20 +769,19 @@ public class PegawaiInput extends AppCompatActivity {
             return false;
         }
 
-//        for(int i=0; i < ArListTunjangan.size(); i++){
-//            if (ArListTunjangan.get(i).getJumlah() == 0) {
-//
-//
-//                return false;
-//            }
-//
-//            for(int j=i+1; j < ArListTunjangan.size(); j++){
-//                if (ArListTunjangan.get(i).getId() == ArListTunjangan.get(j).getId()) {
-//                    Toast.makeText(PegawaiInput.this, ArListTunjangan.get(i).getNama()+" tidak boleh diinput > 1 kali", Toast.LENGTH_SHORT).show();
-//                    return false;
-//                }
-//            }
-//        }
+        for(int i=0; i < ArListTunjangan.size(); i++){
+            if (ArListTunjangan.get(i).getJumlah() == 0) {
+                Toast.makeText(PegawaiInput.this, "Jumlah "+ArListTunjangan.get(i).getNama()+ " belum diisi", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            for(int j=i+1; j < ArListTunjangan.size(); j++){
+                if (ArListTunjangan.get(i).getId() == ArListTunjangan.get(j).getId()) {
+                    Toast.makeText(PegawaiInput.this, ArListTunjangan.get(i).getNama()+" tidak boleh diinput > 1 kali", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+        }
 
         return true;
     }

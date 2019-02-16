@@ -59,10 +59,11 @@ public class PilihTunjanganPenggajian extends AppCompatActivity {
     public List<PenggajianDetailModel> ListTunjangan;
     public String Mode;
 
+
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
         this.btnTambah  = (Button) findViewById(R.id.btnTambah);
-        this.txtTmp          = (EditText) findViewById(R.id.txtTmp);// BUAT NUPANG FOCUSIN AJA
+        this.txtTmp     = (EditText) findViewById(R.id.txtTmp);// BUAT NUPANG FOCUSIN AJA
     }
 
     private void InitClass(){
@@ -133,7 +134,16 @@ public class PilihTunjanganPenggajian extends AppCompatActivity {
             return true;
         };
         return false;
+    }
 
+    @Override
+    public void onBackPressed() {
+        LostFocus();
+        if (IsValid()){
+            Intent intent = getIntent();
+            setResult(RESULT_OK, intent);
+            finish();
+        }
     }
 
     @Override

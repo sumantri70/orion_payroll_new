@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.PotonganTable;
 import com.example.user.orion_payroll_new.form.adapter.lov_potongan_adapter;
 import com.example.user.orion_payroll_new.models.PotonganModel;
 import com.example.user.orion_payroll_new.utility.route;
@@ -43,10 +44,11 @@ public class lov_potongan extends AppCompatActivity implements SwipeRefreshLayou
 
     private ListView ListRekap;
     public static lov_potongan_adapter Adapter;
-    private List<PotonganModel> ListPotongan;
+    private ArrayList<PotonganModel> ListPotongan;
 
     public static String Fstatus;
     public static String OrderBy;
+    private PotonganTable DbMaster;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -63,6 +65,8 @@ public class lov_potongan extends AppCompatActivity implements SwipeRefreshLayou
         OrderBy = "kode";
         ListPotongan = new ArrayList<PotonganModel>();
         this.ListRekap.setDividerHeight(1);
+        DbMaster = new PotonganTable(this);
+        DbMaster.SetRecords(ListPotongan);
     }
 
     protected void EventClass(){
@@ -70,7 +74,7 @@ public class lov_potongan extends AppCompatActivity implements SwipeRefreshLayou
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PotonganModel data;
-                data =  ListPotongan.get(i);
+                data =  Adapter.getItem(i);
                 if (data.getId() > 0) {
                     Intent intent = getIntent();
                     intent.putExtra("id", data.getId() );
@@ -131,49 +135,58 @@ public class lov_potongan extends AppCompatActivity implements SwipeRefreshLayou
 
     public void LoadData(){
         swipe.setRefreshing(true);
-        String filter;
-        filter = "?status="+Fstatus+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_POTONGAN + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                PotonganModel Data;
-                ListPotongan.clear();
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new PotonganModel(
-                                obj.getInt("id"),
-                                obj.getString("kode"),
-                                obj.getString("nama"),
-                                obj.getString("keterangan"),
-                                obj.getString("status")
-                        );
-                        ListPotongan.add(Data);
-                    }
-                    Adapter = new lov_potongan_adapter(lov_potongan.this, R.layout.list_lov_potongan, ListPotongan);
-                    Adapter.notifyDataSetChanged();
-                    ListRekap.setAdapter(Adapter);
-                    swipe.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(lov_potongan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    swipe.setRefreshing(false);
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ListPotongan.clear();
-                swipe.setRefreshing(false);
-                Toast.makeText(lov_potongan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-
+        this.DbMaster.ReloadList(Fstatus, OrderBy);
+        Adapter = new lov_potongan_adapter(this, R.layout.list_lov_tunjangan, ListPotongan);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
     }
+
+//    public void LoadData(){
+//        swipe.setRefreshing(true);
+//        String filter;
+//        filter = "?status="+Fstatus+"&order_by="+OrderBy;
+//        String url = route.URL_SELECT_POTONGAN + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                PotonganModel Data;
+//                ListPotongan.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new PotonganModel(
+//                                obj.getInt("id"),
+//                                obj.getString("kode"),
+//                                obj.getString("nama"),
+//                                obj.getString("keterangan"),
+//                                obj.getString("status")
+//                        );
+//                        ListPotongan.add(Data);
+//                    }
+//                    Adapter = new lov_potongan_adapter(lov_potongan.this, R.layout.list_lov_potongan, ListPotongan);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(lov_potongan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListPotongan.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(lov_potongan.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

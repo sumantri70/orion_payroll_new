@@ -22,6 +22,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.PegawaiTable;
+import com.example.user.orion_payroll_new.database.master.TunjanganTable;
+import com.example.user.orion_payroll_new.form.adapter.PegawaiAdapter;
 import com.example.user.orion_payroll_new.form.adapter.lov_pegawai_adapter;
 import com.example.user.orion_payroll_new.models.PegawaiModel;
 import com.example.user.orion_payroll_new.utility.route;
@@ -47,10 +50,11 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
 
     private ListView ListRekap;
     public static lov_pegawai_adapter Adapter;
-    private List<PegawaiModel> ListData;
+    private ArrayList<PegawaiModel> ListData;
 
     public static String Fstatus;
     public static String OrderBy;
+    private PegawaiTable DbMaster;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -66,6 +70,10 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
         OrderBy = "NIK";
         ListData = new ArrayList<PegawaiModel>();
         this.ListRekap.setDividerHeight(1);
+
+        DbMaster = new PegawaiTable(this);
+        DbMaster.SetRecords(ListData);
+        this.btnSort.setVisibility(View.INVISIBLE);
     }
 
     protected void EventClass(){
@@ -73,7 +81,7 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 PegawaiModel data;
-                data =  ListData.get(i);
+                data =  Adapter.getItem(i);
                 if (data.getId() > 0) {
 //                    if (OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(data.getId())).getClass() == null ){
 //                        OrionPayrollApplication.getInstance().GetHashPegawai();
@@ -137,6 +145,15 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
     }
 
     public void LoadData(){
+        swipe.setRefreshing(true);
+        this.DbMaster.ReloadList(Fstatus, OrderBy);
+        Adapter = new lov_pegawai_adapter(this, R.layout.list_lov_pegawai, ListData);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
+    }
+
+//    public void LoadData(){
 //        swipe.setRefreshing(true);
 //        String filter;
 //        filter = "?status="+Fstatus+"&order_by="+OrderBy;
@@ -187,7 +204,7 @@ public class lov_pegawai extends AppCompatActivity implements SwipeRefreshLayout
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 
-    }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

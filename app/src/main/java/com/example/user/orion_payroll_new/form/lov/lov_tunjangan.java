@@ -58,7 +58,6 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
 
     public static String Fstatus;
     public static String OrderBy;
-
     private TunjanganTable DbMaster;
 
     private void CreateVew(){
@@ -86,7 +85,7 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             TunjanganModel data;
-            data =  ListTunjangan.get(i);
+            data =  Adapter.getItem(i);
                 if (data.getId() > 0) {
                     Intent intent = getIntent();
                     intent.putExtra("id", data.getId() );

@@ -63,12 +63,12 @@ public class OrionPayrollApplication extends Application {
         ListHashTunjanganGlobal = new HashMap<>();
         ListHashPotonganGlobal  = new HashMap<>();
 
-//        GetHashPegawai();
+        GetHashPegawai();
         GetHashTunjangan();
         GetHashPotongan();
     }
 
-    public void GetHashPegawai(){
+    //public void GetHashPegawai(){
 //        String filter;
 //        filter = "?status=&order_by=";
 //        String url = route.URL_SELECT_PEGAWAI + filter;
@@ -115,7 +115,7 @@ public class OrionPayrollApplication extends Application {
 //            }
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-    }
+//    }
 
 //    public void GetHashTunjangan(){
 //        String filter;
@@ -199,6 +199,11 @@ public class OrionPayrollApplication extends Application {
     public void GetHashTunjangan() {
         TunjanganTable TTunjangan = new TunjanganTable(getApplicationContext());
         ListHashTunjanganGlobal = TTunjangan.GetHash();
+    }
+
+    public void GetHashPegawai() {
+        PegawaiTable TPegawai = new PegawaiTable(getApplicationContext());
+        ListHashPegawaiGlobal = TPegawai.GetHash();
     }
 
     public static synchronized OrionPayrollApplication getInstance() {

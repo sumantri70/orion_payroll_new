@@ -103,7 +103,7 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
         ListRekap.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                int Id =  ListPotongan.get(i).getId();
+                int Id =  Adapter.getItem(i).getId();
                 if (Id > 0) {
                     Intent s = new Intent(PotonganRekap.this, PotonganInput.class);
                     s.putExtra("MODE", JCons.DETAIL_MODE);

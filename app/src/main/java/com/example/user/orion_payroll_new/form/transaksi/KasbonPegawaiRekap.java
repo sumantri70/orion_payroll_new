@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.user.orion_payroll_new.OrionPayrollApplication;
 import com.example.user.orion_payroll_new.R;
+import com.example.user.orion_payroll_new.database.master.KasbonPegawaiTable;
 import com.example.user.orion_payroll_new.database.master.PegawaiTable;
 import com.example.user.orion_payroll_new.form.adapter.KasbonPegawaiAdapter;
 import com.example.user.orion_payroll_new.form.filter.FilterKasbonPegawai;
@@ -64,7 +65,7 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
 
     private SwipeRefreshLayout swipe;
 
-    private List<KasbonPegawaiModel> ListData;
+    private ArrayList<KasbonPegawaiModel> ListData;
     private ListView ListRekap;
     public static KasbonPegawaiAdapter Adapter;
     public static PegawaiTable Data;
@@ -74,6 +75,8 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
 
     private Long tgl_dari, tgl_Sampai;
     private int IdPegawai, status;
+
+    private KasbonPegawaiTable DbMaster;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -108,6 +111,9 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         tgl_Sampai = serverNowLong();
         IdPegawai  = 0;
         status     = 0;
+
+        DbMaster = new KasbonPegawaiTable(this);
+        DbMaster.SetRecords(ListData);
     }
 
     protected void EventClass(){
@@ -202,61 +208,70 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
 
     public void LoadData(){
         swipe.setRefreshing(true);
-        String filter;
-        Fstatus = "";
-        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
-        String url = route.URL_SELECT_KASBON + filter;
-        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                KasbonPegawaiModel Data;
-                ListData.clear();
-                try {
-                    JSONArray jsonArray = response.getJSONArray("data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject obj = jsonArray.getJSONObject(i);
-                        Data = new KasbonPegawaiModel(
-                                obj.getInt("id"),
-                                getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
-                                obj.getString("nomor"),
-                                obj.getInt("id_pegawai"),
-                                obj.getDouble("jumlah"),
-                                obj.getDouble("sisa"),
-                                obj.getInt("cicilan"),                                
-                                obj.getString("keterangan"),
-                                obj.getString("user_id"),
-                                getMillisDate(FormatDateFromSql(obj.getString("tgl_input"))),
-                                obj.getString("user_edit"),
-                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit")))
-                        );
-                        Data.setNama_pegawai(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
-                        ListData.add(Data);
-                    }
-                    //Satu baris kosong di akhir
-                    Data = new KasbonPegawaiModel(0,0,"",0,0,0,0,"","HIDE",0,"",0);
-                    ListData.add(Data);
-
-                    Adapter = new KasbonPegawaiAdapter(KasbonPegawaiRekap.this, R.layout.list_kasbon_pegawai_rekap, ListData);
-                    Adapter.notifyDataSetChanged();
-                    ListRekap.setAdapter(Adapter);
-                    swipe.setRefreshing(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(KasbonPegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-                    swipe.setRefreshing(false);
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                ListData.clear();
-                swipe.setRefreshing(false);
-                Toast.makeText(KasbonPegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-            }
-        });
-        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+        this.DbMaster.ReloadList(tgl_dari,tgl_Sampai,OrderBy);
+        Adapter = new KasbonPegawaiAdapter(this, R.layout.list_kasbon_pegawai_rekap, ListData);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
     }
+
+//    public void LoadData(){
+//        swipe.setRefreshing(true);
+//        String filter;
+//        Fstatus = "";
+//        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
+//        String url = route.URL_SELECT_KASBON + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                KasbonPegawaiModel Data;
+//                ListData.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new KasbonPegawaiModel(
+//                                obj.getInt("id"),
+//                                getMillisDate(FormatDateFromSql(obj.getString("tanggal"))),
+//                                obj.getString("nomor"),
+//                                obj.getInt("id_pegawai"),
+//                                obj.getDouble("jumlah"),
+//                                obj.getDouble("sisa"),
+//                                obj.getInt("cicilan"),
+//                                obj.getString("keterangan"),
+//                                obj.getString("user_id"),
+//                                getMillisDate(FormatDateFromSql(obj.getString("tgl_input"))),
+//                                obj.getString("user_edit"),
+//                                getMillisDate(FormatDateFromSql(obj.getString("tgl_edit")))
+//                        );
+//                        Data.setNama_pegawai(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
+//                        ListData.add(Data);
+//                    }
+//                    //Satu baris kosong di akhir
+//                    Data = new KasbonPegawaiModel(0,0,"",0,0,0,0,"","HIDE",0,"",0);
+//                    ListData.add(Data);
+//
+//                    Adapter = new KasbonPegawaiAdapter(KasbonPegawaiRekap.this, R.layout.list_kasbon_pegawai_rekap, ListData);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(KasbonPegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListData.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(KasbonPegawaiRekap.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
