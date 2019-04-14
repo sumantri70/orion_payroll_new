@@ -6,22 +6,78 @@
     android:layout_height="match_parent"
     tools:context=".MainMenu">
 
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="17dp"
+                        android:layout_marginLeft="17dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:foregroundGravity="clip_horizontal"
+                        android:gravity="center"
+                        android:text="Orion Payroll"
+                        android:textColor="@color/colorwhite"
+                        android:textSize="19dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btnSetting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="17dp"
+                        android:layout_marginEnd="6dp"
+                        android:layout_marginRight="6dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/more_menu"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.056" />
+
+                </android.support.constraint.ConstraintLayout>
+            </LinearLayout>
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.AppBarLayout>
+
 
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="18dp"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="8dp"
         android:scrollbarSize="0dp"
         android:scrollbarStyle="insideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.037">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,14 +144,14 @@
                                     <ImageView
                                         android:layout_width="50dp"
                                         android:layout_height="60dp"
-                                        android:background="@drawable/bkmenulaporankasbon"
+                                        android:background="@drawable/bkmenumaster"
                                         android:src="@drawable/ic_group_black_24dp" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Pegawai"/>
+                                        android:text="Pegawai"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -123,14 +179,14 @@
                                     <ImageView
                                         android:layout_width="50dp"
                                         android:layout_height="60dp"
-                                        android:background="@drawable/bkmenulaporankasbon"
+                                        android:background="@drawable/bkmenumaster"
                                         android:src="@drawable/ic_menu_tunjangan" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Tunjangan"/>
+                                        android:text="Tunjangan"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -158,14 +214,14 @@
                                     <ImageView
                                         android:layout_width="50dp"
                                         android:layout_height="60dp"
-                                        android:background="@drawable/bkmenulaporankasbon"
+                                        android:background="@drawable/bkmenumaster"
                                         android:src="@drawable/ic_menu_potongan" />
 
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Potongan"/>
+                                        android:text="Potongan"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -237,8 +293,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Gaji Pegawai"/>
+                                        android:text="Gaji Pegawai"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -272,8 +328,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Kasbon"/>
+                                        android:text="Kasbon"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -379,8 +435,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Gaji Pegawai"/>
+                                        android:text="Gaji Pegawai"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>
@@ -414,8 +470,8 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:textSize="12dp"
-                                        android:text="Kasbon"/>
+                                        android:text="Kasbon"
+                                        android:textSize="12dp" />
                                 </LinearLayout>
                             </android.support.v7.widget.CardView>
                         </LinearLayout>

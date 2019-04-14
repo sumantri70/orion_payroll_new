@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.user.orion_payroll_new">
+    package="com.orionit.app.orion_payroll_new">
 
     <!-- Include required permissions for Google Mobile Ads to run. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".OrionPayrollApplication"
+        android:name="com.orionit.app.orion_payroll_new.OrionPayrollApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,69 +18,92 @@
         android:roundIcon="@drawable/ic_public_black_24dp"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Login">
+        <activity android:name="com.orionit.app.orion_payroll_new.Login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainMenu" />
-        <activity android:name=".form.master.PegawaiInput" />
-        <activity android:name=".form.master.PegawaiRekap" />
-        <activity android:name=".form.search" />
-        <activity android:name=".form.master.TunjanganRekap" />
-        <activity android:name=".form.master.TunjanganInput" />
+        <activity
+            android:name="com.orionit.app.orion_payroll_new.MainMenu"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.PegawaiInput" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.PegawaiRekap" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.search" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.TunjanganRekap" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.TunjanganInput" />
+
+        <activity
+            android:name="com.dropbox.core.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask">
+            <intent-filter>
+
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-37e2umr2z0kt91d" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <!-- Include the AdActivity configChanges and theme. -->
         <activity
             android:name="com.google.android.gms.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
             android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".form.transaksi.PenggajianInput" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.PenggajianInput" />
         <activity
-            android:name=".form.transaksi.PenggajianPilihTunjangan"
+            android:name="com.orionit.app.orion_payroll_new.form.transaksi.PenggajianPilihTunjangan"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".form.lov.lov_tunjangan" />
-        <activity android:name=".form.master.PotonganInput" />
-        <activity android:name=".form.master.PotonganRekap" />
-        <activity android:name=".form.testMenu" />
-        <activity android:name=".form.master.PegawaiInputGaji" />
-        <activity android:name=".form.transaksi.KasbonPegawaiInput" />
-        <activity android:name=".form.transaksi.KasbonPegawaiRekap" />
-        <activity android:name=".form.lov.lov_pegawai" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.lov.lov_tunjangan" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.PotonganInput" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.PotonganRekap" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.testMenu" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.master.PegawaiInputGaji" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.KasbonPegawaiInput" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.KasbonPegawaiRekap" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.lov.lov_pegawai" />
         <activity
-            android:name=".form.filter.FilterKasbonPegawai"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".form.filter.FilterPenggajian"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".form.transaksi.PenggajianInputNew" />
-        <activity
-            android:name=".form.transaksi.PenggajianRekapNew"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".form.lov.lov_potongan" />
-        <activity
-            android:name=".form.transaksi.PilihTunjanganPenggajian"
+            android:name="com.orionit.app.orion_payroll_new.form.filter.FilterKasbonPegawai"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".form.transaksi.PilihPotonganPenggajian"
+            android:name="com.orionit.app.orion_payroll_new.form.filter.FilterPenggajian"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.PenggajianInputNew" />
+        <activity
+            android:name="com.orionit.app.orion_payroll_new.form.transaksi.PenggajianRekapNew"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.lov.lov_potongan" />
+        <activity
+            android:name="com.orionit.app.orion_payroll_new.form.transaksi.PilihTunjanganPenggajian"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".form.transaksi.PilihKasbonPenggajian"
+            android:name="com.orionit.app.orion_payroll_new.form.transaksi.PilihPotonganPenggajian"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".form.filter.FilterLaporanPenggajian"
+            android:name="com.orionit.app.orion_payroll_new.form.transaksi.PilihKasbonPenggajian"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".androidpdfcreator" />
-        <activity android:name=".form.laporan.Laporan_penggajian" />
-        <activity android:name=".form.AbsenPegawai" />
-        <activity android:name=".email.MainActivity" />
-        <activity android:name=".form.transaksi.PilihKirimEmail" />
-        <activity android:name=".form.laporan.Laporan_kasbon" />
         <activity
-            android:name=".MainMenuNew"
+            android:name="com.orionit.app.orion_payroll_new.form.filter.FilterLaporanPenggajian"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.orionit.app.orion_payroll_new.androidpdfcreator" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.laporan.Laporan_penggajian" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.AbsenPegawai" />
+        <activity android:name="com.orionit.app.orion_payroll_new.email.MainActivity" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.PilihKirimEmail" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.laporan.Laporan_kasbon" />
+        <activity
+            android:name="com.orionit.app.orion_payroll_new.MainMenuNew"
             android:label="@string/title_activity_main_menu_new"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingAplikasi" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.setting.GantiPassword" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingEmail" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingDatabase"></activity>
     </application>
 
 </manifest>
