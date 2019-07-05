@@ -41,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String message = editTextMessage.getText().toString().trim();
 
         //Creating SendMail object
-        SendMail sm = new SendMail(this, email, subject, message,"");
+        //SendMail sm = new SendMail(this, email, subject, message,"");
 
         //Executing sendmail to send email
-        sm.execute();
+        //sm.execute();
     }
 
     @Override

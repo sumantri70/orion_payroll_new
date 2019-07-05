@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Orion Payroll New</string>
+    <string name="app_name">Orion Payroll</string>
     <string name="title_activity_master_pegawai">MasterPegawai</string>
     <string name="title_activity_pegawai_rekap">PegawaiRekap</string>
     <string name="title_activity_search">search</string>

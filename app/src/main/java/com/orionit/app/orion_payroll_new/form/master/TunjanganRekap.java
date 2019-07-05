@@ -251,7 +251,7 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 
     public void LoadData(){
         swipe.setRefreshing(true);
-        this.DbMaster.ReloadList(Fstatus, OrderBy, false);
+        this.DbMaster.ReloadList(Fstatus, OrderBy, false,"");
         Adapter = new TunjanganAdapter(this, R.layout.list_potongan_rekap, ListTunjangan);
         ListRekap.setAdapter(Adapter);
         Adapter.notifyDataSetChanged();

@@ -10,6 +10,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.orionit.app.orion_payroll_new.R;
 import com.orionit.app.orion_payroll_new.form.lov.lov_tunjangan;
@@ -19,6 +20,8 @@ import com.orionit.app.orion_payroll_new.utility.FormatNumber;
 import com.orionit.app.orion_payroll_new.utility.FungsiGeneral;
 
 import static com.orionit.app.orion_payroll_new.models.JCons.DETAIL_MODE;
+import static com.orionit.app.orion_payroll_new.models.JCons.ID_TJ_LEMBUR;
+import static com.orionit.app.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE;
 import static com.orionit.app.orion_payroll_new.models.JCons.RESULT_LOV;
 import static com.orionit.app.orion_payroll_new.utility.FormatNumber.fmt;
 
@@ -40,7 +43,6 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
         ListHasMap = listHasMap;
         this.ctx = context;
     }
-
 
 
     @Override
@@ -103,7 +105,10 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
             LostFocus();
             Intent s = new Intent(((PegawaiInput)ctx), lov_tunjangan.class);
             s.putExtra("JANGANMUNCULKANSYSTEM",false);
+            s.putExtra("TANPA_ID",String.valueOf(ID_TJ_LEMBUR));
             ((PegawaiInput)ctx).startActivityForResult(s, RESULT_LOV);
+
+
             }
         });
         return convertView;
@@ -165,8 +170,7 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
              LostFocus();
             ((PegawaiInput)ctx).ArListTunjangan.remove(idx);
             ((PegawaiInput)ctx).ListAdapter.notifyDataSetChanged();
-            ((PegawaiInput)ctx).ListView.getLayoutParams().height = 200 * ((PegawaiInput)ctx).ArListTunjangan.size() + 150;
-
+            ((PegawaiInput)ctx).SetAutoHeightListView();
             }
         });
         return v;
@@ -197,14 +201,14 @@ public class ExpandListAdapterPegawai extends BaseExpandableListAdapter {
     public void onGroupCollapsed(int groupPosition) {
         super.onGroupCollapsed(groupPosition);
         LostFocus();
-        ((PegawaiInput)ctx).ListView.getLayoutParams().height = 150;
+        ((PegawaiInput)ctx).SetAutoHeightListView();
     }
 
     @Override
     public void onGroupExpanded(int groupPosition) {
         super.onGroupExpanded(groupPosition);
         LostFocus();
-        ((PegawaiInput)ctx).ListView.getLayoutParams().height = 200 * ((PegawaiInput)ctx).ArListTunjangan.size() + 150;
+        ((PegawaiInput)ctx).SetAutoHeightListView();
     }
 
 }

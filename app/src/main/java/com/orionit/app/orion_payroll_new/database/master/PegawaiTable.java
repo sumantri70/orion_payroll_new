@@ -185,6 +185,36 @@ public class PegawaiTable {
         return cr.getCount() > 0;
     }
 
+
+    public ArrayList<Integer> get_list_id_pegawai(String status, int id_pegawai){
+        ArrayList<Integer> hasil = new ArrayList<Integer>();
+
+        String filter = "";
+        if (status != ""){
+            filter = " AND status = '" + status + "'";
+        }
+
+        if (id_pegawai > 0){
+            filter = " AND _id = "+String.valueOf(id_pegawai);
+        }
+
+        if (filter.length() > 0) {
+            filter = " where " + filter.substring(4,filter.length());
+        }
+
+        SQL = "SELECT _id FROM master_pegawai "+ filter;
+        this.records.clear();
+        Cursor cr = this.db.rawQuery(SQL,null);
+
+        if (cr != null && cr.moveToFirst()){
+            do {
+                hasil.add(cr.getInt(cr.getColumnIndexOrThrow("_id")));
+            }while (cr.moveToNext());
+        }
+
+        return hasil;
+    }
+
     public ArrayList<PegawaiModel> GetRecords(){
         return records;
     }

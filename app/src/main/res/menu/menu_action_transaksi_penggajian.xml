@@ -18,9 +18,9 @@
         android:orderInCategory="100"
         android:title="Hapus"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/nav_create_pdf"
-        android:orderInCategory="100"
-        android:title="Cetak"
-        app:showAsAction="never"/>
+    <!--<item-->
+        <!--android:id="@+id/nav_create_pdf"-->
+        <!--android:orderInCategory="100"-->
+        <!--android:title="Cetak"-->
+        <!--app:showAsAction="never"/>-->
 </menu>

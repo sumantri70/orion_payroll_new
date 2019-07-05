@@ -3,6 +3,8 @@ package com.orionit.app.orion_payroll_new.form.setting;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.Environment;
+import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,11 +13,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.session.AccessTokenPair;
+import com.dropbox.client2.session.AppKeyPair;
+import com.dropbox.client2.session.Session;
 import com.dropbox.core.DbxRequestConfig;
 import com.dropbox.core.android.Auth;
 import com.dropbox.core.http.OkHttp3Requestor;
 import com.dropbox.core.v2.DbxClientV2;
 import com.dropbox.core.v2.files.FileMetadata;
+import com.orionit.app.orion_payroll_new.OrionPayrollApplication;
 import com.orionit.app.orion_payroll_new.R;
 import com.orionit.app.orion_payroll_new.database.master.PotonganTable;
 import com.orionit.app.orion_payroll_new.database.master.SettingDBTable;
@@ -35,6 +43,7 @@ import java.nio.channels.FileChannel;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_NEGATIVE;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_POSITIVE;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
+import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getTglFormatCustom;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.inform;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowFormated4Ekspor;
 
@@ -43,11 +52,14 @@ public class SettingDatabase extends AppCompatActivity {
 
     private SettingDBTable TData;
     private SettingDBModel DataModel;
+    private String password, AccessKey, AccessSecret;
 
     private final static String FILE_DIR = "/backup_orion_payroll/";
     private final static String DROPBOX_NAME = "orion payroll";
     private final static String ACCESS_KEY = "37e2umr2z0kt91d";
     private final static String ACCESS_SECRET = "u5nc2m1eru7diy9";
+
+    private DropboxAPI<AndroidAuthSession> dropbox;
 
     private boolean isLoggedIn;
 
@@ -75,8 +87,32 @@ public class SettingDatabase extends AppCompatActivity {
 
         TData = new SettingDBTable(getApplicationContext());
         DataModel = TData.GetData();
+        password = DataModel.getPassword();
 
-//        AndroidAuthSession session;
+        AndroidAuthSession session;
+        String key = DataModel.getAccessKey();
+        String secret = DataModel.getAccessSecret();
+        AccessKey = key;
+        AccessSecret = secret;
+        AppKeyPair pair = new AppKeyPair(ACCESS_KEY, ACCESS_SECRET);
+
+        if (key != null) {
+            if (key.equals("")) {
+                key = null;
+            }
+        }
+        if (secret != null) {
+            if (secret.equals("")){
+                secret = null;
+            }
+        }
+
+        if (key == null || secret == null) {
+            session = new AndroidAuthSession(pair, Session.AccessType.APP_FOLDER);
+            dropbox = new DropboxAPI<AndroidAuthSession>(session);
+        } else {
+            loggedIn(true);
+        }
     }
 
     protected void EventClass(){
@@ -90,7 +126,10 @@ public class SettingDatabase extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 String namaFile = "/orion_payroll_backup_"+serverNowFormated4Ekspor()+".db";
                                 String file = CreateGetDir()+namaFile;
-                                BackupDBNew(file, namaFile);
+                                String lokasi = BackupDBNew(file);
+                                if (!lokasi.equals("")){
+                                    inform(SettingDatabase.this, "Database berhasil dibackup ke "+lokasi);
+                                }
                             }
                         })
                         .setNegativeButton("Tidak", null)
@@ -108,13 +147,31 @@ public class SettingDatabase extends AppCompatActivity {
                             @Override
                             public void onChosenDir(String chosenDir)
                             {
+                                if (!chosenDir.contains(".db")){
+                                    Toast.makeText(SettingDatabase.this, "File yang dipilih bukan file database", Toast.LENGTH_SHORT).show();
+                                    return;
+                                }
+
+                                //Backup terlebih dahulu data sebelummnya
+                                String namaFile = "/orion_payroll_backup_"+serverNowFormated4Ekspor()+".db";
+                                String file = CreateGetDirBefforeRestore()+namaFile;
+                                String lokasi = BackupDBNew(file);
+                                if (lokasi.equals("")){
+                                    return;
+                                }
+
+                                //Restore data
                                 m_chosen = chosenDir;
-                                SettingDatabase.this.restoreDBNew(m_chosen);
+                                if (SettingDatabase.this.restoreDBNew(m_chosen)){
+                                    inform(SettingDatabase.this, "Database sebelumnya dibackup ke "+lokasi+"\nDan database terbaru berhasil direstore");
+                                };
                             }
+
                         });
 
-                FileOpenDialog.Default_File_Name = "Dump.db";
-                FileOpenDialog.chooseFile_or_Dir();
+                FileOpenDialog.Default_File_Name = "";
+                FileOpenDialog.chooseFile_or_Dir(CreateGetDir());
+                OrionPayrollApplication.getInstance().GetHashMaster();
             }
         });
 
@@ -125,6 +182,7 @@ public class SettingDatabase extends AppCompatActivity {
                     SharedPreferences prefs = getSharedPreferences(DROPBOX_NAME, MODE_PRIVATE);
                     prefs.edit().remove("access-token").commit();
                     loggedIn(false);
+                    TData.deleteAll();
                 }else{
                     Auth.startOAuth2Authentication(SettingDatabase.this, ACCESS_KEY);
                 }
@@ -169,12 +227,17 @@ public class SettingDatabase extends AppCompatActivity {
                 bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //BAckup dulu datanya sebelum download
+                        //Backup terlebih dahulu data sebelummnya
                         String namaFile = "/orion_payroll_backup_"+serverNowFormated4Ekspor()+".db";
-                        String file = CreateGetDir()+namaFile;
-                        BackupDBNew(file, namaFile);
+                        String file = CreateGetDirBefforeRestore()+namaFile;
+                        String lokasi = BackupDBNew(file);
+                        if (lokasi.equals("")){
+                            return;
+                        }
+
                         //------------------------------------
-                        downloadFileNew("/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db");
+                        downloadFileNew("/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db", lokasi);
+//                        OrionPayrollApplication.getInstance().GetHashMaster();
                     }
                 });
 
@@ -195,36 +258,43 @@ public class SettingDatabase extends AppCompatActivity {
         return true;
     }
 
-    public void  BackupDBNew(String fileLocation, String namaFile)
+    public String BackupDBNew(String fileLocation)
     {
+        String Hasil = "";
         try
         {
-            String currentDBPath = "/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
-            String backupDBPath = fileLocation;
-            File currentDB = new File(currentDBPath);
-            File backupDB = new File(backupDBPath);
+            String Asal = "/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
+            String Tujuan = fileLocation;
+
+            File currentDB = new File(Asal);
+            File backupDB = new File(Tujuan);
+
             if (currentDB.exists()) {
                 FileChannel src = new FileInputStream(currentDB).getChannel();
                 FileChannel dst = new FileOutputStream(backupDB).getChannel();
                 dst.transferFrom(src, 0, src.size());
                 src.close();
                 dst.close();
+                Hasil = fileLocation;
             }
-            inform(SettingDatabase.this, "Database berhasil dibackup ke "+fileLocation);
         }
         catch (Exception e) {
+            Hasil = "";
+            inform(SettingDatabase.this, "Gagal backup database");
             Log.w("Settings Backup", e);
         }
+        return Hasil;
     }
 
-    private void restoreDBNew(String FileName){
+    private boolean restoreDBNew(String FileName){
         {
             try
             {
-                String currentDBPath = FileName;
-                String backupDBPath = "/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
-                File currentDB = new File(currentDBPath);
-                File backupDB = new File(backupDBPath);
+                String sumber = FileName;
+                String tujuan = "/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
+
+                File currentDB = new File(sumber);
+                File backupDB = new File(tujuan);
 
                 if (currentDB.exists()) {
                     FileChannel src = new FileInputStream(currentDB).getChannel();
@@ -232,21 +302,59 @@ public class SettingDatabase extends AppCompatActivity {
                     dst.transferFrom(src, 0, src.size());
                     src.close();
                     dst.close();
+                    saveSettingDB();
                 }
-                Toast.makeText(SettingDatabase.this, "Restore Complete", Toast.LENGTH_SHORT).show();
+                return true;
             }
             catch (Exception e) {
-                Log.w("Settings Backup", e);
+                inform(SettingDatabase.this, "Gagal restore");
+                return false;
             }
         }
     }
 
+//    private String CreateGetDir() {
+//        File direct = new File("/storage/emulated/0/Download/orion_payroll/database");
+//        if (!direct.exists()) {
+//            direct.mkdirs();
+//        }
+//        return direct.getPath();
+//    }
+
     private String CreateGetDir() {
-        File direct = new File("/storage/emulated/0/Download/orion_payroll/database");
-        if (!direct.exists()) {
-            direct.mkdirs();
+        File direct1 = new File(Environment.getExternalStorageDirectory() + "/orion_payroll");
+        if (!direct1.exists()) {
+            direct1.mkdirs();
         }
-        return direct.getPath();
+
+        File direct2 = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/database");
+        if (!direct2.exists()) {
+            direct2.mkdirs();
+        }
+
+        File direct3 = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/database/backup");
+        if (!direct3.exists()) {
+            direct3.mkdirs();
+        }
+        return direct3.getPath();
+    }
+
+    private String CreateGetDirBefforeRestore() {
+        File direct1 = new File(Environment.getExternalStorageDirectory() + "/orion_payroll");
+        if (!direct1.exists()) {
+            direct1.mkdirs();
+        }
+
+        File direct2 = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/database");
+        if (!direct2.exists()) {
+            direct2.mkdirs();
+        }
+
+        File direct3 = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/database/backup_sebelum_restore");
+        if (!direct3.exists()) {
+            direct3.mkdirs();
+        }
+        return direct3.getPath();
     }
 
     @Override
@@ -287,6 +395,15 @@ public class SettingDatabase extends AppCompatActivity {
         btnUploadCloud.setEnabled(isLogged);
         btnDownloadCloud.setEnabled(isLogged);
         btnLogin.setText(isLogged ? "LOG OUT" : "LOG IN");
+
+        if (!isLogged){
+            btnUploadCloud.setBackgroundColor(getResources().getColor(R.color.colorgrey));
+            btnDownloadCloud.setBackgroundColor(getResources().getColor(R.color.colorgrey));
+        }else{
+            btnUploadCloud.setBackground(getResources().getDrawable(R.drawable.style_btn_default));
+            btnDownloadCloud.setBackground(getResources().getDrawable(R.drawable.style_btn_default));
+        }
+
     }
 
 
@@ -310,6 +427,7 @@ public class SettingDatabase extends AppCompatActivity {
             @Override
             public void onUploadComplete(FileMetadata result) {
                 dialog.dismiss();
+                saveSettingDB();
                 Toast.makeText(SettingDatabase.this,
                         "Upload database berhasil",
                         Toast.LENGTH_SHORT)
@@ -326,11 +444,11 @@ public class SettingDatabase extends AppCompatActivity {
                         .setPositiveButton("Ok", null)
                         .show();
             }
-        }, "/backup_orion_payroll/Dump.DB", fileLocation).execute();
+        }, "/backup_orion_payroll/Dump.db", fileLocation).execute();
     }
 
 
-    private void downloadFileNew(String fileLocation){
+    private void downloadFileNew(String fileLocation, final String fileBackUp){
         File localFile = new File(fileLocation);
         DbxClientV2 client;
         DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("examples-v2-demo")
@@ -351,12 +469,17 @@ public class SettingDatabase extends AppCompatActivity {
             @Override
             public void onDownloadComplete(File result) {
                 dialog.dismiss();
-                Toast.makeText(SettingDatabase.this,"Download database berhasil",Toast.LENGTH_SHORT).show();
+                saveSettingDB();
+                OrionPayrollApplication.getInstance().GetHashMaster();
+                inform(SettingDatabase.this, "Database sebelumnya dibackup ke "+fileBackUp+"\nDan database terbaru berhasil direstore");
             }
+
+
 
             @Override
             public void onError(Exception e) {
                 dialog.dismiss();
+                SettingDatabase.this.restoreDBNew(fileBackUp);
 
                 new AlertDialog.Builder(SettingDatabase.this)
                         .setMessage("Download database tidak berhasil")
@@ -364,6 +487,11 @@ public class SettingDatabase extends AppCompatActivity {
                         .setPositiveButton("Ok", null)
                         .show();
             }
-        }, "/backup_orion_payroll/Dump.DB", fileLocation).execute(localFile);
+        }, "/backup_orion_payroll/Dump.db", fileLocation).execute(localFile);
+    }
+
+    private void saveSettingDB(){
+        SettingDBModel newData = new SettingDBModel(this.AccessKey, this.AccessSecret, this.password);
+        TData.Insert(newData);
     }
 }

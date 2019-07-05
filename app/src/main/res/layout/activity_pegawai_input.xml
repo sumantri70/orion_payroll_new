@@ -62,7 +62,7 @@
                         android:layout_height="wrap_content">
 
                         <android.support.design.widget.TextInputEditText
-                            android:id="@+id/txtNama"
+                            android:id="@+id/txtNomor"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="6dp"
@@ -595,8 +595,7 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:nestedScrollingEnabled="true"
-                android:scrollbars="vertical">
-            </ExpandableListView>
+                android:scrollbars="vertical"></ExpandableListView>
             <Button
                 android:id="@+id/btnSimpan"
                 android:layout_width="match_parent"

@@ -3,6 +3,7 @@ package com.orionit.app.orion_payroll_new.database.master;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.orionit.app.orion_payroll_new.database.DBConection;
@@ -31,7 +32,12 @@ public class SettingDBTable {
     public void Insert(SettingDBModel Data) {
         ContentValues cv;
         cv = SetValue(Data);
+        deleteAll();
         this.db.insert("setting_db", null, cv);
+    }
+
+    public void deleteAll(){
+        this.db.delete("setting_db", null, null);
     }
 
 //    public void Update(SettingDBModel Data) {

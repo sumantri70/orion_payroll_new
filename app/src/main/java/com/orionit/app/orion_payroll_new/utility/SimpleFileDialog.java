@@ -3,7 +3,6 @@ package com.orionit.app.orion_payroll_new.utility;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Environment;
 import android.text.Editable;
 import android.view.Gravity;
@@ -26,6 +25,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.orionit.app.orion_payroll_new.models.JCons.MSG_NEGATIVE;
+import static com.orionit.app.orion_payroll_new.models.JCons.MSG_POSITIVE;
+import static com.orionit.app.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
+
 //import android.content.DialogInterface.OnKeyListener;
 //import android.view.KeyEvent;
 
@@ -47,6 +50,8 @@ public class SimpleFileDialog
     private List<String> m_subdirs = null;
     private SimpleFileDialogListener m_SimpleFileDialogListener = null;
     private ArrayAdapter<String> m_listAdapter = null;
+    private android.support.v7.app.AlertDialog.Builder bld;
+    private AlertDialog dirsDialog;
 
     //////////////////////////////////////////////////////
     // Callback interface for selected directory
@@ -66,6 +71,7 @@ public class SimpleFileDialog
         m_context = context;
         m_sdcardDirectory = Environment.getExternalStorageDirectory().getAbsolutePath();
         m_SimpleFileDialogListener = SimpleFileDialogListener;
+        bld = new android.support.v7.app.AlertDialog.Builder(m_context);
 
         try
         {
@@ -126,39 +132,60 @@ public class SimpleFileDialog
                 {
                     m_dir = m_dir_old;
                     Selected_File_Name = sel;
+
+                    bld.setTitle("Konfirmasi");
+                    bld.setCancelable(true);
+                    bld.setMessage(MSG_SAVE_CONFIRMATION);
+
+                    bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            m_SimpleFileDialogListener.onChosenDir(m_dir + "/" + Selected_File_Name);
+                            dirsDialog.dismiss();
+                        }
+                    });
+
+                    bld.setNegativeButton(MSG_NEGATIVE, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    });
+
+                    android.support.v7.app.AlertDialog dg = bld.create();
+                    dg.show();
                 }
 
                 updateDirectory();
             }
         }
 
-        AlertDialog.Builder dialogBuilder = createDirectoryChooserDialog(dir, m_subdirs,
-                new SimpleFileDialogOnClickListener());
+        AlertDialog.Builder dialogBuilder = createDirectoryChooserDialog(dir, m_subdirs,new SimpleFileDialogOnClickListener());
         dialogBuilder.setCancelable(true);
-        dialogBuilder.setPositiveButton("OK", new OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                // Current directory chosen
-                // Call registered listener supplied with the chosen directory
-                if (m_SimpleFileDialogListener != null){
-                    {
-                        if (Select_type == FileOpen || Select_type == FileSave)
-                        {
-                            Selected_File_Name= input_text.getText() +"";
-                            m_SimpleFileDialogListener.onChosenDir(m_dir + "/" + Selected_File_Name);}
-                        else
-                        {
-                            m_SimpleFileDialogListener.onChosenDir(m_dir);
-                        }
-                    }
-                }
-            }
-        }).setNegativeButton("Cancel", null);
-
-        final AlertDialog dirsDialog = dialogBuilder.create();
+//        dialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which)
+//            {
+//                // Current directory chosen
+//                // Call registered listener supplied with the chosen directory
+//                if (m_SimpleFileDialogListener != null){
+//                    {
+//                        if (Select_type == FileOpen || Select_type == FileSave)
+//                        {
+//                            Selected_File_Name= input_text.getText() +"";
+//                            m_SimpleFileDialogListener.onChosenDir(m_dir + "/" + Selected_File_Name);}
+//                        else
+//                        {
+//                            m_SimpleFileDialogListener.onChosenDir(m_dir);
+//                        }
+//                    }
+//                }
+//            }
+//        }).setNegativeButton("Cancel", null);
         // Show directory chooser dialog
+
+        dirsDialog = dialogBuilder.create();
         dirsDialog.show();
         dirsDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
     }
@@ -280,12 +307,12 @@ public class SimpleFileDialog
         LinearLayout titleLayout = new LinearLayout(m_context);
         titleLayout.setOrientation(LinearLayout.VERTICAL);
 
-        if (Select_type == FileOpen || Select_type == FileSave)
-        {
-            input_text = new EditText(m_context);
-            input_text.setText(Default_File_Name);
-            titleLayout.addView(input_text);
-        }
+//        if (Select_type == FileOpen || Select_type == FileSave)
+//        {
+//            input_text = new EditText(m_context);
+//            input_text.setText(Default_File_Name);
+//            titleLayout.addView(input_text);
+//        }
 
         m_titleView = new TextView(m_context);
         m_titleView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
@@ -315,10 +342,10 @@ public class SimpleFileDialog
         m_titleView.setText(m_dir);
         m_listAdapter.notifyDataSetChanged();
         //#scorch
-        if (Select_type == FileSave || Select_type == FileOpen)
-        {
-            input_text.setText(Selected_File_Name);
-        }
+//        if (Select_type == FileSave || Select_type == FileOpen)
+//        {
+//            input_text.setText(Selected_File_Name);
+//        }
     }
 
     private ArrayAdapter<String> createListAdapter(List<String> items)

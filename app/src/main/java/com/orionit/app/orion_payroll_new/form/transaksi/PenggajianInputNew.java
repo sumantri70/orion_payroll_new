@@ -80,6 +80,7 @@ import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StartOfThe
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StrFmtToDouble;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StrToDeobleDef;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StrToIntDef;
+import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getMillisDateFmt;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getSimpleDate;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getTglFormat;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getTglFormatCustom;
@@ -209,6 +210,14 @@ public class PenggajianInputNew extends AppCompatActivity {
         txtPeriode.setEnabled(Enabled);
 
         txtTmp.setVisibility(View.INVISIBLE);
+
+        txtTelat1.setText("0");
+        txtTelat2.setText("0");
+        txtDokter.setText("0");
+        txtNonCuti.setText("0");
+        txtCuti.setText("0");
+        txtstghHari.setText("0");
+        txtLembur.setText("0");
 
         lblGajiPokok.setText("0");
         lblTotTunjangan.setText("0");
@@ -769,7 +778,7 @@ public class PenggajianInputNew extends AppCompatActivity {
                     DataPegawai.getUang_kehadiran(),
                     DataPegawai.getPremi_harian(),
                     DataPegawai.getPremi_perjam(),
-                    StrToDeobleDef(txtLembur.getText().toString(),0.0),
+                    StrFmtToDouble(txtLembur.getText().toString()),
                     StrFmtToDouble(lblTotTunjangan.getText().toString()),
                     StrFmtToDouble(lblTotPotongan.getText().toString()),
                     StrFmtToDouble(lblTotLembur.getText().toString()),
@@ -778,7 +787,7 @@ public class PenggajianInputNew extends AppCompatActivity {
                     getSimpleDate(txtTanggal.getText().toString()),
                     serverNowLong(),
                     0,
-                    StartOfTheMonthLong(getSimpleDate(txtTanggal.getText().toString()))
+                    StartOfTheMonthLong(getMillisDateFmt(txtPeriode.getText().toString(), "MMMM yyyy"))
             );
             int IdMaster = TData.Insert(Data);
 
@@ -856,7 +865,7 @@ public class PenggajianInputNew extends AppCompatActivity {
                     DataPegawai.getUang_kehadiran(),
                     DataPegawai.getPremi_harian(),
                     DataPegawai.getPremi_perjam(),
-                    StrToDeobleDef(txtLembur.getText().toString(),0.0),
+                    StrFmtToDouble(txtLembur.getText().toString()),
                     StrFmtToDouble(lblTotTunjangan.getText().toString()),
                     StrFmtToDouble(lblTotPotongan.getText().toString()),
                     StrFmtToDouble(lblTotLembur.getText().toString()),
@@ -865,7 +874,7 @@ public class PenggajianInputNew extends AppCompatActivity {
                     getSimpleDate(txtTanggal.getText().toString()),
                     serverNowLong(),
                     serverNowLong(),
-                    StartOfTheMonthLong(getSimpleDate(txtTanggal.getText().toString()))
+                    StartOfTheMonthLong(getMillisDateFmt(txtPeriode.getText().toString(), "MMMM yyyy"))
             );
             TData.Update(Data);
 
@@ -1393,7 +1402,7 @@ public class PenggajianInputNew extends AppCompatActivity {
             if (DataPegawai.getId() > 0) {
                 if (Id == ID_TJ_LEMBUR) {
                     banyak    = StrToIntDef(txtLembur.getText().toString(),0);
-                    jumlah    = (banyak * DataPegawai.getPremi_perjam()) * 1.5;
+                    jumlah    = Round((banyak * DataPegawai.getPremi_perjam()) * 1.5,0);
                     tambahkan = banyak > 0;
                 }
             }

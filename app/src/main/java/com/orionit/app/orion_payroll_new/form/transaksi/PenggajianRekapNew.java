@@ -36,9 +36,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static com.orionit.app.orion_payroll_new.models.JCons.RESULT_LOV;
+import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.EndOfTheMonthLong;
+import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StartOfTheMonthLong;
+import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getMillisDateFmt;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
 
@@ -60,13 +64,10 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
 
     public static String OrderBy;
 
-    private Long tgl_dari, tgl_Sampai;
+    private Long tgl_dari, tgl_Sampai, periode_dari, periode_sampai;
     private int IdPegawai;
-
-    private static final String TAG = "PdfCreatorActivity";
-    private File pdfFile;
-
     private PenggajianTable DbMaster;
+
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -92,8 +93,11 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         ListData = new ArrayList<PenggajianModel>();
         this.ListRekap.setDividerHeight(1);
 
-        tgl_dari   = serverNowStartOfTheMonthLong();
-        tgl_Sampai = serverNowLong();
+        periode_dari   = serverNowStartOfTheMonthLong();
+        periode_sampai = EndOfTheMonthLong(serverNowLong());
+
+        tgl_dari   = Long.valueOf(0);
+        tgl_Sampai = Long.valueOf(0);
         IdPegawai  = 0;
 
         DbMaster = new PenggajianTable(this);
@@ -119,6 +123,8 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
             @Override
             public void onClick(View view) {
                 Intent s = new Intent(PenggajianRekapNew.this, FilterPenggajian.class);
+                s.putExtra("PERIODE_DARI", periode_dari);
+                s.putExtra("periode_sampai", periode_sampai);
                 s.putExtra("TGL_DARI", tgl_dari);
                 s.putExtra("TGL_SAMPAI", tgl_Sampai);
                 s.putExtra("PEGAWAI_ID", IdPegawai);
@@ -149,15 +155,15 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
             @Override
             public void onClick(View view) {
                 PopupMenu PmFilter = new PopupMenu(PenggajianRekapNew.this, btnSort);
-                PmFilter.getMenuInflater().inflate(R.menu.sort_kabon_pegawai, PmFilter.getMenu());
+                PmFilter.getMenuInflater().inflate(R.menu.sort_penggajian, PmFilter.getMenu());
                 PmFilter.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getTitle().toString().trim()){
                             case "Nomor" :
                                 OrderBy = "nomor";
                                 break;
-                            case "Tanggal" :
-                                OrderBy = "tanggal";
+                            case "Periode" :
+                                OrderBy = "periode, tanggal";
                                 break;
                             case "Pegawai" :
                                 OrderBy = "nama_pegawai";
@@ -200,7 +206,7 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
         PopUpAction.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Intent s = new Intent(PenggajianRekapNew.this, PilihKirimEmail.class);
+                Intent s = new Intent(PenggajianRekapNew.this, PilihKirimEmailNew.class);
                 startActivity(s);
                 return false;
             }
@@ -209,12 +215,60 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
 
     public void LoadData(){
         swipe.setRefreshing(true);
-        this.DbMaster.ReloadList(tgl_dari,tgl_Sampai,OrderBy);
+        this.DbMaster.ReloadList(tgl_dari, tgl_Sampai, periode_dari, periode_sampai, OrderBy);
         Adapter = new PenggajianAdapterNew(PenggajianRekapNew.this, R.layout.list_penggajian_rekap_new, ListData);
         ListRekap.setAdapter(Adapter);
         Adapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
     }
+
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_penggajian_rekap_new);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOV) {
+                Bundle extra = data.getExtras();
+                IdPegawai  = extra.getInt("PEGAWAI_ID");
+                periode_dari   = extra.getLong("PERIODE_DARI");
+                periode_sampai = extra.getLong("PERIODE_SAMPAI");
+                tgl_dari   = extra.getLong("TGL_DARI");
+                tgl_Sampai = extra.getLong("TGL_SAMPAI");
+            }
+            LoadData();
+        }
+    }
+}
+
+
+
 
 //    public void LoadData(){
 //        swipe.setRefreshing(true);
@@ -288,104 +342,3 @@ public class PenggajianRekapNew extends AppCompatActivity implements SwipeRefres
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 //    }
-
-
-
-    private void createPdf() throws FileNotFoundException, DocumentException {
-
-        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/documents");
-        if (!docsFolder.exists()) {
-            docsFolder.mkdir();
-            Log.i(TAG, "Created a new directory for PDF");
-        }
-
-        pdfFile = new File(docsFolder.getAbsolutePath(),"HelloWorld.pdf");
-        OutputStream output = new FileOutputStream(pdfFile);
-        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-        PdfWriter.getInstance(document, output);
-//        document.setPageSize(PageSize.A10);
-//        document.setMargins(36, 72, 108, 180);
-//        document.setMarginMirroring(true);
-//        document.setMarginMirroringTopBottom(true);
-        document.open();
-        document.add(new Paragraph("anjayyyy"));
-        document.add(new Chunk("This is sentence 1. "));
-        document.add(new Phrase("This is sentence 1. "));
-        document.add(new Phrase("This is sentence 2. "));
-        document.add(new Phrase("This is sentence 3. "));
-        document.add(new Phrase("This is sentence 4. "));
-
-        Paragraph paragraph = new Paragraph();
-        for(int i=0; i<10; i++){
-            Chunk chunk = new Chunk(
-                    "This is a sentence which is long " + i + ". ");
-            paragraph.add(chunk);
-        }
-        document.add(paragraph);
-
-        document.close();
-        //previewPdf();
-
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_penggajian_rekap_new);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == RESULT_LOV) {
-                Bundle extra = data.getExtras();
-                IdPegawai  = extra.getInt("PEGAWAI_ID");
-                tgl_dari   = extra.getLong("TGL_DARI");
-                tgl_Sampai = extra.getLong("TGL_SAMPAI");
-            }
-            LoadData();
-        }
-    }
-
-    protected void sendEmail() {
-        Log.i("Send email", "");
-        String[] TO = {""};
-        String[] CC = {""};
-        Intent emailIntent = new Intent(Intent.ACTION_SEND);
-
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.setType("text/plain");
-        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
-        emailIntent.putExtra(Intent.EXTRA_CC, CC);
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
-
-        try {
-            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-            finish();
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(PenggajianRekapNew.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
-        }
-    }
-}
-

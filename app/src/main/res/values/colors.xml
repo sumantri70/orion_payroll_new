@@ -14,8 +14,11 @@
     <color name="colorwhite">#ffffff</color>
     <color name="colordarkwhite">#F5F5F5</color>
     <color name="colorwhite2">#FFFFFF</color>
+    <color name="colorwhite3">#f7f7f7</color>
     <color name="colorblack">#000000</color>
     <color name="colorgrey">#c2c6ca</color>
+    <color name="colorSoftRed">#e45d8b</color>
+    <color name="colorSoftGrean">#60bc96</color>
 
 
 

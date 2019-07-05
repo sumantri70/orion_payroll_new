@@ -15,69 +15,68 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:scrollbarSize="0dp"
         android:scrollbarStyle="insideOverlay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0">
-            <LinearLayout
+        app:layout_constraintVertical_bias="0.333">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="140dp"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:layout_height="wrap_content"
+                android:paddingLeft="37dp"
+                android:paddingRight="37dp">
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Orion Payroll"
                     android:layout_gravity="center"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="50dp"
+                    android:text="Orion Payroll"
                     android:textSize="40dp"
-                    android:layout_marginBottom="40dp"
-                    tools:layout_editor_absoluteX="101dp"
-                    tools:layout_editor_absoluteY="93dp" />
+                    app:layout_constraintBottom_toTopOf="@+id/txtUserId"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/guideline5" />
 
 
                 <EditText
                     android:id="@+id/txtUserId"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/style_txt_login"
                     android:drawableLeft="@drawable/ic_group_black_24dp"
                     android:drawablePadding="10dp"
-                    android:paddingBottom="10dp"
                     android:ems="10"
                     android:hint="User Id"
                     android:inputType="textPersonName"
+                    android:paddingBottom="10dp"
                     android:text=""
                     android:textColor="@color/cardview_light_background"
                     android:theme="@style/StyleLogin"
-                    android:background="@drawable/style_txt_login"
-                    />
+                    app:layout_constraintBottom_toTopOf="@+id/txtPassword"
+                    tools:layout_editor_absoluteX="0dp" />
 
 
                 <EditText
                     android:id="@+id/txtPassword"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/style_txt_login"
                     android:drawableLeft="@drawable/ic_password"
                     android:drawablePadding="10dp"
@@ -85,15 +84,29 @@
                     android:hint="Password"
                     android:inputType="textPassword"
                     android:textColor="@color/cardview_light_background"
-                    android:theme="@style/StyleLogin" />
+                    android:theme="@style/StyleLogin"
+                    app:layout_constraintBottom_toTopOf="@+id/BtnLogin"
+                    tools:layout_editor_absoluteX="0dp" />
 
                 <Button
                     android:id="@+id/BtnLogin"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/style_btn_login"
                     android:text="Masuk"
-                    android:textColor="@color/colorblack" />
-            </LinearLayout>
+                    android:textColor="@color/colorblack"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:layout_editor_absoluteX="0dp" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.41" />
+
+            </android.support.constraint.ConstraintLayout>
+        </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

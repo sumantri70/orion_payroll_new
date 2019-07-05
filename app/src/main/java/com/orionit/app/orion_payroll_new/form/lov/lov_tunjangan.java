@@ -39,6 +39,7 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
     public static String OrderBy;
     private TunjanganTable DbMaster;
     private boolean IsMunculkanTunjanganSystem;
+    private String TanpaId;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekapTunjangan);
@@ -56,6 +57,7 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
 
         Bundle extra = this.getIntent().getExtras();
         IsMunculkanTunjanganSystem = extra.getBoolean("JANGANMUNCULKANSYSTEM");
+        TanpaId = extra.getString("TANPA_ID");
 
         ListTunjangan = new ArrayList<TunjanganModel>();
         this.ListRekap.setDividerHeight(1);
@@ -130,7 +132,7 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
 
     public void LoadData(){
         swipe.setRefreshing(true);
-        this.DbMaster.ReloadList(Fstatus, OrderBy,IsMunculkanTunjanganSystem);
+        this.DbMaster.ReloadList(Fstatus, OrderBy,IsMunculkanTunjanganSystem, TanpaId);
         Adapter = new lov_tunjangan_adapter(this, R.layout.list_lov_tunjangan, ListTunjangan);
         ListRekap.setAdapter(Adapter);
         Adapter.notifyDataSetChanged();

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -158,15 +159,7 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
                                     Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
                                 }
                             } else if (item.getTitle().equals("Cetak")) {
-                                PrintPenggajian print = new PrintPenggajian(ctx);
-                                print.Execute(IdMSt);
-//                                try {
-//                                    createPdf();
-//                                } catch (FileNotFoundException e) {
-//                                    e.printStackTrace();
-//                                } catch (DocumentException e) {
-//                                    e.printStackTrace();
-//                                }
+
                             }
                         }
                         return false;
@@ -294,4 +287,29 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
         }
         return true;
     }
+
+//    protected void sendEmail() {
+//
+//        String[] TO = {"someone@gmail.com"};
+//        String[] CC = {"xyz@gmail.com"};
+//        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+//
+//        emailIntent.setData(Uri.parse("mailto:"));
+//        emailIntent.setType("text/plain");
+//
+//        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+//        //emailIntent.putExtra(Intent.EXTRA_CC, CC);
+//        emailIntent.putExtra(Intent.EXTRA_STREAM, CC);
+//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject");
+//        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
+//
+//        try {
+//            ctx.startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+//            //finish();
+//
+//        } catch (android.content.ActivityNotFoundException ex) {
+//
+//        }
+//    }
+
 }

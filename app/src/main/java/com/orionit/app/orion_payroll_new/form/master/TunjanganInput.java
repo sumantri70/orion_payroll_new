@@ -14,13 +14,10 @@ import android.widget.Toast;
 
 import com.orionit.app.orion_payroll_new.R;
 import com.orionit.app.orion_payroll_new.database.master.TunjanganTable;
-import com.orionit.app.orion_payroll_new.form.transaksi.KasbonPegawaiInput;
 import com.orionit.app.orion_payroll_new.models.TunjanganModel;
 
 import static com.orionit.app.orion_payroll_new.models.JCons.DETAIL_MODE;
 import static com.orionit.app.orion_payroll_new.models.JCons.EDIT_MODE;
-import static com.orionit.app.orion_payroll_new.models.JCons.FALSE_STRING;
-import static com.orionit.app.orion_payroll_new.models.JCons.MSG_DELETE_CONFIRMATION;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_NEGATIVE;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_POSITIVE;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
@@ -40,7 +37,7 @@ public class TunjanganInput extends AppCompatActivity {
 
     protected void CreateView(){
         txtKode       = (TextInputEditText) findViewById(R.id.txtKode);
-        txtNama       = (TextInputEditText) findViewById(R.id.txtNama);
+        txtNama       = (TextInputEditText) findViewById(R.id.txtNomor);
         txtKeterangan = (TextInputEditText) findViewById(R.id.txtKeterangan);
         btnSimpan     = (Button) findViewById(R.id.btnSimpan);
     }

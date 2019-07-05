@@ -65,6 +65,7 @@ public class PilihTunjanganPenggajian extends AppCompatActivity {
                 LostFocus();
                 Intent s = new Intent(PilihTunjanganPenggajian.this, lov_tunjangan.class);
                 s.putExtra("MUNCULKANSYSTEM",false);
+                s.putExtra("TANPA_ID","");
                 startActivityForResult(s, RESULT_LOV);
             }
         });

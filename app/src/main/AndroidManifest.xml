@@ -15,7 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:launchMode="singleTop"
-        android:roundIcon="@drawable/ic_public_black_24dp"
+        android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name="com.orionit.app.orion_payroll_new.Login">
@@ -95,7 +95,11 @@
         <activity android:name="com.orionit.app.orion_payroll_new.form.AbsenPegawai" />
         <activity android:name="com.orionit.app.orion_payroll_new.email.MainActivity" />
         <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.PilihKirimEmail" />
+        <activity android:name="com.orionit.app.orion_payroll_new.form.transaksi.PilihKirimEmailNew" />
         <activity android:name="com.orionit.app.orion_payroll_new.form.laporan.Laporan_kasbon" />
+        <activity
+            android:name="com.orionit.app.orion_payroll_new.form.laporan.Laporan_kasbon_new"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name="com.orionit.app.orion_payroll_new.MainMenuNew"
             android:label="@string/title_activity_main_menu_new"

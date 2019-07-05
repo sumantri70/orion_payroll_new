@@ -2,9 +2,15 @@ package com.orionit.app.orion_payroll_new.email;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.orionit.app.orion_payroll_new.database.master.EmailTable;
+import com.orionit.app.orion_payroll_new.models.EmailModel;
+import com.orionit.app.orion_payroll_new.models.KirimEmailModel;
+
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.activation.DataHandler;
@@ -22,54 +28,40 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.activation.DataSource;
 
-public class SendMail extends AsyncTask<Void,Void,Void> {
+import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.inform;
+
+public class SendMail extends AsyncTask<ArrayList<KirimEmailModel>, String, Long> {
 
     //Declaring Variables
     private Context context;
     private Session session;
-
-    //Information to send email
-    private String email;
-    private String subject;
-    private String message;
-    private String File;
-
-    //Progressdialog to show while sending email
+    private KirimEmailModel DataKirim;
+    private int berjalan, jumlah;
     private ProgressDialog progressDialog;
 
     //Class Constructor
-    public SendMail(Context context, String email, String subject, String message, String File){
-        //Initializing variables
+    public SendMail(Context context){
         this.context = context;
-        this.email = email;
-        this.subject = subject;
-        this.message = message;
-        this.File = File;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        //Showing progress dialog while sending email
-        progressDialog = ProgressDialog.show(context,"Sending message","Please wait...",false,false);
+        progressDialog = ProgressDialog.show(context,"Mengirim email","Please wait...",false,false);
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        //Dismissing the progress dialog
+    protected void onPostExecute(Long aLong) {
+        super.onPostExecute(aLong);
         progressDialog.dismiss();
-        //Showing a success message
-        Toast.makeText(context,"Message Sent",Toast.LENGTH_LONG).show();
+        inform(context, "Email terkirim");
     }
 
+
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Long doInBackground(ArrayList<KirimEmailModel>... params) {
         //Creating properties
         Properties props = new Properties();
-
-        //Configuring properties for gmail
-        //If you are not using gmail you may need to change the values
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.socketFactory.port", "465");
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
@@ -77,71 +69,82 @@ public class SendMail extends AsyncTask<Void,Void,Void> {
         props.put("mail.smtp.port", "465");
 
         //Creating a new session
-        session = Session.getDefaultInstance(props,
-                new javax.mail.Authenticator() {
-                    //Authenticating the password
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        return new PasswordAuthentication(Config.EMAIL, Config.PASSWORD);
-                    }
-                });
+        session = Session.getDefaultInstance(props,new javax.mail.Authenticator() {
+            //Authenticating the password
+            protected PasswordAuthentication getPasswordAuthentication() {
+                EmailTable TEmail = new EmailTable(context);
+                EmailModel Data = TEmail.GetData(1);
+                return new PasswordAuthentication(Data.getAlamat_email(), Data.getPassword());
+            }
+        });
 
-        try {
-            //Creating MimeMessage object
-            MimeMessage mm = new MimeMessage(session);
+        berjalan = 0;
+        jumlah   = params[0].size();
+        for (int i =0; i < params[0].size(); i++){
+            if (isCancelled()) break;
 
-            //Setting sender address
-            mm.setFrom(new InternetAddress(Config.EMAIL));
-            //Adding receiver
-            mm.addRecipient(Message.RecipientType.TO, new InternetAddress(email));
-            //Adding subject
-            mm.setSubject(subject);
-            //Adding message
-            mm.setText(message);
+            try {
+                //Creating MimeMessage object
+                MimeMessage mm = new MimeMessage(session);
+                mm.setFrom(new InternetAddress(Config.EMAIL));
 
-            mm.setFileName(File);
+                mm.addRecipient(Message.RecipientType.TO, new InternetAddress(params[0].get(i).getEmail()));
+                mm.setSubject(params[0].get(i).getSubject());
+                mm.setText(params[0].get(i).getMessage());
 
+                // Create the message part
+                BodyPart messageBodyPart = new MimeBodyPart();
+                // Create a multipar message
+                Multipart multipart = new MimeMultipart();
 
+                // Set text message part
+                multipart.addBodyPart(messageBodyPart);
 
+                // Set text message part
+                multipart.addBodyPart(messageBodyPart);
 
-            // Create the message part
-            BodyPart messageBodyPart = new MimeBodyPart();
-            // Create a multipar message
-            Multipart multipart = new MimeMultipart();
+                // Part two is attachment
+                messageBodyPart = new MimeBodyPart();
+                java.io.File file = new File(params[0].get(i).getFile());
+                if(file.exists()) {
+                    DataSource source = new FileDataSource(params[0].get(i).getFile());
+                    mm.setDataHandler(new DataHandler(source));
+                    mm.setFileName(params[0].get(i).getFile());
+                }else{
 
-            // Set text message part
-            multipart.addBodyPart(messageBodyPart);
+                }
 
-            // Set text message part
-            multipart.addBodyPart(messageBodyPart);
+                berjalan++;
+                publishProgress("Mengirim email ke \n"+params[0].get(i).getEmail());
 
-            // Part two is attachment
-//            messageBodyPart = new MimeBodyPart();
-//            String filename = "/home/manisha/file.txt";
-//            DataSource source = new FileDataSource(filename);
-//            messageBodyPart.setDataHandler(new DataHandler(source));
-//            messageBodyPart.setFileName(filename);
-//            multipart.addBodyPart(messageBodyPart);
-
-            // Part two is attachment
-            messageBodyPart = new MimeBodyPart();
-            java.io.File file = new File(File);
-            if(file.exists()) {
-                DataSource source = new FileDataSource(File);
-                mm.setDataHandler(new DataHandler(source));
-                mm.setFileName(File);
+                //Sending email
                 Transport.send(mm);
-            }else{
-
+            } catch (MessagingException e) {
+                cancel(true);
+                e.printStackTrace();
             }
 
-
-
-            //Sending email
-            Transport.send(mm);
-
-        } catch (MessagingException e) {
-            e.printStackTrace();
         }
         return null;
     }
+
+    @Override
+    protected void onCancelled(Long aLong) {
+        super.onCancelled(aLong);
+        progressDialog.dismiss();
+        inform(context, "Email gagal dikirm\n"+"Pastikan email dan password pengirim terisi dengan benar");
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+    }
+
+    @Override
+    protected void onProgressUpdate(String... values) {
+        super.onProgressUpdate(values);
+        progressDialog.setTitle("Mengirim email "+String.valueOf(berjalan)+" dari "+String.valueOf(jumlah));
+        progressDialog.setMessage(values[0]);
+    }
 }
+

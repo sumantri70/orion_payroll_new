@@ -1,23 +1,34 @@
 package com.orionit.app.orion_payroll_new.form.transaksi;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.orionit.app.orion_payroll_new.MainMenu;
 import com.orionit.app.orion_payroll_new.R;
+import com.orionit.app.orion_payroll_new.database.master.EmailTable;
 import com.orionit.app.orion_payroll_new.database.master.PenggajianTable;
 import com.orionit.app.orion_payroll_new.email.SendMail;
 import com.orionit.app.orion_payroll_new.form.adapter.PilihKirimEmailAdapter;
+import com.orionit.app.orion_payroll_new.form.master.PegawaiInput;
 import com.orionit.app.orion_payroll_new.form.print.PrintPenggajian;
+import com.orionit.app.orion_payroll_new.models.EmailModel;
+import com.orionit.app.orion_payroll_new.models.KirimEmailModel;
+import com.orionit.app.orion_payroll_new.models.PegawaiModel;
 import com.orionit.app.orion_payroll_new.models.PenggajianModel;
 import com.orionit.app.orion_payroll_new.utility.FungsiGeneral;
 
@@ -28,6 +39,7 @@ import java.util.Calendar;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_NEGATIVE;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_POSITIVE;
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_SAVE_CONFIRMATION;
+import static com.orionit.app.orion_payroll_new.models.JCons.MSG_SUCCESS_UPDATE;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.EndOfTheMonthLong;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StartOfTheMonthLong;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getMillisDateFmt;
@@ -35,6 +47,7 @@ import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getTglForm
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.hideSoftKeyboard;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowFormated;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
+import static com.orionit.app.orion_payroll_new.utility.JEngine.Get_Email_Master_Pegawai;
 import static com.orionit.app.orion_payroll_new.utility.JEngine.Get_Nama_Master_Pegawai;
 
 public class PilihKirimEmail extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
@@ -51,6 +64,7 @@ public class PilihKirimEmail extends AppCompatActivity implements SwipeRefreshLa
 
     private int IdPegawai;
     private PenggajianTable DbMaster;
+    private ProgressDialog progressDialog;
 
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
@@ -99,24 +113,34 @@ public class PilihKirimEmail extends AppCompatActivity implements SwipeRefreshLa
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        EmailTable TEmail = new EmailTable(PilihKirimEmail.this);
+                        EmailModel SettingEemail = TEmail.GetData(1);
+
+                        if (SettingEemail.getAlamat_email().equals("")){
+                            Toast.makeText(PilihKirimEmail.this, "Email pengirim belum diisi", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        ArrayList<KirimEmailModel> ListKirim = new ArrayList<KirimEmailModel>();
                         PenggajianModel Data;
+                        KirimEmailModel DataKirm;
+
+                        progressDialog = ProgressDialog.show(PilihKirimEmail.this,"Menyiapkan data","Please wait...",false,false);
+
                         for (int i = 0; i < ListData.size() ; i++) {
                             Data = new PenggajianModel(ListData.get(i));
-                            if (Data.isPilih() == true){
+                            if ((Data.isPilih() == true) && (Data.getId_pegawai() > 0)) {
+                                progressDialog.setMessage(Get_Nama_Master_Pegawai(Data.getId_pegawai()));
                                 PrintPenggajian print = new PrintPenggajian(PilihKirimEmail.this);
-                                print.Execute(Data.getId());
-
-                                String haha = Get_Nama_Master_Pegawai(Data.getId_pegawai())+"-"+getTglFormatCustom(Data.getPeriode(),"MMMM-yyyy")+".pdf";
-
-                                //                                KirimEmail(Get_Email_Master_Pegawai(Data.getId_pegawai()), print.getNamaPrint(),
-//                                        Environment.getExternalStorageDirectory() + "/orion_payroll/documents/"+print.getNamaPrint());
-
-//                                haha = Environment.getExternalStorageDirectory() + "/orion_payroll/documents/Test.png";
-//
-//                                KirimEmail(Get_Email_Master_Pegawai(Data.getId_pegawai()), print.getNamaPrint(),haha);
-
+                                String Email = Get_Email_Master_Pegawai(Data.getId_pegawai());
+                                String Path = print.Execute(Data.getId());
+                                DataKirm = new KirimEmailModel(Email, "", "", Path);
+                                ListKirim.add(DataKirm);
                             }
                         }
+                        progressDialog.dismiss();
+                        SendMail sm = new SendMail(PilihKirimEmail.this);
+                        sm.execute(ListKirim);
                     }
                 });
 
@@ -161,9 +185,85 @@ public class PilihKirimEmail extends AppCompatActivity implements SwipeRefreshLa
                 txtPeriode.setError(null);
             }
         });
-
-
     }
+
+
+    public void LoadData(){
+        swipe.setRefreshing(true);
+        long periode_dari   = StartOfTheMonthLong(getMillisDateFmt(txtPeriode.getText().toString(), "MMMM yyyy"));
+        long periode_sampai = EndOfTheMonthLong(getMillisDateFmt(txtPeriode.getText().toString(), "MMMM yyyy"));
+
+        this.DbMaster.ReloadList(Long.valueOf(0), Long.valueOf(0), periode_dari, periode_sampai,"nomor");
+        for (int i = 0; i < ListData.size(); i++){
+            ListData.get(i).setPilih(true);
+        }
+
+        Adapter = new PilihKirimEmailAdapter(PilihKirimEmail.this, R.layout.list_penggajian_rekap_new, ListData);
+        Adapter.notifyDataSetChanged();
+        ListRekap.setAdapter(Adapter);
+        swipe.setRefreshing(false);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pilih_kirim_email);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+//    protected boolean KirimEmail(String email, String subjek, String pathFile){
+//
+//        SendMail sm = new SendMail(this, email, subjek, "", pathFile);
+//
+//        //Executing sendmail to send email
+//        sm.execute();
+//        return true;
+//    }
+
+
+//    protected void sendEmail() {
+//
+//        String[] TO = {"someone@gmail.com"};
+//        String[] CC = {"xyz@gmail.com"};
+//        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+//
+//        emailIntent.setData(Uri.parse("mailto:"));
+//        emailIntent.setType("text/plain");
+//
+//        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+//        //emailIntent.putExtra(Intent.EXTRA_CC, CC);
+//        emailIntent.putExtra(Intent.EXTRA_STREAM, CC);
+//        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Your subject");
+//        emailIntent.putExtra(Intent.EXTRA_TEXT, "Email message goes here");
+//
+//        try {
+//            startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+//            finish();
+//
+//        } catch (android.content.ActivityNotFoundException ex) {
+//
+//        }
+//    }
+}
 
 //    public void LoadData(){
 //        swipe.setRefreshing(true);
@@ -241,59 +341,3 @@ public class PilihKirimEmail extends AppCompatActivity implements SwipeRefreshLa
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 //    }
-
-    public void LoadData(){
-        swipe.setRefreshing(true);
-        long Awal = StartOfTheMonthLong(getMillisDateFmt(txtPeriode.getText().toString(),"MMMM yyyy"));
-        long Akhir = EndOfTheMonthLong(getMillisDateFmt(txtPeriode.getText().toString(),"MMMM yyyy"));
-
-        this.DbMaster.ReloadList(Awal,Akhir,"id_pegawai");
-        for (int i = 0; i < ListData.size(); i++){
-            ListData.get(i).setPilih(true);
-        }
-
-        Adapter = new PilihKirimEmailAdapter(PilihKirimEmail.this, R.layout.list_penggajian_rekap_new, ListData);
-        Adapter.notifyDataSetChanged();
-        ListRekap.setAdapter(Adapter);
-        swipe.setRefreshing(false);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pilih_kirim_email);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-    protected boolean KirimEmail(String email, String subjek, String pathFile){
-
-        SendMail sm = new SendMail(this, email, subjek, "", pathFile);
-
-        //Executing sendmail to send email
-        sm.execute();
-        return true;
-    }
-
-
-
-}
-
