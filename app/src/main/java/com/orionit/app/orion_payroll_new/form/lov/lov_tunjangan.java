@@ -139,6 +139,35 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
         swipe.setRefreshing(false);
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lov_tunjangan);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+}
+
+
 //    public void LoadData(){
 //        swipe.setRefreshing(true);
 //        String filter;
@@ -184,31 +213,3 @@ public class lov_tunjangan extends AppCompatActivity implements SwipeRefreshLayo
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 //
 //    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lov_tunjangan);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-}

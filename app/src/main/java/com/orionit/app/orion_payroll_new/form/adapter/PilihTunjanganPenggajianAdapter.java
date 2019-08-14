@@ -68,11 +68,6 @@ public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDeta
                 holder.HbtnHapus.setVisibility(View.INVISIBLE);
             }
 
-//            if ((Data.getId_tjg_pot_kas() == ID_TJ_INSENTIF) || ((Data.getId_tjg_pot_kas() == ID_TJ_LEMBUR))) {
-//                holder.HbtnHapus.setVisibility(View.INVISIBLE);
-//            }
-
-            //holder.Hjumlah.setEnabled(false);
             v.setTag(holder);
         }else{
             holder = (PilihTunjanganPenggajianAdapter.ViewHolder)v.getTag();
@@ -82,22 +77,7 @@ public class PilihTunjanganPenggajianAdapter extends ArrayAdapter<PenggajianDeta
         holder.Hnama.setText(Get_Nama_Master_Tunjangan(Data.getId_tjg_pot_kas()));
         holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
         holder.Hjumlah.setId(position);
-
-//        holder.Hjumlah.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//            public void onFocusChange(View v, boolean hasFocus) {
-//                final EditText Caption = (EditText) v;
-//                if (!hasFocus){
-//                    //final EditText Caption = (EditText) v;
-//                    if (!Caption.getText().toString().equals("")) {
-//                        Data.setJumlah(StrFmtToDouble(Caption.getText().toString()));
-//                    }else{
-//                        Data.setJumlah(StrFmtToDouble("0"));
-//                    }
-//                    holder.Hjumlah.setText(FungsiGeneral.FloatToStrFmt(Data.getJumlah()));
-//                    holder.Hjumlah.setText(fmt.format(Data.getJumlah()));
-//                }
-//            }
-//        });
+        
 
         if (Enabled){
             holder.Hjumlah.setOnClickListener(new View.OnClickListener() {

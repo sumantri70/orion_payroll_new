@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -94,7 +95,7 @@ import static com.orionit.app.orion_payroll_new.utility.route.URL_UPDATE_PEGAWAI
 public class PenggajianInputNew extends AppCompatActivity {
     private TextInputEditText txtNomor, txtTanggal, txtPegawai, txtTelat1, txtTelat2, txtDokter, txtNonCuti,
             txtstghHari, txtCuti, txtLembur, txtKeterangan, txtPeriode;
-    private TextView lblGajiPokok, lblTotTunjangan, lblTotPotongan, lblTotKasbon, lblTotLembur, lblTotal, lblPilihTunjangan, lblPilihPotongan, lblPilikKasbon;
+    private TextView lblGajiPokok, lblTotTunjangan, lblTotPotongan, lblTotKasbon, lblTotLembur, lblTotal, lblPilihTunjangan, lblPilihPotongan, lblPilikKasbon, lblCaptionTotalKasbon;
     private Button btnSimpan;
 
     private ImageButton btnTunjangan, btnPotongan, btnKasbon;
@@ -150,6 +151,7 @@ public class PenggajianInputNew extends AppCompatActivity {
         lblTotKasbon    = (TextView) findViewById(R.id.lblTotKasbon);
         lblTotLembur    = (TextView) findViewById(R.id.lblTotLembur);
         lblTotal        = (TextView) findViewById(R.id.lblTotal);
+        lblCaptionTotalKasbon = (TextView) findViewById(R.id.lblCaptionTotalKasbon);
 
         //lblPilihTunjangan = (TextView) findViewById(R.id.lblPilihTunjangan);
 //        lblPilihPotongan  = (TextView) findViewById(R.id.lblPilihPotongan);
@@ -419,38 +421,6 @@ public class PenggajianInputNew extends AppCompatActivity {
             }
         });
 
-
-//        lblPilihTunjangan.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LostFocus();
-//                Intent s = new Intent(PenggajianInputNew.this, PilihTunjanganPenggajian.class);
-//                s.putExtra("MODE","");
-//                startActivityForResult(s, RESULT_LOV_TUNJANGAN);
-//            }
-//        });
-
-
-//        lblPilihPotongan.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LostFocus();
-//                Intent s = new Intent(PenggajianInputNew.this, PilihPotonganPenggajian.class);
-//                s.putExtra("MODE","");
-//                startActivityForResult(s, RESULT_LOV_POTONGAN);
-//            }
-//        });
-//
-//        lblPilikKasbon.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LostFocus();
-//                Intent s = new Intent(PenggajianInputNew.this, PilihKasbonPenggajian.class);
-//                s.putExtra("MODE","");
-//                startActivityForResult(s, RESULT_LOV_KASBON);
-//            }
-//        });
-
         btnTunjangan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -493,7 +463,6 @@ public class PenggajianInputNew extends AppCompatActivity {
         mInstance = this;
         if ((Mode.equals(EDIT_MODE)) || (Mode.equals(DETAIL_MODE))){
             LoadData();
-            //ListView.expandGroup(0);
         }
     }
 
@@ -512,58 +481,6 @@ public class PenggajianInputNew extends AppCompatActivity {
         finish();
         return true;
     }
-
-//    protected void LoadData(){
-//        Loading.setMessage("Loading...");
-//        Loading.setCancelable(false);
-//        Loading.show();
-//        String filter;
-//        filter = "?id="+IdMst;
-//        String url = route.URL_GET_PENGGAJIAN  + filter;
-//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("data");
-//                    JSONObject obj = jsonArray.getJSONObject(0);
-//                    IdPegawai = obj.getInt("id_pegawai");
-//                    //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
-//                    txtNomor.setText(obj.getString("nomor"));
-//                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
-//                    txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
-//                    txtTelat1.setText(obj.getString("telat_satu"));
-//                    txtTelat2.setText(obj.getString("telat_dua"));
-//                    txtDokter.setText(obj.getString("dokter"));
-//                    txtstghHari.setText(obj.getString("izin_stgh_hari"));
-//                    txtCuti.setText(obj.getString("izin_cuti"));
-//                    txtNonCuti.setText(obj.getString("izin_non_cuti"));
-//                    txtKeterangan.setText(obj.getString("keterangan"));
-//                    txtLembur.setText(obj.getString("jam_lembur"));
-//                    lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
-//                    lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
-//                    lblTotPotongan.setText(fmt.format(obj.getDouble("total_potongan")));
-//                    lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
-//                    lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
-//                    lblTotal.setText(fmt.format(obj.getDouble("total")));
-//
-//                    LoadKasbonPegawaiEdit(IdPegawai);
-//                    DataPegawai = new PegawaiModel(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//                    Loading.dismiss();
-//                }
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("error", "Error: " + error.getMessage());
-//                Loading.dismiss();
-//            }
-//        });
-//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-//    }
 
     protected void LoadData(){
         Loading.setMessage("Loading...");
@@ -598,6 +515,14 @@ public class PenggajianInputNew extends AppCompatActivity {
         LoadDetail();
         HitungDetail();
         HitungTotal();
+
+        if (!Mode.equals(DETAIL_MODE)){
+            if (ArListKasbon.size() > 0){
+                lblCaptionTotalKasbon.setTextColor(getResources().getColor(R.color.colorSoftRed));
+            }else {
+                lblCaptionTotalKasbon.setTextColor(getResources().getColor(R.color.colorGrayDark));
+            }
+        };
 
         Loading.dismiss();
     }
@@ -1331,25 +1256,25 @@ public class PenggajianInputNew extends AppCompatActivity {
                 if (Id == ID_PT_TELAT_15) {
                     banyak = StrToIntDef(txtTelat1.getText().toString(),0);
                     if (banyak > 5) {
-                        jumlah = (banyak - 5) * Round(DataPegawai.getPremi_harian() * 0.25,0);
+                        //jumlah = (banyak - 5) * Round(DataPegawai.getPremi_harian() * 0.25,0);
+                        jumlah = Round((banyak - 5) * (DataPegawai.getUang_kehadiran() / 21) * 0.25,0);
                         tambahkan = true;
                     }
                 } else if (Id == ID_PT_TELAT_LBH_15) {
                     banyak    = StrToIntDef(txtTelat2.getText().toString(),0);
-                    jumlah    = (banyak) * Round(DataPegawai.getPremi_harian() * 0.25, 0);
+                    //jumlah    =  Round((banyak) * (DataPegawai.getPremi_harian() * 0.25), 0);
+                    jumlah    =  Round((banyak) * ((DataPegawai.getUang_kehadiran() / 21) * 0.25), 0);
                     tambahkan = banyak > 0;
                 } else if (Id == ID_PT_IZIN_STGH_HARI) {
                     banyak   = StrToIntDef(txtstghHari.getText().toString(),0);
-                    jumlah    = (banyak) * Round(DataPegawai.getPremi_harian() * 0.5, 0);
+                    //jumlah    = Round((banyak) * (DataPegawai.getPremi_harian() * 0.5), 0);
+                    jumlah    = Round((banyak) * ((DataPegawai.getUang_kehadiran() / 21) * 0.5), 0);
                     tambahkan = banyak > 0;
                 } else if (Id == ID_PT_IZIN_NON_CUTI) {
                     banyak    = StrToIntDef(txtNonCuti.getText().toString(),0);
-                    jumlah    = (banyak) * (DataPegawai.getPremi_harian());
+//                    jumlah    = (banyak) * (DataPegawai.getPremi_harian());
+                    jumlah    = Round((banyak) * (DataPegawai.getUang_kehadiran() / 21), 0);
                     tambahkan = banyak > 0;
-//                } else if (Id == ID_PT_DOKTER) {
-//                    banyak = StrToIntDef(txtTelat1.getText().toString(),0);
-//                    jumlah = 0.0;
-//                    tambahkan = banyak > 0;
                 }
             }
         }
@@ -1402,7 +1327,8 @@ public class PenggajianInputNew extends AppCompatActivity {
             if (DataPegawai.getId() > 0) {
                 if (Id == ID_TJ_LEMBUR) {
                     banyak    = StrToIntDef(txtLembur.getText().toString(),0);
-                    jumlah    = Round((banyak * DataPegawai.getPremi_perjam()) * 1.5,0);
+                    //jumlah    = Round((banyak * DataPegawai.getPremi_perjam()) * 1.5,0);
+                    jumlah    = Round((  (banyak * (DataPegawai.getUang_kehadiran() / 21) /8)) * 1.5,0);
                     tambahkan = banyak > 0;
                 }
             }
@@ -1631,6 +1557,14 @@ public class PenggajianInputNew extends AppCompatActivity {
 //                LoadAbsensi();
                 HitungDetail();
                 HitungTotal();
+
+                if (!Mode.equals(DETAIL_MODE)){
+                    if (ArListKasbon.size() > 0){
+                        lblCaptionTotalKasbon.setTextColor(getResources().getColor(R.color.colorSoftRed));
+                    }else {
+                        lblCaptionTotalKasbon.setTextColor(getResources().getColor(R.color.colorGrayDark));
+                    }
+                };
             }
         }
         Loading.dismiss();
@@ -1642,3 +1576,56 @@ public class PenggajianInputNew extends AppCompatActivity {
         txtTmp.setVisibility(View.INVISIBLE);
     }
 }
+
+
+//    protected void LoadData(){
+//        Loading.setMessage("Loading...");
+//        Loading.setCancelable(false);
+//        Loading.show();
+//        String filter;
+//        filter = "?id="+IdMst;
+//        String url = route.URL_GET_PENGGAJIAN  + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    JSONObject obj = jsonArray.getJSONObject(0);
+//                    IdPegawai = obj.getInt("id_pegawai");
+//                    //txtPeriode.setText(getTglFormatCustom(serverNowStartOfTheMonthLong(), "MMMM yyyy"));
+//                    txtNomor.setText(obj.getString("nomor"));
+//                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
+//                    txtPegawai.setText(Get_Nama_Master_Pegawai(obj.getInt("id_pegawai")));
+//                    txtTelat1.setText(obj.getString("telat_satu"));
+//                    txtTelat2.setText(obj.getString("telat_dua"));
+//                    txtDokter.setText(obj.getString("dokter"));
+//                    txtstghHari.setText(obj.getString("izin_stgh_hari"));
+//                    txtCuti.setText(obj.getString("izin_cuti"));
+//                    txtNonCuti.setText(obj.getString("izin_non_cuti"));
+//                    txtKeterangan.setText(obj.getString("keterangan"));
+//                    txtLembur.setText(obj.getString("jam_lembur"));
+//                    lblGajiPokok.setText(fmt.format(obj.getDouble("gaji_pokok")));
+//                    lblTotTunjangan.setText(fmt.format(obj.getDouble("total_tunjangan")));
+//                    lblTotPotongan.setText(fmt.format(obj.getDouble("total_potongan")));
+//                    lblTotLembur.setText(fmt.format(obj.getDouble("total_lembur")));
+//                    lblTotKasbon.setText(fmt.format(obj.getDouble("total_kasbon")));
+//                    lblTotal.setText(fmt.format(obj.getDouble("total")));
+//
+//                    LoadKasbonPegawaiEdit(IdPegawai);
+//                    DataPegawai = new PegawaiModel(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(IdPegawai)));
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(PenggajianInputNew.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("error", "Error: " + error.getMessage());
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }

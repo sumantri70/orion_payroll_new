@@ -172,55 +172,6 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
         });
     }
 
-//    public void LoadData(){
-//        swipe.setRefreshing(true);
-//        String filter;
-//        Fstatus = "";
-//        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
-//        String url = route.URL_SELECT_LAPORAN_PENGGAJIAN + filter;
-//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                LaporanPenggajianModel Data;
-//                ListData.clear();
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("data");
-//                    for (int i = 0; i < jsonArray.length(); i++) {
-//                        JSONObject obj = jsonArray.getJSONObject(i);
-//                        Data = new LaporanPenggajianModel(
-//                                getMillisDate(FormatDateFromSql(obj.getString("periode"))),
-//                                obj.getDouble("gaji_pokok"),
-//                                obj.getDouble("total_tunjangan"),
-//                                obj.getDouble("total_potongan"),
-//                                obj.getDouble("total_kasbon"),
-//                                obj.getDouble("total_lembur"),
-//                                obj.getDouble("total")
-//                        );
-//                        ListData.add(Data);
-//                    }
-//
-//                    Adapter = new LaporanPenggajianAdapter(Laporan_penggajian.this, R.layout.list_laporan_penggajian, ListData);
-//                    Adapter.notifyDataSetChanged();
-//                    ListRekap.setAdapter(Adapter);
-//                    swipe.setRefreshing(false);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(Laporan_penggajian.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//                    swipe.setRefreshing(false);
-//                }
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                ListData.clear();
-//                swipe.setRefreshing(false);
-//                Toast.makeText(Laporan_penggajian.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-//    }
-
     public void LoadData(){
         swipe.setRefreshing(true);
         String filter;
@@ -270,3 +221,53 @@ public class Laporan_penggajian extends AppCompatActivity implements SwipeRefres
     }
 }
 
+
+
+//    public void LoadData(){
+//        swipe.setRefreshing(true);
+//        String filter;
+//        Fstatus = "";
+//        filter = "?tgl_dari="+getTglFormatMySql(tgl_dari)+ "&tgl_sampai="+getTglFormatMySql(tgl_Sampai)+ "&status="+status+ "&id_pegawai="+Integer.toString(IdPegawai)+"&order_by="+OrderBy;
+//        String url = route.URL_SELECT_LAPORAN_PENGGAJIAN + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                LaporanPenggajianModel Data;
+//                ListData.clear();
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    for (int i = 0; i < jsonArray.length(); i++) {
+//                        JSONObject obj = jsonArray.getJSONObject(i);
+//                        Data = new LaporanPenggajianModel(
+//                                getMillisDate(FormatDateFromSql(obj.getString("periode"))),
+//                                obj.getDouble("gaji_pokok"),
+//                                obj.getDouble("total_tunjangan"),
+//                                obj.getDouble("total_potongan"),
+//                                obj.getDouble("total_kasbon"),
+//                                obj.getDouble("total_lembur"),
+//                                obj.getDouble("total")
+//                        );
+//                        ListData.add(Data);
+//                    }
+//
+//                    Adapter = new LaporanPenggajianAdapter(Laporan_penggajian.this, R.layout.list_laporan_penggajian, ListData);
+//                    Adapter.notifyDataSetChanged();
+//                    ListRekap.setAdapter(Adapter);
+//                    swipe.setRefreshing(false);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(Laporan_penggajian.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    swipe.setRefreshing(false);
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                ListData.clear();
+//                swipe.setRefreshing(false);
+//                Toast.makeText(Laporan_penggajian.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }

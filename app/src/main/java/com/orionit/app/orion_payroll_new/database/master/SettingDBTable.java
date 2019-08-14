@@ -40,11 +40,6 @@ public class SettingDBTable {
         this.db.delete("setting_db", null, null);
     }
 
-//    public void Update(SettingDBModel Data) {
-//        ContentValues cv;
-//        cv = SetValue(Data);
-//        this.db.update("setting_db", cv, "_id = " + Data.getId(), null);
-//    }
 
     public SettingDBModel GetData(){
         Cursor cr = this.db.rawQuery("SELECT accessKey, accessSecret, password FROM setting_db", null);

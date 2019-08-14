@@ -34,7 +34,7 @@ public class PilihPotonganPenggajian extends AppCompatActivity {
     private void CreateVew(){
         this.ListRekap  = (ListView) findViewById(R.id.ListRekap);
         this.btnTambah  = (Button) findViewById(R.id.btnTambah);
-        this.txtTmp          = (EditText) findViewById(R.id.txtTmp);// BUAT NUPANG FOCUSIN AJA
+        this.txtTmp     = (EditText) findViewById(R.id.txtTmp);
     }
 
     private void InitClass(){

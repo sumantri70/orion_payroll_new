@@ -199,6 +199,55 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
         });
     }
 
+    public void LoadData(){
+        swipe.setRefreshing(true);
+        this.DbMaster.ReloadList(Fstatus, OrderBy, false,"");
+        Adapter = new TunjanganAdapter(this, R.layout.list_potongan_rekap, ListTunjangan);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_tunjangan_rekap);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                LoadData();
+                OrionPayrollApplication.getInstance().GetHashTunjangan();
+            }else{
+
+            }
+        }
+    }
+}
+
+
 //    public void LoadData(){
 //        swipe.setRefreshing(true);
 //        String filter;
@@ -248,56 +297,3 @@ public class TunjanganRekap extends AppCompatActivity implements SwipeRefreshLay
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 //
 //    }
-
-    public void LoadData(){
-        swipe.setRefreshing(true);
-        this.DbMaster.ReloadList(Fstatus, OrderBy, false,"");
-        Adapter = new TunjanganAdapter(this, R.layout.list_potongan_rekap, ListTunjangan);
-        ListRekap.setAdapter(Adapter);
-        Adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tunjangan_rekap);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                LoadData();
-                OrionPayrollApplication.getInstance().GetHashTunjangan();
-            }else{
-
-            }
-        }
-    }
-
-
-
-
-
-}

@@ -143,32 +143,6 @@ public class KasbonPegawaiAdapter extends ArrayAdapter<KasbonPegawaiModel> imple
                                 catch(Exception e) {
                                     Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
                                 }
-
-//                                StringRequest strReq = new StringRequest(Request.Method.POST, URL_DELETE_KASBON, new Response.Listener<String>() {
-//                                    @Override
-//                                    public void onResponse(String response) {
-//                                        try {
-//                                            JSONObject jObj = new JSONObject(response);
-//                                            ((KasbonPegawaiRekap)ctx).LoadData();
-//                                            Toast.makeText(getContext(),MSG_SUCCESS_DELETE, Toast.LENGTH_SHORT).show();
-//                                        } catch (JSONException e) {
-//                                            e.printStackTrace();
-//                                        }
-//                                    }
-//                                }, new Response.ErrorListener() {
-//                                    @Override
-//                                    public void onErrorResponse(VolleyError error) {
-//                                        Toast.makeText(getContext(),MSG_UNSUCCESS_DELETE, Toast.LENGTH_SHORT).show();
-//                                    }
-//                                }) {
-//                                    @Override
-//                                    protected Map<String, String> getParams() {
-//                                        Map<String, String> params = new HashMap<String, String>();
-//                                        params.put("id", String.valueOf(IdMSt));
-//                                        return params;
-//                                    }
-//                                };
-//                                OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
                             }
                         }
                         return false;

@@ -26,23 +26,10 @@ import com.orionit.app.orion_payroll_new.form.adapter.PenggajianAdapterNew;
 import com.orionit.app.orion_payroll_new.form.filter.FilterPenggajian;
 import com.orionit.app.orion_payroll_new.models.JCons;
 import com.orionit.app.orion_payroll_new.models.PenggajianModel;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.pdf.PdfWriter;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import static com.orionit.app.orion_payroll_new.models.JCons.RESULT_LOV;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.EndOfTheMonthLong;
-import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.StartOfTheMonthLong;
-import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.getMillisDateFmt;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowLong;
 import static com.orionit.app.orion_payroll_new.utility.FungsiGeneral.serverNowStartOfTheMonthLong;
 

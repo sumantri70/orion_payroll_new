@@ -1112,7 +1112,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView66666"
+                                    android:id="@+id/lblCaptionTotalKasbon"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
@@ -1124,7 +1124,7 @@
                                     android:textStyle="bold" />
 
                                 <TextView
-                                    android:id="@+id/textView666666"
+                                    android:id="@+id/lblCaptionTotalKasbon6"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"

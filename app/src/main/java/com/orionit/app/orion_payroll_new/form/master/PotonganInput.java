@@ -138,6 +138,69 @@ public class PotonganInput extends AppCompatActivity {
         return true;
     }
 
+    protected boolean IsValid(){
+        if (this.txtKode.getText().toString().trim().equals("")) {
+            txtKode.requestFocus();
+            txtKode.setError("Kode belum diisi");
+            return false;
+        }
+
+        if (TData.KodeExist(this.txtKode.getText().toString().trim(),IdMst)) {
+            txtKode.requestFocus();
+            txtKode.setError("Kode sudah pernah digunakan");
+            return false;
+        }
+
+        if (this.txtNama.getText().toString().trim().equals("")) {
+            txtNama.requestFocus();
+            txtNama.setError("Nama belum diisi");
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean IsSaved(){
+        try {
+            PotonganModel Data = new PotonganModel(
+                    0,txtKode.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtKeterangan.getText().toString().trim(),
+                    TRUE_STRING,
+                    TRUE_STRING);
+            TData.Insert(Data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    protected boolean IsSavedEdit(){
+        try {
+            PotonganModel Data = new PotonganModel(
+                    IdMst,
+                    txtKode.getText().toString().trim(),
+                    txtNama.getText().toString().trim(),
+                    txtKeterangan.getText().toString().trim(),
+                    TRUE_STRING,
+                    TRUE_STRING);
+            TData.Update(Data);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    protected void LoadData(){
+        PotonganModel Data = TData.GetData(IdMst);
+        txtKode.setText(Data.getKode());
+        txtNama.setText(Data.getNama());
+        txtKeterangan.setText(Data.getKeterangan());
+    }
+}
+
+
 //    protected void LoadData(){
 //        Loading.setMessage("Loading...");
 //        Loading.setCancelable(false);
@@ -244,65 +307,3 @@ public class PotonganInput extends AppCompatActivity {
 //        };
 //        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
 //    }
-
-    protected boolean IsValid(){
-        if (this.txtKode.getText().toString().trim().equals("")) {
-            txtKode.requestFocus();
-            txtKode.setError("Kode belum diisi");
-            return false;
-        }
-
-        if (TData.KodeExist(this.txtKode.getText().toString().trim(),IdMst)) {
-            txtKode.requestFocus();
-            txtKode.setError("Kode sudah pernah digunakan");
-            return false;
-        }
-
-        if (this.txtNama.getText().toString().trim().equals("")) {
-            txtNama.requestFocus();
-            txtNama.setError("Nama belum diisi");
-            return false;
-        }
-        return true;
-    }
-
-    protected boolean IsSaved(){
-        try {
-            PotonganModel Data = new PotonganModel(
-                    0,txtKode.getText().toString().trim(),
-                    txtNama.getText().toString().trim(),
-                    txtKeterangan.getText().toString().trim(),
-                    TRUE_STRING,
-                    TRUE_STRING);
-            TData.Insert(Data);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    protected boolean IsSavedEdit(){
-        try {
-            PotonganModel Data = new PotonganModel(
-                    IdMst,
-                    txtKode.getText().toString().trim(),
-                    txtNama.getText().toString().trim(),
-                    txtKeterangan.getText().toString().trim(),
-                    TRUE_STRING,
-                    TRUE_STRING);
-            TData.Update(Data);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    protected void LoadData(){
-        PotonganModel Data = TData.GetData(IdMst);
-        txtKode.setText(Data.getKode());
-        txtNama.setText(Data.getNama());
-        txtKeterangan.setText(Data.getKeterangan());
-    }
-}

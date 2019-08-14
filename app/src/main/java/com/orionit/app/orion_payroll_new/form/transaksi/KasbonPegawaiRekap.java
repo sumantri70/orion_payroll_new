@@ -81,8 +81,6 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         Fstatus = TRUE_STRING;
         OrderBy = "nomor";
         ListData = new ArrayList<KasbonPegawaiModel>();
-        //Kodeing buat ngilangin garis
-        //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
 
         tgl_dari   = serverNowStartOfTheMonthLong();
@@ -192,6 +190,46 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
         Adapter.notifyDataSetChanged();
         swipe.setRefreshing(false);
     }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_kasbon_pegawai_rekap);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == RESULT_LOV) {
+                Bundle extra = data.getExtras();
+                IdPegawai  = extra.getInt("PEGAWAI_ID");
+                tgl_dari   = extra.getLong("TGL_DARI");
+                tgl_Sampai = extra.getLong("TGL_SAMPAI");
+                status     = extra.getInt("STATUS");
+            }
+            LoadData();
+        }
+    }
+}
 
 //    public void LoadData(){
 //        swipe.setRefreshing(true);
@@ -250,45 +288,3 @@ public class KasbonPegawaiRekap extends AppCompatActivity implements SwipeRefres
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 //    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kasbon_pegawai_rekap);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == RESULT_LOV) {
-                Bundle extra = data.getExtras();
-                IdPegawai  = extra.getInt("PEGAWAI_ID");
-                tgl_dari   = extra.getLong("TGL_DARI");
-                tgl_Sampai = extra.getLong("TGL_SAMPAI");
-                status     = extra.getInt("STATUS");
-            }
-            LoadData();
-        }
-    }
-}
-

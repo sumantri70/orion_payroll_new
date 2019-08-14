@@ -226,45 +226,6 @@ public class PenggajianAdapterNew extends ArrayAdapter<PenggajianModel> implemen
 
     }
 
-    private void createPdf() throws FileNotFoundException, DocumentException {
-        File docsFolder = new File(Environment.getExternalStorageDirectory() + "/orion_payroll/documents");
-        if (!docsFolder.exists()) {
-            docsFolder.mkdir();
-            Log.i(TAG, "Created a new directory for PDF");
-        }
-
-        pdfFile = new File(docsFolder.getAbsolutePath(),"Penggajian.pdf");
-        OutputStream output = new FileOutputStream(pdfFile);
-        com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-        PdfWriter.getInstance(document, output);
-        document.setPageSize(PageSize.A6);
-//        document.setMargins(36, 72, 108, 180);
-//        document.setMarginMirroring(true);
-//        document.setMarginMirroringTopBottom(true);
-        document.open();
-
-        document.add(new Paragraph("Nomor         : "));
-        document.add(new Paragraph("Tanggal       : "));
-        document.add(new Paragraph("Periode      : "));
-        document.add(new Paragraph("Nik/Nama   : "));
-
-        Chunk glue = new Chunk(new VerticalPositionMark());
-        Paragraph p = new Paragraph("Text to the left");
-        p.add(new Chunk(glue));
-        p.add("Text to the right");
-        document.add(p);
-
-
-
-        ZapfDingbatsList zapfDingbatsList1 = new ZapfDingbatsList(40, 15);
-        zapfDingbatsList1.add(new ListItem("Item 1"));
-        zapfDingbatsList1.add(new ListItem("Item 2"));
-        zapfDingbatsList1.add(new ListItem("Item 3"));
-
-        document.add(zapfDingbatsList1);
-        document.close();
-    }
-
     private boolean IsDelete(int idMst){
         try {
             PenggajianTable TDtMaster = new PenggajianTable(ctx);

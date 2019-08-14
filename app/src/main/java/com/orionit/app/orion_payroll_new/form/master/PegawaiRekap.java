@@ -202,6 +202,65 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
 
+    public void LoadData(){
+        swipe.setRefreshing(true);
+        this.DbMaster.ReloadList(Fstatus, OrderBy);
+        Adapter = new PegawaiAdapter(this, R.layout.list_pegawai_rekap, ListPegawai);
+        ListRekap.setAdapter(Adapter);
+        Adapter.notifyDataSetChanged();
+        swipe.setRefreshing(false);
+    }
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pegawai_rekap);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                LoadData();
+                OrionPayrollApplication.getInstance().GetHashPegawai();
+            }else{
+
+            }
+        }
+    }
+}
+
+
+//    private void LoadData(){
+//        swipe.setRefreshing(true);
+//        this.Data.ReloadList(Fstatus, OrderBy);
+//        PegawaiRekap.this.Adapter.notifyDataSetChanged();
+//        swipe.setRefreshing(false);
+//    }
+
+
+
 //    public void LoadData(){
 //        swipe.setRefreshing(true);
 //        String filter;
@@ -257,63 +316,4 @@ public class PegawaiRekap extends AppCompatActivity implements SwipeRefreshLayou
 //            }
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-//    }
-
-    public void LoadData(){
-        swipe.setRefreshing(true);
-        this.DbMaster.ReloadList(Fstatus, OrderBy);
-        Adapter = new PegawaiAdapter(this, R.layout.list_pegawai_rekap, ListPegawai);
-        ListRekap.setAdapter(Adapter);
-        Adapter.notifyDataSetChanged();
-        swipe.setRefreshing(false);
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_pegawai_rekap);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                LoadData();
-                OrionPayrollApplication.getInstance().GetHashPegawai();
-            }else{
-
-            }
-        }
-    }
-}
-
-
-
-
-//    private void LoadData(){
-//        swipe.setRefreshing(true);
-//        this.Data.ReloadList(Fstatus, OrderBy);
-//        PegawaiRekap.this.Adapter.notifyDataSetChanged();
-//        swipe.setRefreshing(false);
 //    }

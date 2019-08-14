@@ -81,8 +81,6 @@ public class Laporan_kasbon extends AppCompatActivity implements SwipeRefreshLay
         Fstatus = TRUE_STRING;
         OrderBy = "tanggal";
         ListData = new ArrayList<LaporanKasbonModel>();
-        //Kodeing buat ngilangin garis
-        //this.ListRekap.setDivider(null);
         this.ListRekap.setDividerHeight(1);
 
         tgl_dari   = serverNowStartOfTheMonthLong();

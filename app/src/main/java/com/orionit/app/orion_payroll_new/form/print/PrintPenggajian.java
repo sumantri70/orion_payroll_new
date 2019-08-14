@@ -101,126 +101,6 @@ public class PrintPenggajian {
             return Hasil;
         }
 
-    private String CreatePrdf() throws FileNotFoundException, DocumentException {
-            String Hasil = "";
-            Font fontNormal = new Font(Font.FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK);
-            Font fontBold   = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
-            Font fontBoldHeader = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK);
-
-            this.NamaPrint = Get_Nama_Master_Pegawai(DtPenggajian.getId_pegawai())+"-"+getTglFormatCustom(DtPenggajian.getPeriode(),"MMMM-yyyy");
-
-            pdfFile = new File(CreateGetDir(DtPenggajian.getPeriode()),NamaPrint+".pdf");
-            OutputStream output = new FileOutputStream(pdfFile);
-            com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-            PdfWriter.getInstance(document, output);
-            document.setPageSize(PageSize.A6);
-            document.open();
-
-            Chunk glue = new Chunk(new VerticalPositionMark());
-
-            LineSeparator line = new LineSeparator(1,100,null, Element.ALIGN_CENTER,-4);
-
-            Paragraph h1 = new Paragraph("Orion IT Solution", fontBoldHeader);
-            h1.add(new Chunk(glue));
-            h1.add("Slip Gaji");
-
-            document.add(h1);
-            document.add(line);
-
-            Paragraph pMaster = new Paragraph("\n",fontNormal);
-            pMaster.add("Nomor        : " + DtPenggajian.getNomor()+"\n");
-            pMaster.add("Tanggal      : " + getTglFormat(DtPenggajian.getTanggal())+"\n");//sementara
-            pMaster.add("Periode       : " + getTglFormatCustom(DtPenggajian.getPeriode(), "MMMM yyyy")+"\n");//sementara
-            pMaster.add("Nik/Nama   : " + Get_Nik_Master_Pegawai(DtPenggajian.getId_pegawai())+"|"+Get_Nama_Master_Pegawai(DtPenggajian.getId_pegawai())+"\n\n");
-            document.add(pMaster);
-
-            Paragraph pKosong = new Paragraph(" ");
-
-            Paragraph p = new Paragraph("Gaji Pokok", fontBold);
-            p.add(new Chunk(glue));
-            p.add(fmt.format(DtPenggajian.getGaji_pokok()));
-            document.add(p);
-
-            Paragraph p1 = new Paragraph("Total Tunjangan",fontBold);
-            p1.add(new Chunk(glue));
-            p1.add(fmt.format(DtPenggajian.getTotal_tunjangan() + DtPenggajian.getTotal_lembur()));
-            document.add(p1);
-
-            String jarakDetail = "       ";
-            String jarakDetailKanan = "          ";
-
-            for (int i = 0; i < ArListTunjangan.size(); i++){
-                Paragraph pd = new Paragraph(jarakDetail + Get_Nama_Master_Tunjangan(ArListTunjangan.get(i).getId_tjg_pot_kas()), fontNormal);
-                pd.add(new Chunk(glue));
-                pd.add(fmt.format(ArListTunjangan.get(i).getJumlah()) + jarakDetailKanan);
-                document.add(pd);
-            }
-
-            Paragraph p2 = new Paragraph("Total Potongan",fontBold);
-            p2.add(new Chunk(glue));
-            p2.add(fmt.format(DtPenggajian.getTotal_potongan()));
-            document.add(p2);
-
-            for (int i = 0; i < ArListPotongan.size(); i++){
-                Paragraph pd = new Paragraph(jarakDetail + Get_Nama_Master_Potongan(ArListPotongan.get(i).getId_tjg_pot_kas()), fontNormal);
-                pd.add(new Chunk(glue));
-                pd.add(fmt.format(ArListPotongan.get(i).getJumlah()) + jarakDetailKanan);
-                document.add(pd);
-            }
-
-            Paragraph p7 = new Paragraph("Total Kasbon",fontBold);
-            p7.add(new Chunk(glue));
-            p7.add(fmt.format(DtPenggajian.getTotal_kasbon()));
-            document.add(p7);
-
-            document.add(line);
-
-            Paragraph p3 = new Paragraph("Total",fontBold);
-            p3.add(new Chunk(glue));
-            p3.add(fmt.format(DtPenggajian.getTotal())+"\n");
-            document.add(p3);
-
-
-            //BAWAH----------------------------------------------------------------
-            String keterangan = DtPenggajian.getKeterangan();
-            if (SisaKasbon > 0) {
-                if (keterangan.equals("")){
-                        keterangan += "Sisa kasbon : "+fmt.format(SisaKasbon);
-                }else{
-                    keterangan += "\n"+"                      Sisa kasbon : "+fmt.format(SisaKasbon);
-                }
-            }
-
-            Paragraph p4 = new Paragraph("Keterangan : "+keterangan, fontNormal);
-            document.add(p4);
-
-            document.add(pKosong);
-
-            Paragraph p5 = new Paragraph("            Keuangan", fontNormal);
-            p5.add(new Chunk(glue));
-            p5.add("Penerima             ");
-            document.add(p5);
-
-            document.add(pKosong);
-            document.add(pKosong);
-
-            Paragraph p6 = new Paragraph("      (                          )",fontNormal);
-            p6.add(new Chunk(glue));
-            p6.add("(                          )      ");
-            document.add(p6);
-            //BAWAH----------------------------------------------------------------
-            document.close();
-            return pdfFile.getPath();
-
-//            if (!Get_Email_Master_Pegawai(DtPenggajian.getId_pegawai()).equals("")) {
-//                String subjek = Get_Nama_Master_Pegawai(DtPenggajian.getId_pegawai())+"-"+getTglFormatCustom(DtPenggajian.getPeriode(), "MMMM-yyyy");
-//                KirimEmail(Get_Email_Master_Pegawai(DtPenggajian.getId_pegawai()), subjek, pdfFile.getPath());
-//            }
-        }
-
-
-
-
     private String CreatePrdfDenganHEader() throws FileNotFoundException, DocumentException {
         String Hasil = "";
         Font fontKecil = new Font(Font.FontFamily.HELVETICA, 6, Font.NORMAL, BaseColor.BLACK);
@@ -281,14 +161,6 @@ public class PrintPenggajian {
 
         Paragraph pKosong = new Paragraph(" ");
         document.add(pKosong);
-
-
-//        Paragraph pMaster = new Paragraph("\n",fontNormal);
-//        pMaster.add("Nomor        : " + DtPenggajian.getNomor()+"\n");
-//        pMaster.add("Tanggal      : " + getTglFormat(DtPenggajian.getTanggal())+"\n");//sementara
-//        pMaster.add("Periode       : " + getTglFormatCustom(DtPenggajian.getPeriode(), "MMMM yyyy")+"\n");//sementara
-//        pMaster.add("Nik/Nama   : " + Get_Nik_Master_Pegawai(DtPenggajian.getId_pegawai())+"|"+Get_Nama_Master_Pegawai(DtPenggajian.getId_pegawai())+"\n\n");
-//        document.add(pMaster);
 
         PdfPTable TableMaster = new PdfPTable(3);
         TableMaster.setWidthPercentage(100);
@@ -417,18 +289,7 @@ public class PrintPenggajian {
         //BAWAH----------------------------------------------------------------
         document.close();
         return pdfFile.getPath();
-
-//            if (!Get_Email_Master_Pegawai(DtPenggajian.getId_pegawai()).equals("")) {
-//                String subjek = Get_Nama_Master_Pegawai(DtPenggajian.getId_pegawai())+"-"+getTglFormatCustom(DtPenggajian.getPeriode(), "MMMM-yyyy");
-//                KirimEmail(Get_Email_Master_Pegawai(DtPenggajian.getId_pegawai()), subjek, pdfFile.getPath());
-//            }
     }
-
-
-//    protected void KirimEmail(String email, String subjek, String pathFile){
-//        SendMail sm = new SendMail(context, email, subjek, "", pathFile);
-//        sm.execute();
-//    }
 
     protected void LoadData(final int IdMst){
         DtPenggajian = new PenggajianModel();
@@ -469,7 +330,6 @@ public class PrintPenggajian {
     }
 
     private String CreateGetDir(long periode) {
-        //File direct = new File("/storage/emulated/0/Download/ethica");
 
         String path_periode = getTglFormatCustom(periode, "MMMM yyyy");
 

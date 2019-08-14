@@ -198,6 +198,53 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
             }
         });
     }
+        public void LoadData(){
+            swipe.setRefreshing(true);
+            this.DbMaster.ReloadList(Fstatus, OrderBy, false);
+            Adapter = new PotonganAdapter(this, R.layout.list_potongan_rekap, ListPotongan);
+            ListRekap.setAdapter(Adapter);
+            Adapter.notifyDataSetChanged();
+            swipe.setRefreshing(false);
+        }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_potongan_rekap);
+        CreateVew();
+        InitClass();
+        EventClass();
+        LoadData();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp(){
+        finish();
+        return true;
+    }
+
+    @Override
+    public void onRefresh() {
+        LoadData();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                LoadData();
+                OrionPayrollApplication.getInstance().GetHashPotongan();
+            }else{
+
+            }
+        }
+    }
+}
 
 
 //    public void LoadData(){
@@ -249,56 +296,3 @@ public class PotonganRekap extends AppCompatActivity implements SwipeRefreshLayo
 //        });
 //        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
 //    }
-
-        public void LoadData(){
-            swipe.setRefreshing(true);
-            this.DbMaster.ReloadList(Fstatus, OrderBy, false);
-            Adapter = new PotonganAdapter(this, R.layout.list_potongan_rekap, ListPotongan);
-            ListRekap.setAdapter(Adapter);
-            Adapter.notifyDataSetChanged();
-            swipe.setRefreshing(false);
-        }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_potongan_rekap);
-        CreateVew();
-        InitClass();
-        EventClass();
-        LoadData();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public boolean onSupportNavigateUp(){
-        finish();
-        return true;
-    }
-
-    @Override
-    public void onRefresh() {
-        LoadData();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                LoadData();
-                OrionPayrollApplication.getInstance().GetHashPotongan();
-            }else{
-
-            }
-        }
-    }
-
-
-
-
-
-}

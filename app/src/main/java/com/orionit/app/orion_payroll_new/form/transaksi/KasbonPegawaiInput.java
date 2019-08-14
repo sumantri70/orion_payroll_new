@@ -209,44 +209,6 @@ public class KasbonPegawaiInput extends AppCompatActivity {
         return true;
     }
 
-//    protected void LoadData(){
-//        Loading.setMessage("Loading...");
-//        Loading.setCancelable(false);
-//        Loading.show();
-//        String filter;
-//        filter = "?id="+IdMst;
-//        String url = route.URL_GET_KASBON  + filter;
-//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                try {
-//                    JSONArray jsonArray = response.getJSONArray("data");
-//                    JSONObject obj = jsonArray.getJSONObject(0);
-//                    IdPegawai = obj.getInt("id_pegawai");
-//                    txtNomor.setText(obj.getString("nomor"));
-//                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
-//                    txtPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(obj.getInt("id_pegawai"))).getNama());
-//                    txtJumlah.setText(fmt.format(obj.getDouble("jumlah")));
-//                    txtCicilan.setText(obj.getString("cicilan"));
-//                    txtKeterangan.setText(obj.getString("keterangan"));
-//                    Loading.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
-//                    Loading.dismiss();
-//                }
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("error", "Error: " + error.getMessage());
-//                Loading.dismiss();
-//            }
-//        });
-//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
-//    }
-
     protected void LoadData(){
         Loading.setMessage("Loading...");
         Loading.setCancelable(false);
@@ -263,44 +225,6 @@ public class KasbonPegawaiInput extends AppCompatActivity {
 
         Loading.dismiss();
     }
-
-//    protected void IsSaved(){
-//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_KASBON, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject jObj = new JSONObject(response);
-//                    Toast.makeText(KasbonPegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-//                    Intent intent = getIntent();
-//                    setResult(RESULT_OK, intent);
-//                    finish();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
-//                params.put("id_pegawai", String.valueOf(IdPegawai));
-//                params.put("jumlah", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
-//                params.put("sisa", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
-//                params.put("cicilan", String.valueOf(StrFmtToDouble(txtCicilan.getText().toString())));
-//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-//                params.put("user_id", String.valueOf(OrionPayrollApplication.getInstance().USER_LOGIN));
-//                return params;
-//            }
-//        };
-//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-//    }
 
     protected boolean IsSaved(){
         try {
@@ -321,46 +245,6 @@ public class KasbonPegawaiInput extends AppCompatActivity {
         }
         return true;
     }
-
-
-//    protected void IsSavedEdit(){
-//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_KASBON, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject jObj = new JSONObject(response);
-//                    Toast.makeText(KasbonPegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-//                    Intent intent = getIntent();
-//                    setResult(RESULT_OK, intent);
-//                    finish();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
-//            }
-//        }) {
-//            @Override
-//            protected Map<String, String> getParams() {
-//                Map<String, String> params = new HashMap<String, String>();
-//                params.put("id", String.valueOf(IdMst));
-//                params.put("nomor", String.valueOf(txtNomor.getText()));
-//                params.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
-//                params.put("id_pegawai", String.valueOf(IdPegawai));
-//                params.put("jumlah", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
-//                params.put("sisa", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
-//                params.put("cicilan", String.valueOf(StrFmtToDouble(txtCicilan.getText().toString())));
-//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
-//                params.put("user_edit", String.valueOf(OrionPayrollApplication.getInstance().USER_LOGIN));
-//                return params;
-//            }
-//        };
-//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
-//    }
 
     protected boolean IsSavedEdit(){
         KasbonPegawaiModel DataOld = new KasbonPegawaiModel(TData.GetData(IdMst));
@@ -420,3 +304,123 @@ public class KasbonPegawaiInput extends AppCompatActivity {
         }
     }
 }
+
+
+
+//    protected void LoadData(){
+//        Loading.setMessage("Loading...");
+//        Loading.setCancelable(false);
+//        Loading.show();
+//        String filter;
+//        filter = "?id="+IdMst;
+//        String url = route.URL_GET_KASBON  + filter;
+//        JsonObjectRequest jArr = new JsonObjectRequest(Request.Method.POST, url, null, new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                try {
+//                    JSONArray jsonArray = response.getJSONArray("data");
+//                    JSONObject obj = jsonArray.getJSONObject(0);
+//                    IdPegawai = obj.getInt("id_pegawai");
+//                    txtNomor.setText(obj.getString("nomor"));
+//                    txtTanggal.setText(FormatDateFromSql(obj.getString("tanggal")));
+//                    txtPegawai.setText(OrionPayrollApplication.getInstance().ListHashPegawaiGlobal.get(Integer.toString(obj.getInt("id_pegawai"))).getNama());
+//                    txtJumlah.setText(fmt.format(obj.getDouble("jumlah")));
+//                    txtCicilan.setText(obj.getString("cicilan"));
+//                    txtKeterangan.setText(obj.getString("keterangan"));
+//                    Loading.dismiss();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_CONECT, Toast.LENGTH_SHORT).show();
+//                    Loading.dismiss();
+//                }
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Log.d("error", "Error: " + error.getMessage());
+//                Loading.dismiss();
+//            }
+//        });
+//        OrionPayrollApplication.getInstance().addToRequestQueue(jArr);
+//    }
+
+
+//    protected void IsSavedEdit(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_UPDATE_KASBON, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(KasbonPegawaiInput.this, MSG_SUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_UPDATE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("id", String.valueOf(IdMst));
+//                params.put("nomor", String.valueOf(txtNomor.getText()));
+//                params.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
+//                params.put("id_pegawai", String.valueOf(IdPegawai));
+//                params.put("jumlah", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
+//                params.put("sisa", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
+//                params.put("cicilan", String.valueOf(StrFmtToDouble(txtCicilan.getText().toString())));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                params.put("user_edit", String.valueOf(OrionPayrollApplication.getInstance().USER_LOGIN));
+//                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
+
+
+
+//    protected void IsSaved(){
+//        StringRequest strReq = new StringRequest(Request.Method.POST, URL_INSERT_KASBON, new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//                    Toast.makeText(KasbonPegawaiInput.this, MSG_SUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                    Intent intent = getIntent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                    Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                Toast.makeText(KasbonPegawaiInput.this, MSG_UNSUCCESS_SAVE, Toast.LENGTH_SHORT).show();
+//            }
+//        }) {
+//            @Override
+//            protected Map<String, String> getParams() {
+//                Map<String, String> params = new HashMap<String, String>();
+//                params.put("tanggal", String.valueOf(FormatMySqlDate(txtTanggal.getText().toString())));
+//                params.put("id_pegawai", String.valueOf(IdPegawai));
+//                params.put("jumlah", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
+//                params.put("sisa", String.valueOf(StrFmtToDouble(txtJumlah.getText().toString())));
+//                params.put("cicilan", String.valueOf(StrFmtToDouble(txtCicilan.getText().toString())));
+//                params.put("keterangan", String.valueOf(txtKeterangan.getText().toString()));
+//                params.put("user_id", String.valueOf(OrionPayrollApplication.getInstance().USER_LOGIN));
+//                return params;
+//            }
+//        };
+//        OrionPayrollApplication.getInstance().addToRequestQueue(strReq, FungsiGeneral.tag_json_obj);
+//    }
