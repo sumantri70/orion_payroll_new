@@ -152,10 +152,6 @@ public class PenggajianInputNew extends AppCompatActivity {
         lblTotLembur    = (TextView) findViewById(R.id.lblTotLembur);
         lblTotal        = (TextView) findViewById(R.id.lblTotal);
         lblCaptionTotalKasbon = (TextView) findViewById(R.id.lblCaptionTotalKasbon);
-
-        //lblPilihTunjangan = (TextView) findViewById(R.id.lblPilihTunjangan);
-//        lblPilihPotongan  = (TextView) findViewById(R.id.lblPilihPotongan);
-//        lblPilikKasbon    = (TextView) findViewById(R.id.lblPilihKasbon);
     }
 
     protected void InitClass(){
@@ -725,7 +721,6 @@ public class PenggajianInputNew extends AppCompatActivity {
     }
 
 
-
     protected void LoadTunjanganPegawai(){
         DetailTunjanganPegawaiTable DtTjDet = new DetailTunjanganPegawaiTable(getApplicationContext());
         List<DetailTunjanganPegawaiModel> ListData =  DtTjDet.GetListData(DataPegawai.getId());
@@ -903,7 +898,7 @@ public class PenggajianInputNew extends AppCompatActivity {
 
         //Pake yang ini ada kesalahan 010719
 //        IsHapus      = ((Telat1 > 3) || (Telat2 > 1) || (Dokter > 1) ||(IzinStghHari > 1) || (IzinNonCuti > 0));
-        IsHapus      = (((Telat1 + Telat2) > 3) || (Dokter > 0) ||(IzinStghHari > 1) || (IzinNonCuti > 0));
+        IsHapus      = (((Telat1 + Telat2 + IzinStghHari) > 3) || (Dokter > 0) || (IzinStghHari + Telat2 > 1) || (IzinNonCuti > 0));
 
         if (IsHapus){
             if (CekTunjanganExist(ID_TJ_INSENTIF)) {
@@ -914,11 +909,22 @@ public class PenggajianInputNew extends AppCompatActivity {
             }
         }else {
             if (!CekTunjanganExist(ID_TJ_INSENTIF)) {
-                PenggajianDetailModel Data = new PenggajianDetailModel();
-                Data.setId_tjg_pot_kas(DtTunjangan.getId());
-                Data.setJumlah(DtTunjangan.getJumlah());
-                ArListTunjangan.add(Data);
+                DetailTunjanganPegawaiTable dt = new DetailTunjanganPegawaiTable(getApplicationContext());
+                double jumlah = dt.GetInsentifPegawai(DataPegawai.getId());
+                if (jumlah > 0){
+                    PenggajianDetailModel Data = new PenggajianDetailModel();
+                    Data.setId_tjg_pot_kas(ID_TJ_INSENTIF);
+                    Data.setJumlah(jumlah);
+                    ArListTunjangan.add(Data);
+                }
             }
+
+//        if (!CekTunjanganExist(ID_TJ_INSENTIF)) {
+//                PenggajianDetailModel Data = new PenggajianDetailModel();
+//                Data.setId_tjg_pot_kas(DtTunjangan.getId());
+//                Data.setJumlah(DtTunjangan.getJumlah());
+//                ArListTunjangan.add(Data);
+//            }
         }
 
     }
