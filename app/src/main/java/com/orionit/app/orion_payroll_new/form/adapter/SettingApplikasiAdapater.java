@@ -10,12 +10,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orionit.app.orion_payroll_new.OrionPayrollApplication;
 import com.orionit.app.orion_payroll_new.R;
 import com.orionit.app.orion_payroll_new.form.setting.GantiPassword;
 import com.orionit.app.orion_payroll_new.form.setting.SettingDatabase;
 import com.orionit.app.orion_payroll_new.form.setting.SettingEmail;
 
 import java.util.List;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 public class SettingApplikasiAdapater extends RecyclerView.Adapter{
     private Context ctx;

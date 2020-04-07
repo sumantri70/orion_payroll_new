@@ -55,6 +55,9 @@ public class SettingDBTable {
         return Data;
     }
 
+    public void CreateShmWal(){
+        db.enableWriteAheadLogging();
+    }
 
 
 }

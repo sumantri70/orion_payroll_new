@@ -95,7 +95,7 @@
                     android:layout_marginBottom="20dp"
                     android:background="@drawable/style_btn_login"
                     android:text="Masuk"
-                    android:textColor="@color/colorblack"
+                    android:textColor="#0E3447"
                     app:layout_constraintBottom_toBottomOf="parent"
                     tools:layout_editor_absoluteX="0dp" />
 

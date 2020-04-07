@@ -3,6 +3,7 @@ package com.orionit.app.orion_payroll_new.form.setting;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.provider.ContactsContract;
 import android.support.v7.app.AlertDialog;
@@ -37,7 +38,9 @@ import com.orionit.app.orion_payroll_new.utility.SimpleFileDialog;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 
 import static com.orionit.app.orion_payroll_new.models.JCons.MSG_NEGATIVE;
@@ -53,6 +56,8 @@ public class SettingDatabase extends AppCompatActivity {
     private SettingDBTable TData;
     private SettingDBModel DataModel;
     private String password, AccessKey, AccessSecret;
+    private String lokasi_db;
+    ProgressDialog dialog;
 
     private final static String FILE_DIR = "/backup_orion_payroll/";
     private final static String DROPBOX_NAME = "orion payroll";
@@ -88,6 +93,7 @@ public class SettingDatabase extends AppCompatActivity {
         TData = new SettingDBTable(getApplicationContext());
         DataModel = TData.GetData();
         password = DataModel.getPassword();
+        this.lokasi_db = ((OrionPayrollApplication)getApplicationContext()).lokasi_db;
 
         AndroidAuthSession session;
         String key = DataModel.getAccessKey();
@@ -126,7 +132,7 @@ public class SettingDatabase extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int id) {
                                 String namaFile = "/orion_payroll_backup_"+serverNowFormated4Ekspor()+".db";
                                 String file = CreateGetDir()+namaFile;
-                                String lokasi = BackupDBNew(file);
+                                String lokasi = BackupDBNew(file, lokasi_db);
                                 if (!lokasi.equals("")){
                                     inform(SettingDatabase.this, "Database berhasil dibackup ke "+lokasi);
                                 }
@@ -152,21 +158,31 @@ public class SettingDatabase extends AppCompatActivity {
                                     return;
                                 }
 
+                                //TData.CreateShmWal();//buat 2 file shm wal
+
                                 //Backup terlebih dahulu data sebelummnya
                                 String namaFile = "/orion_payroll_backup_"+serverNowFormated4Ekspor()+".db";
                                 String file = CreateGetDirBefforeRestore()+namaFile;
-                                String lokasi = BackupDBNew(file);
+                                String lokasi = BackupDBNew(file, lokasi_db);
                                 if (lokasi.equals("")){
                                     return;
                                 }
 
-                                //Restore data
                                 m_chosen = chosenDir;
+                                SettingDatabase.this.DeleteShmWal();
                                 if (SettingDatabase.this.restoreDBNew(m_chosen)){
-                                    inform(SettingDatabase.this, "Database sebelumnya dibackup ke "+lokasi+"\nDan database terbaru berhasil direstore");
+                                    new AlertDialog.Builder(SettingDatabase.this)
+                                            .setMessage("Database sebelumnya dibackup ke "+lokasi+"\nDan database terbaru berhasil direstore\nAplikasi akan ditutup\nSilahkan buka ulang")
+                                            .setCancelable(false)
+                                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    SettingDatabase.this.finishAffinity();
+                                                    System.exit(0);
+                                                }
+                                            }).show();
                                 };
                             }
-
                         });
 
                 FileOpenDialog.Default_File_Name = "";
@@ -189,6 +205,33 @@ public class SettingDatabase extends AppCompatActivity {
             }
         });
 
+//        btnUploadCloud.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                AlertDialog.Builder bld = new AlertDialog.Builder(SettingDatabase.this);
+//                bld.setTitle("Konfirmasi");
+//                bld.setCancelable(true);
+//                bld.setMessage("Akan upload data ke dropbox?");
+//
+//                bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        SettingDatabase.this.UploadDBNew("/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db");
+//                    }
+//                });
+//
+//                bld.setNegativeButton(MSG_NEGATIVE, new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                });
+//                AlertDialog dialog = bld.create();
+//                dialog.show();
+//            }
+//        });
+
         btnUploadCloud.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +244,24 @@ public class SettingDatabase extends AppCompatActivity {
                 bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SettingDatabase.this.UploadDBNew("/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db");
+                        SettingDatabase.this.UploadDBNew(lokasi_db, "/backup_orion_payroll/Dump.db", false);
+
+                        String lokfileSHM = lokasi_db+"-shm";
+                        File fileSHM = new File(lokfileSHM);
+                        if (!fileSHM.exists()) {
+                            TData.CreateShmWal();
+                        }
+
+                        File folderSHM = new File(lokasi_db+"-shm");
+                        if (folderSHM.exists()){
+                            SettingDatabase.this.UploadDBNew(lokasi_db+"-shm", "/backup_orion_payroll/Dump.db-shm", false);
+                        }
+
+                        File folderWAL = new File(lokasi_db+"-wal");
+                        if (folderWAL.exists()){
+                            SettingDatabase.this.UploadDBNew(lokasi_db+"-wal", "/backup_orion_payroll/Dump.db-wal", true);
+                        }
+
                     }
                 });
 
@@ -227,17 +287,21 @@ public class SettingDatabase extends AppCompatActivity {
                 bld.setPositiveButton(MSG_POSITIVE,  new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+
+                        //TData.CreateShmWal();//buat 2 file shm wal
+
                         //Backup terlebih dahulu data sebelummnya
                         String namaFile = "/orion_payroll_backup_"+serverNowFormated4Ekspor()+".db";
                         String file = CreateGetDirBefforeRestore()+namaFile;
-                        String lokasi = BackupDBNew(file);
+                        String lokasi = BackupDBNew(file, lokasi_db);
                         if (lokasi.equals("")){
                             return;
                         }
 
+                        SettingDatabase.this.DeleteShmWal();
+
                         //------------------------------------
                         downloadFileNew("/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db", lokasi);
-//                        OrionPayrollApplication.getInstance().GetHashMaster();
                     }
                 });
 
@@ -258,16 +322,16 @@ public class SettingDatabase extends AppCompatActivity {
         return true;
     }
 
-    public String BackupDBNew(String fileLocation)
+    public String BackupDBNew(String fileLocation, String lokasiDB)
     {
         String Hasil = "";
         try
         {
-            String Asal = "/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
+            String Asal   = lokasiDB; //"/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
             String Tujuan = fileLocation;
 
             File currentDB = new File(Asal);
-            File backupDB = new File(Tujuan);
+            File backupDB  = new File(Tujuan);
 
             if (currentDB.exists()) {
                 FileChannel src = new FileInputStream(currentDB).getChannel();
@@ -276,6 +340,34 @@ public class SettingDatabase extends AppCompatActivity {
                 src.close();
                 dst.close();
                 Hasil = fileLocation;
+            }
+
+            String AsalSHM   = lokasiDB+"-shm";
+            String TujuanSHM = fileLocation+"-shm";
+
+            File currentDBSHM = new File(AsalSHM);
+            File backupDBSHM  = new File(TujuanSHM);
+
+            if (currentDBSHM.exists()) {
+                FileChannel src = new FileInputStream(currentDBSHM).getChannel();
+                FileChannel dst = new FileOutputStream(backupDBSHM).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+            }
+
+            String AsalWAL   = lokasiDB+"-wal";
+            String TujuanWAL = fileLocation+"-wal";
+
+            File currentDBWAL = new File(AsalWAL);
+            File backupDBWAL  = new File(TujuanWAL);
+
+            if (currentDBWAL.exists()) {
+                FileChannel src = new FileInputStream(currentDBWAL).getChannel();
+                FileChannel dst = new FileOutputStream(backupDBWAL).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
             }
         }
         catch (Exception e) {
@@ -290,8 +382,39 @@ public class SettingDatabase extends AppCompatActivity {
         {
             try
             {
+                //RESTORE SHM
+                String sumberSHM = FileName+"-shm";
+                String tujuanSHM = lokasi_db+"-shm";
+
+                File currentDBSHM = new File(sumberSHM);
+                File backupDBSHM  = new File(tujuanSHM);
+
+                if (currentDBSHM.exists()) {
+                    FileChannel src = new FileInputStream(currentDBSHM).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDBSHM).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+
+                //RESTORE WAL
+                String sumberWAL = FileName+"-wal";
+                String tujuanWAL = lokasi_db+"-wal";
+
+                File currentDBWAL = new File(sumberWAL);
+                File backupDBWAL  = new File(tujuanWAL);
+
+                if (currentDBWAL.exists()) {
+                    FileChannel src = new FileInputStream(currentDBWAL).getChannel();
+                    FileChannel dst = new FileOutputStream(backupDBWAL).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+                }
+
+                //RESTORE DB
                 String sumber = FileName;
-                String tujuan = "/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
+                String tujuan = lokasi_db;//"/data/data/com.orionit.app.orion_payroll_new/databases/db_orion_payroll.db";
 
                 File currentDB = new File(sumber);
                 File backupDB = new File(tujuan);
@@ -407,7 +530,7 @@ public class SettingDatabase extends AppCompatActivity {
     }
 
 
-    private void UploadDBNew(String fileLocation){
+    private void UploadDBNew(String fileLocation, String fileDropbox, final boolean munculkaninfo){
         DbxClientV2 client;
         DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("examples-v2-demo")
                 .withHttpRequestor(new OkHttp3Requestor(OkHttp3Requestor.defaultOkHttpClient()))
@@ -428,10 +551,12 @@ public class SettingDatabase extends AppCompatActivity {
             public void onUploadComplete(FileMetadata result) {
                 dialog.dismiss();
                 saveSettingDB();
-                Toast.makeText(SettingDatabase.this,
-                        "Upload database berhasil",
-                        Toast.LENGTH_SHORT)
-                        .show();
+                if (munculkaninfo){
+                    Toast.makeText(SettingDatabase.this,
+                            "Upload database berhasil",
+                            Toast.LENGTH_SHORT)
+                            .show();
+                }
             }
 
             @Override
@@ -444,12 +569,60 @@ public class SettingDatabase extends AppCompatActivity {
                         .setPositiveButton("Ok", null)
                         .show();
             }
-        }, "/backup_orion_payroll/Dump.db", fileLocation).execute();
+//        }, "/backup_orion_payroll/Dump.db", fileLocation).execute();
+        }, fileDropbox, fileLocation).execute();
     }
 
 
+//    private void downloadFileNew(String fileLocation, final String fileBackUp){
+//        File localFile = new File(fileLocation);
+
+//
+//        DbxClientV2 client;
+//        DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("examples-v2-demo")
+//                .withHttpRequestor(new OkHttp3Requestor(OkHttp3Requestor.defaultOkHttpClient()))
+//                .build();
+//
+//        SharedPreferences prefs = getSharedPreferences(DROPBOX_NAME, MODE_PRIVATE);
+//        String accessToken = prefs.getString("access-token", null);
+//        client = new DbxClientV2(requestConfig, accessToken);
+//
+//        final ProgressDialog dialog = new ProgressDialog(this);
+//        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//        dialog.setCancelable(false);
+//        dialog.setMessage("Downloading");
+//        dialog.show();
+//
+//        new DownloadDropboxV2(SettingDatabase.this, client, new DownloadDropboxV2.Callback(){
+//            @Override
+//            public void onDownloadComplete(File result) {
+//                dialog.dismiss();
+//                saveSettingDB();
+//                OrionPayrollApplication.getInstance().GetHashMaster();
+//                inform(SettingDatabase.this, "Database sebelumnya dibackup ke "+fileBackUp+"\nDan database terbaru berhasil direstore");
+//            }
+//
+//
+//
+//            @Override
+//            public void onError(Exception e) {
+//                dialog.dismiss();
+//                SettingDatabase.this.restoreDBNew(fileBackUp);
+//
+//                new AlertDialog.Builder(SettingDatabase.this)
+//                        .setMessage("Download database tidak berhasil")
+//                        .setCancelable(true)
+//                        .setPositiveButton("Ok", null)
+//                        .show();
+//            }
+//        }, "/backup_orion_payroll/Dump.db", fileLocation).execute(localFile);
+//    }
+
     private void downloadFileNew(String fileLocation, final String fileBackUp){
         File localFile = new File(fileLocation);
+        final File localFileshm = new File(fileLocation+"-shm");
+        final File localFilewal = new File(fileLocation+"-wal");
+
         DbxClientV2 client;
         DbxRequestConfig requestConfig = DbxRequestConfig.newBuilder("examples-v2-demo")
                 .withHttpRequestor(new OkHttp3Requestor(OkHttp3Requestor.defaultOkHttpClient()))
@@ -458,23 +631,79 @@ public class SettingDatabase extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(DROPBOX_NAME, MODE_PRIVATE);
         String accessToken = prefs.getString("access-token", null);
         client = new DbxClientV2(requestConfig, accessToken);
-
-        final ProgressDialog dialog = new ProgressDialog(this);
+        dialog = new ProgressDialog(this);
         dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         dialog.setCancelable(false);
         dialog.setMessage("Downloading");
         dialog.show();
+        this.downloadWal(client, fileLocation, localFilewal, localFileshm, localFile, fileBackUp);
+    }
+
+
+    private void downloadWal(final DbxClientV2 client, final String fileLocation, final File localFilewal, final File localFileshm, final File localFileDB, final String fileBackUp){
 
         new DownloadDropboxV2(SettingDatabase.this, client, new DownloadDropboxV2.Callback(){
             @Override
             public void onDownloadComplete(File result) {
-                dialog.dismiss();
-                saveSettingDB();
-                OrionPayrollApplication.getInstance().GetHashMaster();
-                inform(SettingDatabase.this, "Database sebelumnya dibackup ke "+fileBackUp+"\nDan database terbaru berhasil direstore");
+                downloadShm(client, fileLocation, localFileshm, localFileDB, fileBackUp);
             }
 
+            @Override
+            public void onError(Exception e) {
+                downloadfiledb(client, fileLocation, localFileDB, fileBackUp);
+            }
+        }, "/backup_orion_payroll/Dump.db-wal", fileLocation).execute(localFilewal);
+    }
 
+
+    private void downloadShm(final DbxClientV2 client, final String fileLocation, File localFileshm, final File localFileDB, final String fileBackUp){
+        new DownloadDropboxV2(SettingDatabase.this, client, new DownloadDropboxV2.Callback(){
+            @Override
+            public void onDownloadComplete(File result) {
+                downloadfiledb(client, fileLocation, localFileDB, fileBackUp);
+            }
+
+            @Override
+            public void onError(Exception e) {
+                downloadfiledb(client, fileLocation, localFileDB, fileBackUp);
+            }
+        }, "/backup_orion_payroll/Dump.db-shm", fileLocation+"-shm").execute(localFileshm);
+    }
+
+    private void downloadfiledb(final DbxClientV2 client, final String fileLocation, File localFile, final String fileBackUp){
+        new DownloadDropboxV2(SettingDatabase.this, client, new DownloadDropboxV2.Callback(){
+            @Override
+            public void onDownloadComplete(File result) {
+                dialog.dismiss();
+                try{
+                    saveSettingDB();
+                    OrionPayrollApplication.getInstance().GetHashMaster();
+                    //inform(SettingDatabase.this, "Database sebelumnya dibackup ke "+fileBackUp+"\nDan database terbaru berhasil direstore\nAplikasi akan ditutup\nSilahkan buka ulang");
+
+                    new AlertDialog.Builder(SettingDatabase.this)
+                            .setMessage("Database sebelumnya dibackup ke "+fileBackUp+"\nDan database terbaru berhasil direstore\nAplikasi akan ditutup\nSilahkan buka ulang")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    SettingDatabase.this.finishAffinity();
+                                    System.exit(0);
+                                }
+                            }).show();
+                } catch (Exception e) {
+                    new AlertDialog.Builder(SettingDatabase.this)
+                            .setMessage("Downloda data gagal\nSilahkan restore ulang file "+fileBackUp+ " untuk mengembalikan data")
+                            .setCancelable(false)
+                            .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    SettingDatabase.this.finishAffinity();
+                                    System.exit(0);
+                                }
+                            })
+                            .show();
+                }
+            }
 
             @Override
             public void onError(Exception e) {
@@ -490,8 +719,19 @@ public class SettingDatabase extends AppCompatActivity {
         }, "/backup_orion_payroll/Dump.db", fileLocation).execute(localFile);
     }
 
+
+
     private void saveSettingDB(){
         SettingDBModel newData = new SettingDBModel(this.AccessKey, this.AccessSecret, this.password);
         TData.Insert(newData);
+    }
+
+    public void DeleteShmWal(){
+
+        File fileshm = new File(lokasi_db+"-shm");
+        fileshm.delete();
+
+        File filewal = new File(lokasi_db+"-wal");
+        filewal.delete();
     }
 }

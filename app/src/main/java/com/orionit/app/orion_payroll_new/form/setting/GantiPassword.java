@@ -17,6 +17,7 @@ public class GantiPassword extends AppCompatActivity {
     private Button btnUbah;
     private ProgressDialog Loading;
     private PasswordAplikasiTable TData;
+    private boolean PasswordAwal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,10 @@ public class GantiPassword extends AppCompatActivity {
         setTitle("Ganti password");
         Loading = new ProgressDialog(GantiPassword.this);
         TData = new PasswordAplikasiTable(getApplicationContext());
+        PasswordAwal = !TData.IsAdaPassword();
+        if (PasswordAwal){
+            txtPassworLama.setVisibility(View.GONE);
+        }
     }
 
     protected void EventClass(){
@@ -65,10 +70,12 @@ public class GantiPassword extends AppCompatActivity {
     }
 
     protected boolean IsValid(){
-        if (this.txtPassworLama.getText().toString().equals("")) {
-            txtPassworLama.requestFocus();
-            txtPassworLama.setError("Belum diisi");
-            return false;
+        if (!PasswordAwal){
+            if (this.txtPassworLama.getText().toString().equals("")) {
+                txtPassworLama.requestFocus();
+                txtPassworLama.setError("Belum diisi");
+                return false;
+            }
         }
 
         if (this.txtPasswordBaru.getText().toString().equals("")) {
@@ -89,14 +96,15 @@ public class GantiPassword extends AppCompatActivity {
             return false;
         }
 
-        if (!TData.CekPassword(this.txtPassworLama.getText().toString())){
-            txtPassworLama.requestFocus();
-            txtPassworLama.setError("Passwor lama salah");
-            return false;
+        if (!PasswordAwal){
+            if (!TData.CekPassword(this.txtPassworLama.getText().toString())){
+                txtPassworLama.requestFocus();
+                txtPassworLama.setError("Passwor lama salah");
+                return false;
+            }
         }
         return true;
     }
-
 
     protected boolean IsSavedEdit(){
         try {

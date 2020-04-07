@@ -35,7 +35,7 @@ public class SettingAplikasi extends AppCompatActivity {
         ListSetting = new ArrayList<String>();
         //RcvRekap.addItemDecoration(new DividerItemDecoration(RcvRekap.getContext(), DividerItemDecoration.VERTICAL));
 
-        mAdapter = new SettingApplikasiAdapater(getApplicationContext(), ListSetting);
+        mAdapter = new SettingApplikasiAdapater(SettingAplikasi.this, ListSetting);
         RcvRekap.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         RcvRekap.setAdapter(mAdapter);
     }

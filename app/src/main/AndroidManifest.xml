@@ -97,7 +97,8 @@
         <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingAplikasi" />
         <activity android:name="com.orionit.app.orion_payroll_new.form.setting.GantiPassword" />
         <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingEmail" />
-        <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingDatabase"></activity>
+        <activity android:name="com.orionit.app.orion_payroll_new.form.setting.SettingDatabase">
+        </activity>
     </application>
 
 </manifest>
